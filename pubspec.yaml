@@ -16,9 +16,9 @@ dependencies:
   shared_preferences: ^2.2.2
   easy_localization: ^3.0.5
   flutter_screenutil: ^5.9.0
-
   cupertino_icons: ^1.0.8
   dots_indicator: ^4.0.1
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:
@@ -30,7 +30,20 @@ flutter:
 
   uses-material-design: true
 
+  fonts:
+    - family: GeneralSans
+      fonts:
+        - asset: assets/fonts/GeneralSans-Regular.otf
+          weight: 400
+        - asset: assets/fonts/GeneralSans-Medium.otf
+          weight: 500
+        - asset: assets/fonts/GeneralSans-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/GeneralSans-Bold.otf
+          weight: 700
+
   assets:
     - assets/images/
+    - assets/svgs/
     - assets/translations/
     - assets/images/onboarding/

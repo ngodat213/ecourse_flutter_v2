@@ -1,4 +1,5 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/widgets/svg_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -91,81 +92,92 @@ class _BaseTextFieldState extends State<BaseTextField> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return TextFormField(
-      controller: widget.controller,
-      obscureText: _obscureText,
-      validator: widget.validator,
-      keyboardType: widget.keyboardType,
-      onTap: widget.onTap,
-      readOnly: widget.readOnly,
-      maxLines: widget.maxLines,
-      minLines: widget.minLines,
-      textInputAction: widget.textInputAction,
-      onFieldSubmitted: widget.onSubmitted,
-      onChanged: widget.onChanged,
-      focusNode: _focusNode,
-      showCursor: widget.showCursor,
-      autofocus: widget.autofocus,
-      enabled: widget.enabled,
-      style: widget.style ?? theme.textTheme.bodyLarge,
-      decoration: InputDecoration(
-        labelText: widget.labelText,
-        hintText: widget.hintText,
-        prefixIcon:
-            widget.prefixIcon != null
-                ? Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: widget.prefixIcon,
-                )
-                : null,
-        suffixIcon:
-            widget.obscureText
-                ? IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_off : Icons.visibility,
-                    color: _isFocused ? theme.primaryColor : Colors.grey,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                )
-                : null,
-        contentPadding:
-            widget.contentPadding ??
-            EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-        filled: true,
-        fillColor: widget.fillColor ?? AppColor.cardColor,
-        labelStyle:
-            widget.labelStyle ??
-            theme.textTheme.bodyLarge?.copyWith(
-              color: _isFocused ? theme.primaryColor : Colors.grey,
+    return Column(
+      children: [
+        TextFormField(
+          controller: widget.controller,
+          obscureText: _obscureText,
+          validator: widget.validator,
+          keyboardType: widget.keyboardType,
+          onTap: widget.onTap,
+          readOnly: widget.readOnly,
+          maxLines: widget.maxLines,
+          minLines: widget.minLines,
+          textInputAction: widget.textInputAction,
+          onFieldSubmitted: widget.onSubmitted,
+          onChanged: widget.onChanged,
+          focusNode: _focusNode,
+          showCursor: widget.showCursor,
+          autofocus: widget.autofocus,
+          enabled: widget.enabled,
+          style: widget.style ?? theme.textTheme.bodyLarge,
+          decoration: InputDecoration(
+            // labelText: widget.labelText,
+            errorStyle: const TextStyle(height: 0, fontSize: 0),
+            errorText: null,
+            hintText: widget.hintText,
+            prefixIcon:
+                widget.prefixIcon != null
+                    ? Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: widget.prefixIcon,
+                    )
+                    : null,
+            suffixIcon:
+                widget.obscureText
+                    ? Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w),
+                      child: SvgIconButton(
+                        width: 16.w,
+                        height: 16.h,
+                        assetName:
+                            _obscureText
+                                ? 'assets/svgs/eye_off.svg'
+                                : 'assets/svgs/eye.svg',
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      ),
+                    )
+                    : null,
+            contentPadding:
+                widget.contentPadding ??
+                EdgeInsets.symmetric(horizontal: 32.w, vertical: 8.h),
+            filled: true,
+            fillColor: widget.fillColor ?? AppColor.cardColor,
+            labelStyle:
+                widget.labelStyle ??
+                theme.textTheme.bodyLarge?.copyWith(
+                  color: _isFocused ? theme.primaryColor : Colors.grey,
+                ),
+            hintStyle:
+                widget.hintStyle ??
+                theme.textTheme.bodyLarge?.copyWith(color: Colors.grey),
+            border: OutlineInputBorder(
+              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
+              borderSide: BorderSide.none,
             ),
-        hintStyle:
-            widget.hintStyle ??
-            theme.textTheme.bodyLarge?.copyWith(color: Colors.grey),
-        border: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-          borderSide: BorderSide.none,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: AppColor.accent),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: AppColor.accent),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: theme.colorScheme.error),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
+              borderSide: BorderSide(color: theme.colorScheme.error),
+            ),
+          ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-          borderSide: BorderSide(color: AppColor.accentColor),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-          borderSide: BorderSide(color: AppColor.accentColor),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-          borderSide: BorderSide(color: theme.colorScheme.error),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-          borderSide: BorderSide(color: theme.colorScheme.error),
-        ),
-      ),
+      ],
     );
   }
 }

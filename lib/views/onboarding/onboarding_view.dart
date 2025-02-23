@@ -1,6 +1,8 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
+import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
 import 'package:flutter/material.dart';
 import '../../view_models/onboarding_vm.dart';
 
@@ -81,34 +83,16 @@ class OnboardingView extends BaseView<OnboardingVM> {
             ),
           ),
           const Expanded(child: SizedBox()),
-          SizedBox(
-            width: double.infinity, // Chiều rộng tối đa
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 16,
-                ),
-                backgroundColor: AppColor.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              onPressed: () {
-                viewModel.nextOnboarding();
-              },
-              child: Text(
+          CustomElevatedButton(
+            context: context,
+            onPressed: () {
+              viewModel.nextOnboarding();
+            },
+            text:
                 viewModel.pageController.page ==
                         viewModel.onboardingList.length - 1
                     ? "Get Started"
                     : "Next",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                ),
-              ),
-            ),
           ),
         ],
       ),

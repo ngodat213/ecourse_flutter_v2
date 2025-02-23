@@ -1,5 +1,5 @@
-import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:flutter/material.dart';
+import '../config/app_theme.dart';
 import '../services/shared_prefs.dart';
 
 class ThemeProvider extends ChangeNotifier {
@@ -24,28 +24,6 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Light theme
-  ThemeData get lightTheme {
-    return ThemeData(
-      brightness: Brightness.light,
-      primaryColor: AppColor.primary,
-      scaffoldBackgroundColor: AppColor.background,
-      colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primary),
-      useMaterial3: true,
-    );
-  }
-
-  // Dark theme
-  ThemeData get darkTheme {
-    return ThemeData(
-      brightness: Brightness.dark,
-      primaryColor: AppColor.primary,
-      scaffoldBackgroundColor: AppColor.background,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.deepPurple,
-        brightness: Brightness.dark,
-      ),
-      useMaterial3: true,
-    );
-  }
+  ThemeData get lightTheme => AppTheme.lightTheme;
+  ThemeData get darkTheme => AppTheme.darkTheme;
 }

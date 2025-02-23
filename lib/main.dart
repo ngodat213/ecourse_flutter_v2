@@ -25,6 +25,14 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  String getStartRoute() {
+    final isOnboardingSkipped = SharedPrefs.getBool('is_onboarding_skipped');
+    if (isOnboardingSkipped == null) {
+      return AppRoutes.onboarding;
+    }
+    return AppRoutes.login;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -39,7 +47,7 @@ class MyApp extends StatelessWidget {
             (_, __) => Consumer<ThemeProvider>(
               builder: (context, themeProvider, _) {
                 return MaterialApp(
-                  title: 'app_name'.tr(),
+                  title: 'ECourse'.tr(),
                   debugShowCheckedModeBanner: false,
                   localizationsDelegates: context.localizationDelegates,
                   supportedLocales: context.supportedLocales,
@@ -47,7 +55,7 @@ class MyApp extends StatelessWidget {
                   themeMode: themeProvider.themeMode,
                   theme: themeProvider.lightTheme,
                   darkTheme: themeProvider.darkTheme,
-                  initialRoute: AppRoutes.onboarding,
+                  initialRoute: getStartRoute(),
                   routes: AppRoutes.getRoutes(),
                   navigatorObservers: [RouteGuard()],
                 );

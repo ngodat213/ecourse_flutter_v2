@@ -34,8 +34,6 @@ abstract class BaseView<T extends BaseVM> extends StatelessWidget {
                 buildView(context, viewModel),
                 if (viewModel.isLoading)
                   const Center(child: CircularProgressIndicator()),
-                if (viewModel.error != null)
-                  Center(child: Text(viewModel.error!)),
               ],
             ),
             bottomNavigationBar: buildBottomNavigationBar(context, viewModel),
