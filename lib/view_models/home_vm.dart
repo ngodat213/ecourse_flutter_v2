@@ -1,20 +1,29 @@
+import 'package:ecourse_flutter_v2/core/repository/user_repository.dart';
+import 'package:ecourse_flutter_v2/models/user_profile.dart';
+
 import '../core/base/base_view_model.dart';
-import '../models/user.dart';
-import '../services/home_service.dart';
 
 class HomeVM extends BaseVM {
-  final HomeService _homeService;
-  List<User> users = [];
+  final UserRepository _userRepository = UserRepository();
 
-  HomeVM(this._homeService);
+  UserProfile? userProfile;
 
-  Future<void> loadUsers() async {
-    try {
-      setLoading(true);
-      users = await _homeService.getUsers();
-      setLoading(false);
-    } catch (e) {
-      setError(e.toString());
+  HomeVM(super.context);
+
+  @override
+  void onInit() {
+    super.onInit();
+    getUser();
+    notifyListeners();
+  }
+
+  Future<void> getUser() async {
+    setLoading(true);
+    final response = await _userRepository.getUserProfile();
+
+    if (response.allGood) {
+      userProfile = UserProfile.fromJson(response.body);
     }
+    setLoading(false);
   }
 }

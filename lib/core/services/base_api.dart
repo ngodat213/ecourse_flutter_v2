@@ -1,143 +1,148 @@
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import '../config/app_config.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
 
-class BaseApi {
-  late Dio _dio;
-  final String? token;
+enum ApiStatus { succeeded, failed, internetUnavailable }
 
-  BaseApi({this.token}) {
-    _initDio();
-  }
+enum ApiMethod { get, post, put, delete }
 
-  void _initDio() {
-    _dio = Dio(
-      BaseOptions(
-        baseUrl: AppConfig.baseUrl,
-        connectTimeout: const Duration(milliseconds: AppConfig.connectTimeout),
-        receiveTimeout: const Duration(milliseconds: AppConfig.receiveTimeout),
-        headers: _getHeaders(),
-      ),
-    );
+const Map<ApiMethod, String> apiMethod = {
+  ApiMethod.get: 'GET',
+  ApiMethod.post: 'POST',
+  ApiMethod.put: 'PUT',
+  ApiMethod.delete: 'DELETE',
+};
 
-    _dio.interceptors.addAll([_getAuthInterceptor(), _getLogInterceptor()]);
-  }
+class ApiResponse {
+  final int? code;
+  final String? message;
+  final dynamic body;
+  final bool? success;
+  final String? error;
 
-  Map<String, dynamic> _getHeaders() {
-    final headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    };
+  ApiResponse({this.code, this.message, this.body, this.success, this.error});
 
-    if (token != null) {
-      headers['Authorization'] = 'Bearer $token';
-    }
+  bool get allGood => success ?? false;
+  bool hasError() => error?.isNotEmpty ?? false;
+  bool hasData() => body != null;
 
-    return headers;
-  }
-
-  Interceptor _getAuthInterceptor() {
-    return InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // Add auth token if available
-        if (token != null) {
-          options.headers['Authorization'] = 'Bearer $token';
-        }
-        return handler.next(options);
-      },
-      onError: (error, handler) async {
-        if (error.response?.statusCode == 401) {
-          // Handle token expired
-          // You can implement token refresh logic here
-        }
-        return handler.next(error);
-      },
+  factory ApiResponse.fromResponse(dynamic response) {
+    return ApiResponse(
+      code: response['statusCode'],
+      message: response['message'] ?? '',
+      body: response['data'],
+      success: response['success'],
+      error: response['error'] ?? '',
     );
   }
+}
 
-  Interceptor _getLogInterceptor() {
-    return LogInterceptor(
-      request: true,
-      requestHeader: true,
-      requestBody: true,
-      responseHeader: true,
-      responseBody: true,
-      error: true,
-    );
+class BaseAPI {
+  static String domain = 'http://192.168.0.108:3000/api';
+  final Dio _dio = Dio();
+
+  Future<Map<String, String>> getHeaders() async {
+    final userToken = SharedPrefs.getToken();
+    return {"Authorization": "Bearer $userToken"};
   }
 
-  Future<Response> get(
-    String path, {
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
+  Future<Response> fetchData(
+    String url, {
+    dynamic body,
+    bool includeHeaders = false,
+    bool forceRefresh = false,
+    Map<String, dynamic>? params,
+    Map<String, dynamic>? headers,
+    ApiMethod method = ApiMethod.get,
   }) async {
     try {
-      return await _dio.get(
-        path,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
+      final options = Options(
+        method: apiMethod[method],
+        headers: includeHeaders ? headers : await getHeaders(),
       );
-    } catch (e) {
-      throw _handleError(e);
+
+      var data = await _dio.request(
+        '$domain$url',
+        data: body,
+        queryParameters: params,
+        options: options,
+      );
+      return data;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     }
   }
 
-  Future<Response> post(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Options? options,
-    CancelToken? cancelToken,
+  Future<Response> fileUpload(
+    String url, {
+    required Uint8List file,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? params,
+    required ApiMethod method,
+    dynamic body,
   }) async {
+    if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      throw ApiStatus.internetUnavailable;
+    }
+
     try {
-      return await _dio.post(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
+      final options = Options(
+        method: apiMethod[method],
+        headers: headers ?? await getHeaders(),
       );
-    } catch (e) {
-      throw _handleError(e);
+
+      final formData = FormData.fromMap({
+        'file': MultipartFile.fromBytes(file, filename: 'upload.png'),
+        if (body != null) ...body,
+      });
+
+      return await _dio.request(
+        '$domain$url',
+        data: formData,
+        queryParameters: params,
+        options: options,
+      );
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     }
   }
 
-  Exception _handleError(dynamic error) {
-    if (error is DioException) {
-      switch (error.type) {
-        case DioExceptionType.connectionTimeout:
-          return Exception('connection_timeout'.tr());
-        case DioExceptionType.sendTimeout:
-          return Exception('send_timeout'.tr());
-        case DioExceptionType.receiveTimeout:
-          return Exception('receive_timeout'.tr());
-        case DioExceptionType.badResponse:
-          return _handleBadResponse(error.response);
-        case DioExceptionType.cancel:
-          return Exception('request_cancelled'.tr());
-        default:
-          return Exception('network_error'.tr());
-      }
-    }
-    return Exception('something_went_wrong'.tr());
-  }
-
-  Exception _handleBadResponse(Response? response) {
-    switch (response?.statusCode) {
-      case 400:
-        return Exception(response?.data['message'] ?? 'bad_request'.tr());
-      case 401:
-        return Exception(response?.data['message'] ?? 'unauthorized'.tr());
-      case 403:
-        return Exception(response?.data['message'] ?? 'forbidden'.tr());
-      case 404:
-        return Exception(response?.data['message'] ?? 'not_found'.tr());
-      case 500:
-        return Exception(response?.data['message'] ?? 'server_error'.tr());
+  String _handleDioError(DioException ex) {
+    switch (ex.type) {
+      case DioExceptionType.cancel:
+        return 'Request to server was cancelled.';
+      case DioExceptionType.connectionTimeout:
+        return 'Connection timed out.';
+      case DioExceptionType.receiveTimeout:
+        return 'Receiving timeout occurred.';
+      case DioExceptionType.sendTimeout:
+        return 'Request send timeout.';
+      case DioExceptionType.badResponse:
+        return _handleStatusCode(ex.response?.statusCode);
+      case DioExceptionType.unknown:
+        return ex.message?.contains('SocketException') ?? false
+            ? 'No Internet.'
+            : 'Unexpected error occurred.';
       default:
-        return Exception('something_went_wrong'.tr());
+        return 'Something went wrong.';
+    }
+  }
+
+  String _handleStatusCode(int? statusCode) {
+    switch (statusCode) {
+      case 400:
+        return 'Bad request.';
+      case 401:
+        return 'Authentication failed.';
+      case 403:
+        return 'Not authorized to access this endpoint.';
+      case 404:
+        return 'Requested resource not found.';
+      case 500:
+        return 'Internal server error.';
+      default:
+        return 'An error occurred.';
     }
   }
 }

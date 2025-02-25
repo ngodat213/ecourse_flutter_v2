@@ -1,7 +1,5 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
-import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
-import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
 import 'package:flutter/material.dart';
 import '../../view_models/onboarding_vm.dart';

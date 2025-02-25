@@ -1,24 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:provider/provider.dart';
+import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
 import '../../core/base/base_view_model.dart';
-import '../../core/config/app_config.dart';
 import '../../core/routes/app_routes.dart';
 
 class SplashVM extends BaseVM {
-  final BuildContext context;
+  SplashVM(super.context);
 
-  SplashVM(this.context) {
-    _init();
+  @override
+  void onInit() {
+    super.onInit();
+    Future.delayed(const Duration(seconds: 2), () {
+      getStartRoute();
+    });
   }
 
-  Future<void> _init() async {
-    await Future.delayed(const Duration(seconds: 2));
-    final prefs = Provider.of<SharedPreferences>(context, listen: false);
-    final token = prefs.getString(AppConfig.tokenKey);
-
-    if (token != null) {
-      AppRoutes.pushAndRemoveUntil(context, AppRoutes.home);
+  void getStartRoute() {
+    final isOnboardingSkipped = SharedPrefs.getBool('is_onboarding_skipped');
+    if (isOnboardingSkipped == null) {
+      AppRoutes.pushAndRemoveUntil(context, AppRoutes.onboarding);
     } else {
       AppRoutes.pushAndRemoveUntil(context, AppRoutes.login);
     }

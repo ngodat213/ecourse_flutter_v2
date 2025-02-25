@@ -25,14 +25,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  String getStartRoute() {
-    final isOnboardingSkipped = SharedPrefs.getBool('is_onboarding_skipped');
-    if (isOnboardingSkipped == null) {
-      return AppRoutes.onboarding;
-    }
-    return AppRoutes.login;
-  }
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -55,7 +47,7 @@ class MyApp extends StatelessWidget {
                   themeMode: themeProvider.themeMode,
                   theme: themeProvider.lightTheme,
                   darkTheme: themeProvider.darkTheme,
-                  initialRoute: getStartRoute(),
+                  initialRoute: AppRoutes.splash,
                   routes: AppRoutes.getRoutes(),
                   navigatorObservers: [RouteGuard()],
                 );

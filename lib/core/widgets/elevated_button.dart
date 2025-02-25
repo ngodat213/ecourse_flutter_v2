@@ -7,14 +7,20 @@ class CustomElevatedButton extends StatelessWidget {
     required this.context,
     required this.text,
     required this.onPressed,
+    this.leading,
     this.backgroundColor,
     this.foregroundColor,
     this.textStyle,
+    this.width,
+    this.padding,
   });
 
   final BuildContext context;
   final String text;
   final TextStyle? textStyle;
+  final Widget? leading;
+  final double? width;
+  final EdgeInsets? padding;
   final VoidCallback onPressed;
   final Color? backgroundColor;
   final Color? foregroundColor;
@@ -22,10 +28,12 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity, // Chiều rộng tối đa
+      width: width,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          padding:
+              padding ??
+              const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           backgroundColor: backgroundColor ?? AppColor.primary,
           foregroundColor: foregroundColor ?? Colors.white,
           shape: RoundedRectangleBorder(
@@ -33,14 +41,21 @@ class CustomElevatedButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style:
-              textStyle ??
-              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: width == null ? MainAxisSize.min : MainAxisSize.max,
+          children: [
+            leading ?? const SizedBox(),
+            Text(
+              text,
+              style:
+                  textStyle ??
+                  Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                  ),
+            ),
+          ],
         ),
       ),
     );

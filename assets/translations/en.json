@@ -44,5 +44,13 @@
   "fullname_length": "Full name must be at least 2 characters",
   "fullname_invalid": "Full name cannot contain special characters",
   "login_success": "Login successful",
-  "register_success": "Registration successful"
+  "register_success": "Registration successful",
+  "login_with_face_id": "Login with Face ID",
+  "forgot_password": "Forgot password?",
+  "enter_the_6_digit_code": "Enter the 6-digit code",
+  "did_not_receive_the_code": "Did not receive the code?",
+  "resend": "Resend",
+  "verify": "Verify",
+  "verification": "Verification",
+  "forget_password": "Forget Password"
 } 

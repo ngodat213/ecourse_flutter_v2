@@ -30,6 +30,6 @@ class AppColor {
   static const Color borderDark = Color(0xFF424242);
 
   // Card colors
-  static const Color cardColor = Colors.white;
+  static const Color cardColor = Color(0xFFF9F9F9);
   static const Color cardColorDark = Color(0xFF242424);
 }

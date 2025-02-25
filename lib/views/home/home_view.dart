@@ -1,7 +1,8 @@
+import 'package:ecourse_flutter_v2/core/widgets/banner.dart';
+import 'package:ecourse_flutter_v2/core/widgets/category_item.dart';
+import 'package:ecourse_flutter_v2/core/widgets/popular_card.dart';
 import 'package:flutter/material.dart';
 import '../../core/base/base_view.dart';
-import '../../core/services/api_service.dart';
-import '../../services/home_service.dart';
 import '../../view_models/home_vm.dart';
 
 class HomeView extends BaseView<HomeVM> {
@@ -9,22 +10,19 @@ class HomeView extends BaseView<HomeVM> {
 
   @override
   HomeVM createViewModel(BuildContext context) {
-    return HomeVM(HomeService(ApiService()))..loadUsers();
+    return HomeVM(context);
   }
 
   @override
-  PreferredSizeWidget buildAppBar(BuildContext context, HomeVM viewModel) {
-    return AppBar(title: const Text('Home'));
-  }
-
-  @override
-  Widget buildView(BuildContext context, HomeVM viewModel) {
-    return ListView.builder(
-      itemCount: viewModel.users.length,
-      itemBuilder: (context, index) {
-        final user = viewModel.users[index];
-        return ListTile(title: Text(user.name), subtitle: Text(user.email));
-      },
+  Widget buildView(BuildContext context, HomeVM vm) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [BannerWidget(), CategoryItem(), PopularCard()],
+          ),
+        ),
+      ),
     );
   }
 }

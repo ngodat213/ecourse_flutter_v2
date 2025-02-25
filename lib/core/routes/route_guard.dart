@@ -4,9 +4,15 @@ import 'app_routes.dart';
 
 class RouteGuard extends NavigatorObserver {
   final List<String> publicRoutes = [
+    AppRoutes.splash,
     AppRoutes.login,
     AppRoutes.onboarding,
     AppRoutes.home,
+    AppRoutes.courseDetail,
+    AppRoutes.verifyOtp,
+    AppRoutes.forgetPw,
+    AppRoutes.examDetail,
+    AppRoutes.examTaking,
   ];
 
   @override

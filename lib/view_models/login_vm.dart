@@ -1,21 +1,27 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
+import 'package:ecourse_flutter_v2/core/repository/auth_repository.dart';
+import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
+import 'package:ecourse_flutter_v2/views/auth/verify_otp_view.dart';
 import 'package:flutter/material.dart';
 import '../../core/base/base_view_model.dart';
 import '../../core/utils/validator.dart';
 
 class LoginVM extends BaseVM {
-  final BuildContext context;
-
-  LoginVM({required this.context});
+  final AuthRepository _authRepository = AuthRepository();
+  LoginVM(super.context);
 
   final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final emailController =
+      TextEditingController()..text = 'ngodat.it213@gmail.com';
+  final passwordController = TextEditingController()..text = 'Code26102003';
   final registerFormKey = GlobalKey<FormState>();
   final registerNameController = TextEditingController();
   final registerEmailController = TextEditingController();
   final registerPasswordController = TextEditingController();
   final registerConfirmPasswordController = TextEditingController();
+
+  String otp = '';
 
   Future<void> login() async {
     try {
@@ -26,8 +32,21 @@ class LoginVM extends BaseVM {
         setError(null);
       }
 
-      // await SharedPrefs.setToken('dummy_token');
-      // AppRoutes.pushAndRemoveUntil(context, AppRoutes.home);
+      final response = await _authRepository.login(
+        emailController.text,
+        passwordController.text,
+      );
+
+      if (response.allGood) {
+        final token = response.body['access_token'];
+        final refreshToken = response.body['refresh_token'];
+
+        await SharedPrefs.setToken(token);
+        await SharedPrefs.setRefreshToken(refreshToken);
+        AppRoutes.pushAndRemoveUntil(context, AppRoutes.home);
+      } else {
+        setError(response.error ?? 'error_occurred'.tr());
+      }
     } catch (e) {
       setError(e.toString());
     } finally {
@@ -84,6 +103,30 @@ class LoginVM extends BaseVM {
     } finally {
       setLoading(false);
     }
+  }
+
+  Future<void> loginWithFaceId() async {
+    await Future.delayed(const Duration(seconds: 2));
+  }
+
+  void onChangeOtp(String value) {
+    otp = value;
+  }
+
+  Future<void> forgotPassword() async {
+    AppRoutes.push(context, AppRoutes.verifyOtp);
+  }
+
+  Future<void> resendOtp() async {
+    AppRoutes.push(context, AppRoutes.verifyOtp);
+  }
+
+  Future<void> verifyOtp() async {
+    AppRoutes.push(context, AppRoutes.home);
+  }
+
+  void goBack() {
+    AppRoutes.pop(context);
   }
 
   String? validateEmail(String? value) => Validator.validateEmail(value);

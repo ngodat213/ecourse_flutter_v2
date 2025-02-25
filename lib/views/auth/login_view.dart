@@ -14,7 +14,7 @@ class LoginView extends BaseView<LoginVM> {
 
   @override
   LoginVM createViewModel(BuildContext context) {
-    return LoginVM(context: context);
+    return LoginVM(context);
   }
 
   @override
@@ -66,6 +66,16 @@ class _LoginContentState extends State<_LoginContent>
             TabBar(
               controller: _tabController,
               tabs: [Tab(text: 'login'.tr()), Tab(text: 'register'.tr())],
+              labelStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColor.secondary,
+              ),
+              unselectedLabelStyle: Theme.of(
+                context,
+              ).textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColor.accent,
+              ),
             ),
             Expanded(
               child: TabBarView(
@@ -161,7 +171,7 @@ class _LoginContentState extends State<_LoginContent>
               textInputAction: TextInputAction.next,
               style: Theme.of(
                 context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 16.h),
             Text(
@@ -182,20 +192,43 @@ class _LoginContentState extends State<_LoginContent>
               onSubmitted: (_) => widget.viewModel.login(),
               style: Theme.of(
                 context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => widget.viewModel.forgotPassword(),
+                child: Text(
+                  'forgot_password'.tr(),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColor.primary,
+                  ),
+                ),
+              ),
             ),
             Expanded(child: SizedBox()),
             CustomElevatedButton(
               context: context,
               onPressed: () => widget.viewModel.login(),
               text: 'login'.tr(),
+              width: 1.sw,
             ),
             SizedBox(height: 16.h),
             CustomElevatedButton(
               context: context,
-              onPressed: () => widget.viewModel.login(),
+              onPressed: () => widget.viewModel.loginWithFaceId(),
               backgroundColor: Colors.white,
-              text: 'sign_up'.tr(),
+              text: 'login_with_face_id'.tr(),
+              width: 1.sw,
+              leading: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: SvgPicture.asset(
+                  'assets/svgs/face_id.svg',
+                  width: 24.w,
+                  height: 24.h,
+                ),
+              ),
               textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColor.secondary,
@@ -264,6 +297,9 @@ class _LoginContentState extends State<_LoginContent>
               ),
               validator: (value) => Validator.validateFullName(value),
               textInputAction: TextInputAction.next,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 16.h),
             Text(
@@ -282,6 +318,9 @@ class _LoginContentState extends State<_LoginContent>
               keyboardType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               validator: (value) => Validator.validateEmail(value),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 16.h),
             Text(
@@ -297,6 +336,9 @@ class _LoginContentState extends State<_LoginContent>
               textInputAction: TextInputAction.done,
               onSubmitted: (_) => widget.viewModel.register(),
               validator: (value) => Validator.validatePassword(value),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             SizedBox(height: 16.h),
             Text(
@@ -312,12 +354,16 @@ class _LoginContentState extends State<_LoginContent>
               textInputAction: TextInputAction.done,
               validator: (value) => Validator.validatePassword(value),
               onSubmitted: (_) => widget.viewModel.register(),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
             Expanded(child: SizedBox()),
             CustomElevatedButton(
               context: context,
               onPressed: () => widget.viewModel.register(),
               text: 'register'.tr(),
+              width: 1.sw,
             ),
           ],
         ),

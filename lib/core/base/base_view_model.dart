@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 abstract class BaseVM extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
+  final BuildContext context;
+
+  BaseVM(this.context) {
+    onInit();
+  }
 
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -24,6 +29,8 @@ abstract class BaseVM extends ChangeNotifier {
     _error = null;
     notifyListeners();
   }
+
+  void onInit() {}
 
   // Dispose resources
   @override

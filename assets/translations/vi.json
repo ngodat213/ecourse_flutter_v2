@@ -44,5 +44,13 @@
   "fullname_length": "Họ tên phải có ít nhất 2 ký tự",
   "fullname_invalid": "Họ tên không được chứa ký tự đặc biệt",
   "login_success": "Đăng nhập thành công",
-  "register_success": "Đăng ký thành công"
-} 
+  "register_success": "Đăng ký thành công",
+  "login_with_face_id": "Đăng nhập bằng Face ID",
+  "forgot_password": "Quên mật khẩu?",
+  "enter_the_6_digit_code": "Nhập mã 6 chữ số",
+  "did_not_receive_the_code": "Không nhận được mã?",
+  "resend": "Gửi lại",
+  "verify": "Xác nhận",
+  "verification": "Xác nhận mã OTP",
+  "forget_password": "Quên mật khẩu?"
+}

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ecourse_flutter_v2/models/user_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_config.dart';
 
@@ -17,8 +18,29 @@ class SharedPrefs {
     await _prefs.setString(AppConfig.tokenKey, token);
   }
 
+  static String? getRefreshToken() =>
+      _prefs.getString(AppConfig.refreshTokenKey);
+
+  static Future<void> setRefreshToken(String refreshToken) async {
+    await _prefs.setString(AppConfig.refreshTokenKey, refreshToken);
+  }
+
   static Future<void> removeToken() async {
     await _prefs.remove(AppConfig.tokenKey);
+  }
+
+  static Future<void> setUser(UserProfile userProfile) async {
+    await _prefs.setString(AppConfig.userKey, jsonEncode(userProfile.toJson()));
+  }
+
+  static UserProfile? getUser() {
+    final String? jsonString = _prefs.getString(AppConfig.userKey);
+    if (jsonString == null) return null;
+    return UserProfile.fromJson(jsonDecode(jsonString));
+  }
+
+  static Future<void> removeUser() async {
+    await _prefs.remove(AppConfig.userKey);
   }
 
   // Theme management

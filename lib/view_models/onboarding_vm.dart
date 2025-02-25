@@ -4,9 +4,8 @@ import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingVM extends BaseVM {
-  final BuildContext context;
   final PageController pageController = PageController();
-  OnboardingVM(this.context);
+  OnboardingVM(super.context);
 
   Future<void> skipOnboarding() async {
     await SharedPrefs.setBool('is_onboarding_skipped', true);
