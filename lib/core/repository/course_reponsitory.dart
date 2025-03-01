@@ -1,11 +1,11 @@
 import 'package:ecourse_flutter_v2/core/config/app_config.dart';
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 
-class UserRepository {
+class CourseRepository {
   final BaseAPI _baseAPI = BaseAPI();
-  Future<ApiResponse> getUserProfile() async {
+  Future<ApiResponse> getCourses() async {
     final response = await _baseAPI.fetchData(
-      AppConfig.userProfile,
+      AppConfig.courses,
       method: ApiMethod.GET,
     );
 

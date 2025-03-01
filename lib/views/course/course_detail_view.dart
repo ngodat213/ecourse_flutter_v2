@@ -1,4 +1,5 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/list_tile.dart';
 import 'package:ecourse_flutter_v2/view_models/course_vm.dart';
@@ -47,7 +48,7 @@ class CourseStatsItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.r),
           ),
           child: SvgPicture.asset(
-            'assets/svgs/play.svg',
+            AppImage.svgPlay,
             width: 16.w,
             height: 16.h,
             color: AppColor.primary,
@@ -120,7 +121,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                         ),
                       ),
                       icon: SvgPicture.asset(
-                        'assets/svgs/arrow_left.svg',
+                        AppImage.svgArrowLeft,
                         width: 12.w,
                         height: 16.h,
                         color: AppColor.primary,
@@ -131,7 +132,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                       onPressed: () {},
                       padding: EdgeInsets.all(8.w),
                       icon: SvgPicture.asset(
-                        'assets/svgs/heart.svg',
+                        AppImage.svgHeart,
                         width: 16.w,
                         height: 16.h,
                         color: AppColor.primary,
@@ -142,7 +143,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                       onPressed: () {},
                       padding: EdgeInsets.all(8.w),
                       icon: SvgPicture.asset(
-                        'assets/svgs/share.svg',
+                        AppImage.svgShare,
                         width: 16.w,
                         height: 16.h,
                         color: AppColor.primary,
@@ -178,7 +179,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                             Row(
                               children: [
                                 SvgPicture.asset(
-                                  'assets/svgs/clock.svg',
+                                  AppImage.svgClock,
                                   width: 12.w,
                                   height: 12.h,
                                   color: AppColor.primary,
@@ -201,7 +202,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                         Row(
                           children: [
                             SvgPicture.asset(
-                              'assets/svgs/star.svg',
+                              AppImage.svgStar,
                               width: 12.w,
                               height: 12.h,
                               color: AppColor.warning,

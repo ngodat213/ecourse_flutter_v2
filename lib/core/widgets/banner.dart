@@ -1,5 +1,6 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
+import 'package:ecourse_flutter_v2/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,6 +10,7 @@ class BannerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: ResponsiveLayout.isDesktop(context) ? 0.2.sw : 1.sw,
       margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       decoration: BoxDecoration(
         color: AppColor.cardColor,

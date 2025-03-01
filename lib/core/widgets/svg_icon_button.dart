@@ -1,5 +1,5 @@
-import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SvgIconButton extends StatelessWidget {
@@ -9,14 +9,15 @@ class SvgIconButton extends StatelessWidget {
   final Color? color;
   final VoidCallback onPressed;
 
-  const SvgIconButton({
+  SvgIconButton({
     super.key,
     required this.assetName,
     required this.onPressed,
-    this.width = 24,
-    this.height = 24,
+    double? width,
+    double? height,
     this.color,
-  });
+  }) : width = width ?? 16.w,
+       height = height ?? 16.h;
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
 import 'package:ecourse_flutter_v2/view_models/login_vm.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class VerifyOtpView extends BaseView<LoginVM> {
                 child: IconButton(
                   onPressed: () => viewModel.goBack(),
                   icon: SvgPicture.asset(
-                    'assets/svgs/arrow_left.svg',
+                    AppImage.svgArrowLeft,
                     width: 24.w,
                     height: 24.h,
                   ),

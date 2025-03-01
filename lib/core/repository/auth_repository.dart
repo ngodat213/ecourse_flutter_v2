@@ -5,7 +5,7 @@ class AuthRepository {
   Future<ApiResponse> login(String email, String password) async {
     final response = await BaseAPI().fetchData(
       AppConfig.login,
-      method: ApiMethod.post,
+      method: ApiMethod.POST,
       body: {'email': email, 'password': password},
     );
 
@@ -20,7 +20,7 @@ class AuthRepository {
   ) async {
     final response = await BaseAPI().fetchData(
       AppConfig.register,
-      method: ApiMethod.post,
+      method: ApiMethod.POST,
       body: {'name': name, 'email': email, 'password': password},
     );
 

@@ -1,3 +1,4 @@
+import 'package:ecourse_flutter_v2/views/admin/admin_view.dart';
 import 'package:ecourse_flutter_v2/views/auth/forget_pw_view.dart';
 import 'package:ecourse_flutter_v2/views/auth/verify_otp_view.dart';
 import 'package:ecourse_flutter_v2/views/course/course_detail_view.dart';
@@ -5,9 +6,9 @@ import 'package:ecourse_flutter_v2/views/exam/exam_detail_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_taking_view.dart';
 import 'package:ecourse_flutter_v2/views/splash/splash_view.dart';
 import 'package:flutter/material.dart';
-import '../../views/home/home_view.dart';
 import '../../views/auth/login_view.dart';
 import '../../views/onboarding/onboarding_view.dart';
+import '../../views/home/main_view.dart';
 
 class AppRoutes {
   // Route names
@@ -20,18 +21,20 @@ class AppRoutes {
   static const String courseDetail = '/course-detail';
   static const String examDetail = '/exam-detail';
   static const String examTaking = '/exam-taking';
+  static const String adminDashboard = '/admin-dashboard';
   // Route map
   static Map<String, WidgetBuilder> getRoutes() {
     return {
       splash: (context) => const SplashView(),
       onboarding: (context) => const OnboardingView(),
       login: (context) => const LoginView(),
-      home: (context) => const HomeView(),
+      home: (context) => const MainView(),
       verifyOtp: (context) => const VerifyOtpView(),
       forgetPw: (context) => const ForgetPwView(),
       courseDetail: (context) => const CourseDetailView(),
       examDetail: (context) => const ExamDetailView(),
       examTaking: (context) => const ExamTakingView(),
+      adminDashboard: (context) => const AdminView(),
     };
   }
 

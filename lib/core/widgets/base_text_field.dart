@@ -1,5 +1,5 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
-import 'package:ecourse_flutter_v2/core/widgets/svg_icon_button.dart';
+import 'package:ecourse_flutter_v2/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -28,6 +28,8 @@ class BaseTextField extends StatefulWidget {
   final TextStyle? labelStyle;
   final TextStyle? hintStyle;
   final BorderRadius? borderRadius;
+  final double? width;
+  final double? height;
 
   const BaseTextField({
     super.key,
@@ -55,6 +57,8 @@ class BaseTextField extends StatefulWidget {
     this.labelStyle,
     this.hintStyle,
     this.borderRadius,
+    this.width,
+    this.height,
   });
 
   @override
@@ -91,93 +95,115 @@ class _BaseTextFieldState extends State<BaseTextField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDesktop = ResponsiveLayout.isDesktop(context);
 
-    return Column(
-      children: [
-        TextFormField(
-          controller: widget.controller,
-          obscureText: _obscureText,
-          validator: widget.validator,
-          keyboardType: widget.keyboardType,
-          onTap: widget.onTap,
-          readOnly: widget.readOnly,
-          maxLines: widget.maxLines,
-          minLines: widget.minLines,
-          textInputAction: widget.textInputAction,
-          onFieldSubmitted: widget.onSubmitted,
-          onChanged: widget.onChanged,
-          focusNode: _focusNode,
-          showCursor: widget.showCursor,
-          autofocus: widget.autofocus,
-          enabled: widget.enabled,
-          style: widget.style ?? theme.textTheme.bodyLarge,
-          decoration: InputDecoration(
-            // labelText: widget.labelText,
-            errorStyle: const TextStyle(height: 0, fontSize: 0),
-            errorText: null,
-            hintText: widget.hintText,
-            prefixIcon:
-                widget.prefixIcon != null
-                    ? Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
-                      child: widget.prefixIcon,
-                    )
-                    : null,
-            suffixIcon:
-                widget.obscureText
-                    ? Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: SvgIconButton(
-                        width: 16.w,
-                        height: 16.h,
-                        assetName:
-                            _obscureText
-                                ? 'assets/svgs/eye_off.svg'
-                                : 'assets/svgs/eye.svg',
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                      ),
-                    )
-                    : null,
-            contentPadding:
-                widget.contentPadding ??
-                EdgeInsets.symmetric(horizontal: 32.w, vertical: 8.h),
-            filled: true,
-            fillColor: widget.fillColor ?? AppColor.cardColor,
-            labelStyle:
-                widget.labelStyle ??
-                theme.textTheme.bodyLarge?.copyWith(
-                  color: _isFocused ? theme.primaryColor : Colors.grey,
-                ),
-            hintStyle:
-                widget.hintStyle ??
-                theme.textTheme.bodyLarge?.copyWith(color: Colors.grey),
-            border: OutlineInputBorder(
-              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-              borderSide: BorderSide.none,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: AppColor.accent),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: AppColor.accent),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: theme.colorScheme.error),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: widget.borderRadius ?? BorderRadius.circular(12.r),
-              borderSide: BorderSide(color: theme.colorScheme.error),
-            ),
+    final horizontalPadding = isDesktop ? 24.0 : 16.w;
+    final verticalPadding = isDesktop ? 16.0 : 8.h;
+    final fontSize = isDesktop ? 16.0 : 14.sp;
+    final iconSize = isDesktop ? 16.0 : 20.w;
+    final borderRadius = isDesktop ? 12.0 : 12.r;
+    final width = isDesktop ? 400.w : widget.width;
+    final height = isDesktop ? 56.h : widget.height;
+
+    return SizedBox(
+      width: width,
+      height: height,
+      child: TextFormField(
+        controller: widget.controller,
+        obscureText: _obscureText,
+        validator: widget.validator,
+        keyboardType: widget.keyboardType,
+        onTap: widget.onTap,
+        readOnly: widget.readOnly,
+        maxLines: widget.maxLines,
+        minLines: widget.minLines,
+        textInputAction: widget.textInputAction,
+        onFieldSubmitted: widget.onSubmitted,
+        onChanged: widget.onChanged,
+        focusNode: _focusNode,
+        showCursor: widget.showCursor,
+        autofocus: widget.autofocus,
+        enabled: widget.enabled,
+        style:
+            widget.style ??
+            theme.textTheme.bodyLarge?.copyWith(fontSize: fontSize),
+        decoration: InputDecoration(
+          errorStyle: const TextStyle(height: 0, fontSize: 0),
+          errorText: null,
+          hintText: widget.hintText,
+          prefixIcon:
+              widget.prefixIcon != null
+                  ? Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: horizontalPadding,
+                    ),
+                    child: IconTheme(
+                      data: IconThemeData(size: iconSize),
+                      child: widget.prefixIcon!,
+                    ),
+                  )
+                  : null,
+          suffixIcon:
+              widget.obscureText
+                  ? IconButton(
+                    icon: Icon(
+                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                      size: iconSize,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                  )
+                  : null,
+          contentPadding:
+              widget.contentPadding ??
+              EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: verticalPadding,
+              ),
+          filled: true,
+          fillColor: widget.fillColor ?? AppColor.cardColor,
+          labelStyle:
+              widget.labelStyle ??
+              theme.textTheme.bodyLarge?.copyWith(
+                fontSize: fontSize,
+                color: _isFocused ? theme.primaryColor : Colors.grey,
+              ),
+          hintStyle:
+              widget.hintStyle ??
+              theme.textTheme.bodyLarge?.copyWith(
+                fontSize: fontSize,
+                color: Colors.grey,
+              ),
+          border: OutlineInputBorder(
+            borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(borderRadius),
+            borderSide: BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(color: AppColor.accent),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(color: AppColor.accent),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(color: theme.colorScheme.error),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(borderRadius),
+            borderSide: BorderSide(color: theme.colorScheme.error),
           ),
         ),
-      ],
+      ),
     );
   }
 }

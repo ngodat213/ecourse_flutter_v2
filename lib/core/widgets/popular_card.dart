@@ -1,5 +1,7 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
+import 'package:ecourse_flutter_v2/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,7 +14,8 @@ class PopularCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => AppRoutes.push(context, AppRoutes.courseDetail),
       child: Container(
-        height: 0.3.sw,
+        height: ResponsiveLayout.isDesktop(context) ? 0.1.sw : 0.3.sw,
+        width: ResponsiveLayout.isDesktop(context) ? 0.3.sw : 1.sw,
         margin: EdgeInsets.symmetric(horizontal: 16.w),
         decoration: BoxDecoration(
           color: AppColor.cardColor,
@@ -21,8 +24,8 @@ class PopularCard extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 0.3.sw,
-              height: 0.3.sw,
+              width: ResponsiveLayout.isDesktop(context) ? 0.1.sw : 0.3.sw,
+              height: ResponsiveLayout.isDesktop(context) ? 0.1.sw : 0.3.sw,
               decoration: BoxDecoration(
                 color: AppColor.border.withOpacity(0.5),
                 borderRadius: BorderRadius.only(
@@ -32,11 +35,12 @@ class PopularCard extends StatelessWidget {
               ),
               child: Image.asset(
                 'assets/images/home/computer.png',
-                height: 0.3.sw,
+                height: 0.1.sw,
               ),
             ),
             Container(
               padding: EdgeInsets.all(16.w),
+              height: ResponsiveLayout.isDesktop(context) ? 0.1.sw : 0.3.sw,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -73,7 +77,7 @@ class PopularCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100.r),
               ),
               child: SvgPicture.asset(
-                'assets/svgs/play.svg',
+                AppImage.svgPlay,
                 height: 12.h,
                 width: 12.w,
                 color: AppColor.accent,

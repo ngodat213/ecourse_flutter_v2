@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ecourse_flutter_v2/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -30,11 +31,14 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ThemeProvider(SharedPrefs.getThemeMode()),
+          create: (_) => ThemeProvider(SharedPrefs.getThemeMode(), context),
         ),
       ],
       child: ScreenUtilInit(
-        designSize: const Size(375, 812),
+        designSize:
+            ResponsiveLayout.isDesktop(context)
+                ? const Size(1920, 1080)
+                : const Size(360, 800),
         builder:
             (_, __) => Consumer<ThemeProvider>(
               builder: (context, themeProvider, _) {

@@ -1,127 +1,135 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_color.dart';
 import 'app_text_style.dart';
 
 class AppTheme {
-  static TextTheme get textTheme {
+  static TextTheme getTextTheme(BuildContext context) {
     return TextTheme(
       // Display styles
       displayLarge: AppTextStyle.bold(
-        fontSize: 57,
+        context: context,
+        fontSize: 57.sp,
         height: 1.12,
         color: AppColor.textPrimary,
       ),
       displayMedium: AppTextStyle.bold(
-        fontSize: 45,
+        context: context,
+        fontSize: 45.sp,
         height: 1.15,
         color: AppColor.textPrimary,
       ),
       displaySmall: AppTextStyle.bold(
-        fontSize: 36,
+        fontSize: 36.sp,
         height: 1.22,
         color: AppColor.textPrimary,
       ),
 
       // Headline styles
       headlineLarge: AppTextStyle.semiBold(
-        fontSize: 32,
+        fontSize: 32.sp,
         height: 1.25,
         color: AppColor.textPrimary,
       ),
       headlineMedium: AppTextStyle.semiBold(
-        fontSize: 28,
+        fontSize: 28.sp,
         height: 1.28,
         color: AppColor.textPrimary,
       ),
       headlineSmall: AppTextStyle.semiBold(
-        fontSize: 24,
+        fontSize: 24.sp,
         height: 1.33,
         color: AppColor.textPrimary,
       ),
 
       // Title styles
       titleLarge: AppTextStyle.medium(
-        fontSize: 22,
+        fontSize: 22.sp,
         height: 1.27,
         color: AppColor.textPrimary,
       ),
       titleMedium: AppTextStyle.medium(
-        fontSize: 16,
+        fontSize: 16.sp,
         height: 1.5,
         color: AppColor.textPrimary,
       ),
       titleSmall: AppTextStyle.medium(
-        fontSize: 14,
+        fontSize: 14.sp,
         height: 1.43,
         color: AppColor.textPrimary,
       ),
 
       // Label styles
       labelLarge: AppTextStyle.medium(
-        fontSize: 14,
+        fontSize: 14.sp,
         height: 1.43,
         color: AppColor.textPrimary,
       ),
       labelMedium: AppTextStyle.medium(
-        fontSize: 12,
+        fontSize: 12.sp,
         height: 1.33,
         color: AppColor.textSecondary,
       ),
       labelSmall: AppTextStyle.medium(
-        fontSize: 11,
+        fontSize: 11.sp,
         height: 1.45,
         color: AppColor.textPrimary,
       ),
 
       // Body styles
       bodyLarge: AppTextStyle.regular(
-        fontSize: 16,
+        fontSize: 16.sp,
         height: 1.5,
         color: AppColor.textPrimary,
       ),
       bodyMedium: AppTextStyle.regular(
-        fontSize: 14,
+        fontSize: 14.sp,
         height: 1.43,
         color: AppColor.textPrimary,
       ),
       bodySmall: AppTextStyle.regular(
-        fontSize: 12,
+        fontSize: 12.sp,
         height: 1.33,
         color: AppColor.textPrimary,
       ),
     );
   }
 
-  static TextTheme get darkTextTheme {
-    return textTheme.apply(
+  static TextTheme getDarkTextTheme(BuildContext context) {
+    return getTextTheme(context).apply(
       bodyColor: AppColor.textPrimaryDark,
       displayColor: AppColor.textPrimaryDark,
     );
   }
 
-  static ThemeData get lightTheme {
+  static ThemeData getLightTheme(BuildContext context) {
     return ThemeData(
       brightness: Brightness.light,
       primaryColor: AppColor.primary,
+      dividerColor: Colors.black,
       scaffoldBackgroundColor: AppColor.background,
       colorScheme: ColorScheme.fromSeed(seedColor: AppColor.primary),
-      fontFamily: 'GeneralSans',
-      textTheme: textTheme,
+      fontFamily: 'Poppins',
+      textTheme: getTextTheme(context),
       useMaterial3: true,
     );
   }
 
-  static ThemeData get darkTheme {
+  static ThemeData getDarkTheme(BuildContext context) {
     return ThemeData(
       brightness: Brightness.dark,
       primaryColor: AppColor.primary,
+      dividerColor: Colors.black,
       scaffoldBackgroundColor: AppColor.backgroundDark,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColor.primary,
         brightness: Brightness.dark,
       ),
-      fontFamily: 'GeneralSans',
-      textTheme: darkTextTheme,
+      fontFamily: 'Poppins',
+      textTheme: getTextTheme(context).apply(
+        bodyColor: AppColor.textPrimary,
+        displayColor: AppColor.textPrimary,
+      ),
       useMaterial3: true,
     );
   }

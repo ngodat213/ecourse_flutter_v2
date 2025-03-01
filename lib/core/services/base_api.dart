@@ -5,13 +5,13 @@ import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
 
 enum ApiStatus { succeeded, failed, internetUnavailable }
 
-enum ApiMethod { get, post, put, delete }
+enum ApiMethod { GET, POST, PUT, DELETE }
 
 const Map<ApiMethod, String> apiMethod = {
-  ApiMethod.get: 'GET',
-  ApiMethod.post: 'POST',
-  ApiMethod.put: 'PUT',
-  ApiMethod.delete: 'DELETE',
+  ApiMethod.GET: 'GET',
+  ApiMethod.POST: 'POST',
+  ApiMethod.PUT: 'PUT',
+  ApiMethod.DELETE: 'DELETE',
 };
 
 class ApiResponse {
@@ -19,12 +19,11 @@ class ApiResponse {
   final String? message;
   final dynamic body;
   final bool? success;
-  final String? error;
-
+  final ErrorResponse? error;
   ApiResponse({this.code, this.message, this.body, this.success, this.error});
 
   bool get allGood => success ?? false;
-  bool hasError() => error?.isNotEmpty ?? false;
+  bool hasError() => error != null;
   bool hasData() => body != null;
 
   factory ApiResponse.fromResponse(dynamic response) {
@@ -33,13 +32,42 @@ class ApiResponse {
       message: response['message'] ?? '',
       body: response['data'],
       success: response['success'],
-      error: response['error'] ?? '',
     );
   }
 }
 
+class ErrorResponse {
+  final int statusCode;
+  final String status;
+  final bool isOperational;
+  final List<String> errors;
+
+  ErrorResponse({
+    required this.statusCode,
+    required this.status,
+    required this.isOperational,
+    required this.errors,
+  });
+
+  factory ErrorResponse.fromJson(Map<String, dynamic> json) {
+    return ErrorResponse(
+      statusCode: json['statusCode'],
+      status: json['status'],
+      isOperational: json['isOperational'],
+      errors: json['errors'],
+    );
+  }
+
+  String getErrorMessage() {
+    if (errors.isNotEmpty) {
+      return errors.first;
+    }
+    return 'An error occurred.';
+  }
+}
+
 class BaseAPI {
-  static String domain = 'http://192.168.0.108:3000/api';
+  static String domain = 'http://192.168.0.107:3000/api';
   final Dio _dio = Dio();
 
   Future<Map<String, String>> getHeaders() async {
@@ -54,7 +82,7 @@ class BaseAPI {
     bool forceRefresh = false,
     Map<String, dynamic>? params,
     Map<String, dynamic>? headers,
-    ApiMethod method = ApiMethod.get,
+    ApiMethod method = ApiMethod.GET,
   }) async {
     try {
       final options = Options(

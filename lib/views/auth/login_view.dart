@@ -1,13 +1,15 @@
+import 'package:ecourse_flutter_v2/core/config/app_image.dart';
+import 'package:ecourse_flutter_v2/utils/responsive_layout.dart';
+import 'package:flutter/material.dart';
+import '../../core/base/base_view.dart';
+import '../../view_models/login_vm.dart';
+import 'package:ecourse_flutter_v2/core/widgets/base_text_field.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/utils/validator.dart';
 import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../core/base/base_view.dart';
-import '../../view_models/login_vm.dart';
-import '../../core/widgets/base_text_field.dart';
 
 class LoginView extends BaseView<LoginVM> {
   const LoginView({super.key});
@@ -19,20 +21,20 @@ class LoginView extends BaseView<LoginVM> {
 
   @override
   Widget buildView(BuildContext context, LoginVM viewModel) {
-    return _LoginContent(viewModel: viewModel);
+    return LoginMobileView(viewModel: viewModel);
   }
 }
 
-class _LoginContent extends StatefulWidget {
+class LoginMobileView extends StatefulWidget {
   final LoginVM viewModel;
 
-  const _LoginContent({required this.viewModel});
+  const LoginMobileView({super.key, required this.viewModel});
 
   @override
-  State<_LoginContent> createState() => _LoginContentState();
+  State<LoginMobileView> createState() => LoginMobileViewState();
 }
 
-class _LoginContentState extends State<_LoginContent>
+class LoginMobileViewState extends State<LoginMobileView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -59,28 +61,40 @@ class _LoginContentState extends State<_LoginContent>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return SafeArea(
+      child: SizedBox(
+        width: 1.sw,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TabBar(
-              controller: _tabController,
-              tabs: [Tab(text: 'login'.tr()), Tab(text: 'register'.tr())],
-              labelStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColor.secondary,
-              ),
-              unselectedLabelStyle: Theme.of(
-                context,
-              ).textTheme.labelMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColor.accent,
+            SizedBox(height: ResponsiveLayout.isDesktop(context) ? 32.h : 0),
+            SizedBox(
+              width: ResponsiveLayout.isDesktop(context) ? 400.w : 1.sw,
+              child: TabBar(
+                controller: _tabController,
+                tabs: [Tab(text: 'login'.tr()), Tab(text: 'register'.tr())],
+                labelStyle: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColor.secondary,
+                ),
+                unselectedLabelStyle: Theme.of(
+                  context,
+                ).textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColor.accent,
+                ),
               ),
             ),
             Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [_buildLoginTab(context), _buildRegisterTab(context)],
+              child: SizedBox(
+                width: ResponsiveLayout.isDesktop(context) ? 400.w : 1.sw,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildLoginTab(context),
+                    _buildRegisterTab(context),
+                  ],
+                ),
               ),
             ),
           ],
@@ -103,7 +117,7 @@ class _LoginContentState extends State<_LoginContent>
               children: [
                 IconButton(
                   icon: SvgPicture.asset(
-                    'assets/svgs/google.svg',
+                    AppImage.svgGoogle,
                     width: 23.w,
                     height: 23.h,
                   ),
@@ -111,7 +125,7 @@ class _LoginContentState extends State<_LoginContent>
                 ),
                 IconButton(
                   icon: SvgPicture.asset(
-                    'assets/svgs/facebook.svg',
+                    AppImage.svgFacebook,
                     width: 23.w,
                     height: 23.h,
                   ),
@@ -136,7 +150,7 @@ class _LoginContentState extends State<_LoginContent>
                   child: Row(
                     children: [
                       SvgPicture.asset(
-                        'assets/svgs/info.svg',
+                        AppImage.svgInfo,
                         width: 16.w,
                         height: 16.h,
                         color: AppColor.error,
@@ -162,7 +176,7 @@ class _LoginContentState extends State<_LoginContent>
               controller: widget.viewModel.emailController,
               labelText: 'email'.tr(),
               prefixIcon: SvgPicture.asset(
-                'assets/svgs/user.svg',
+                AppImage.svgUser,
                 width: 16.w,
                 height: 16.h,
               ),
@@ -183,7 +197,7 @@ class _LoginContentState extends State<_LoginContent>
               controller: widget.viewModel.passwordController,
               labelText: 'password'.tr(),
               prefixIcon: SvgPicture.asset(
-                'assets/svgs/lock.svg',
+                AppImage.svgLock,
                 width: 16.w,
                 height: 16.h,
               ),
@@ -207,7 +221,7 @@ class _LoginContentState extends State<_LoginContent>
                 ),
               ),
             ),
-            Expanded(child: SizedBox()),
+            SizedBox(height: ResponsiveLayout.isDesktop(context) ? 32.h : 16.h),
             CustomElevatedButton(
               context: context,
               onPressed: () => widget.viewModel.login(),
@@ -224,7 +238,7 @@ class _LoginContentState extends State<_LoginContent>
               leading: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: SvgPicture.asset(
-                  'assets/svgs/face_id.svg',
+                  AppImage.svgFaceId,
                   width: 24.w,
                   height: 24.h,
                 ),
@@ -265,7 +279,7 @@ class _LoginContentState extends State<_LoginContent>
                   child: Row(
                     children: [
                       SvgPicture.asset(
-                        'assets/svgs/info.svg',
+                        AppImage.svgInfo,
                         width: 16.w,
                         height: 16.h,
                         color: AppColor.error,
@@ -291,7 +305,7 @@ class _LoginContentState extends State<_LoginContent>
               controller: widget.viewModel.registerNameController,
               labelText: 'email'.tr(),
               prefixIcon: SvgPicture.asset(
-                'assets/svgs/user.svg',
+                AppImage.svgUser,
                 width: 16.w,
                 height: 16.h,
               ),
@@ -311,7 +325,7 @@ class _LoginContentState extends State<_LoginContent>
               controller: widget.viewModel.registerEmailController,
               labelText: 'email'.tr(),
               prefixIcon: SvgPicture.asset(
-                'assets/svgs/mail.svg',
+                AppImage.svgMail,
                 width: 16.w,
                 height: 16.h,
               ),
@@ -358,7 +372,7 @@ class _LoginContentState extends State<_LoginContent>
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
             ),
-            Expanded(child: SizedBox()),
+            SizedBox(height: ResponsiveLayout.isDesktop(context) ? 32.h : 16.h),
             CustomElevatedButton(
               context: context,
               onPressed: () => widget.viewModel.register(),

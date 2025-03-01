@@ -13,6 +13,7 @@ class RouteGuard extends NavigatorObserver {
     AppRoutes.forgetPw,
     AppRoutes.examDetail,
     AppRoutes.examTaking,
+    AppRoutes.adminDashboard,
   ];
 
   @override

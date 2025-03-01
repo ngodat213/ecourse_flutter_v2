@@ -1,4 +1,5 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -69,13 +70,13 @@ class ListTileWidget extends StatelessWidget {
             child:
                 isExam
                     ? SvgPicture.asset(
-                      'assets/svgs/hour.svg',
+                      AppImage.svgHour,
                       width: 16.w,
                       height: 16.h,
                       color: AppColor.primary,
                     )
                     : SvgPicture.asset(
-                      'assets/svgs/play.svg',
+                      AppImage.svgPlay,
                       width: 16.w,
                       height: 16.h,
                       color: AppColor.primary,

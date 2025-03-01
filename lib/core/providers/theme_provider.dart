@@ -4,8 +4,9 @@ import '../services/shared_prefs.dart';
 
 class ThemeProvider extends ChangeNotifier {
   late ThemeMode _themeMode;
+  final BuildContext context;
 
-  ThemeProvider(String? savedThemeMode) {
+  ThemeProvider(String? savedThemeMode, this.context) {
     _themeMode = _getThemeModeFromString(savedThemeMode);
   }
 
@@ -24,6 +25,6 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  ThemeData get lightTheme => AppTheme.lightTheme;
-  ThemeData get darkTheme => AppTheme.darkTheme;
+  ThemeData get lightTheme => AppTheme.getLightTheme(context);
+  ThemeData get darkTheme => AppTheme.getDarkTheme(context);
 }

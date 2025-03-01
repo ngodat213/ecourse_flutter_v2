@@ -1,4 +1,5 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
 import 'package:ecourse_flutter_v2/view_models/exam_vm.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class ExamTakingView extends BaseView<ExamVM> {
                             ),
                           ),
                           icon: SvgPicture.asset(
-                            'assets/svgs/arrow_left.svg',
+                            AppImage.svgArrowLeft,
                             width: 12.w,
                             height: 16.h,
                             color: AppColor.primary,
@@ -82,7 +83,7 @@ class ExamTakingView extends BaseView<ExamVM> {
                           onPressed: () {},
                           padding: EdgeInsets.all(8.w),
                           icon: SvgPicture.asset(
-                            'assets/svgs/bell.svg',
+                            AppImage.svgBell,
                             width: 16.w,
                             height: 16.h,
                             color: AppColor.primary,

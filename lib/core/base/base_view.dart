@@ -1,3 +1,4 @@
+import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'base_view_model.dart';
@@ -29,6 +30,7 @@ abstract class BaseView<T extends BaseVM> extends StatelessWidget {
         builder: (context, viewModel, _) {
           return Scaffold(
             appBar: buildAppBar(context, viewModel),
+            backgroundColor: AppColor.background,
             body: Stack(
               children: [
                 buildView(context, viewModel),

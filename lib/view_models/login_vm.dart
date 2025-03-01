@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/repository/auth_repository.dart';
 import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
-import 'package:ecourse_flutter_v2/views/auth/verify_otp_view.dart';
 import 'package:flutter/material.dart';
 import '../../core/base/base_view_model.dart';
 import '../../core/utils/validator.dart';
@@ -14,7 +13,7 @@ class LoginVM extends BaseVM {
   final formKey = GlobalKey<FormState>();
   final emailController =
       TextEditingController()..text = 'ngodat.it213@gmail.com';
-  final passwordController = TextEditingController()..text = 'Code26102003';
+  final passwordController = TextEditingController()..text = '123456789';
   final registerFormKey = GlobalKey<FormState>();
   final registerNameController = TextEditingController();
   final registerEmailController = TextEditingController();
@@ -45,7 +44,7 @@ class LoginVM extends BaseVM {
         await SharedPrefs.setRefreshToken(refreshToken);
         AppRoutes.pushAndRemoveUntil(context, AppRoutes.home);
       } else {
-        setError(response.error ?? 'error_occurred'.tr());
+        setError(response.message ?? 'error_occurred'.tr());
       }
     } catch (e) {
       setError(e.toString());

@@ -1,6 +1,7 @@
 class User {
   String? sId;
-  String? name;
+  String? firstName;
+  String? lastName;
   String? email;
   String? profilePictureId;
   String? avatarFile;
@@ -20,7 +21,8 @@ class User {
 
   User({
     this.sId,
-    this.name,
+    this.firstName,
+    this.lastName,
     this.email,
     this.profilePictureId,
     this.avatarFile,
@@ -41,7 +43,8 @@ class User {
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    name = json['name'];
+    firstName = json['first_name'];
+    lastName = json['last_name'];
     email = json['email'];
     profilePictureId = json['profile_picture_id'];
     avatarFile = json['avatar_file'];
@@ -78,7 +81,8 @@ class User {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
-    data['name'] = name;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
     data['email'] = email;
     data['profile_picture_id'] = profilePictureId;
     data['avatar_file'] = avatarFile;

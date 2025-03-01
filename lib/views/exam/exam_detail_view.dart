@@ -1,8 +1,8 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/list_tile.dart';
-import 'package:ecourse_flutter_v2/view_models/course_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/exam_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,8 +18,71 @@ class ExamDetailView extends BaseView<ExamVM> {
   }
 
   @override
+  PreferredSizeWidget? buildAppBar(BuildContext context, ExamVM vm) {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: AppColor.background,
+      actionsPadding: EdgeInsets.all(0),
+      title: AppBarDetail(),
+    );
+  }
+
+  @override
   Widget buildView(BuildContext context, ExamVM vm) {
     return ExamDetailScreen(viewModel: vm);
+  }
+}
+
+class AppBarDetail extends StatelessWidget {
+  const AppBarDetail({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            padding: EdgeInsets.all(6.w),
+            style: IconButton.styleFrom(
+              backgroundColor: AppColor.primary.withOpacity(0.3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100.r),
+              ),
+            ),
+            icon: SvgPicture.asset(
+              AppImage.svgArrowLeft,
+              width: 12.w,
+              height: 16.h,
+              color: AppColor.primary,
+            ),
+          ),
+          Spacer(),
+          IconButton(
+            onPressed: () {},
+            padding: EdgeInsets.all(8.w),
+            icon: SvgPicture.asset(
+              AppImage.svgHeart,
+              width: 16.w,
+              height: 16.h,
+              color: AppColor.primary,
+            ),
+          ),
+          SizedBox(width: 6.w),
+          IconButton(
+            onPressed: () {},
+            padding: EdgeInsets.all(8.w),
+            icon: SvgPicture.asset(
+              AppImage.svgShare,
+              width: 16.w,
+              height: 16.h,
+              color: AppColor.primary,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -49,7 +112,7 @@ class ExamStatsItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.r),
           ),
           child: SvgPicture.asset(
-            'assets/svgs/play.svg',
+            AppImage.svgPlay,
             width: 16.w,
             height: 16.h,
             color: AppColor.primary,
@@ -109,51 +172,6 @@ class _ExamDetailScreenState extends State<ExamDetailScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      padding: EdgeInsets.all(6.w),
-                      style: IconButton.styleFrom(
-                        backgroundColor: AppColor.primary.withOpacity(0.3),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100.r),
-                        ),
-                      ),
-                      icon: SvgPicture.asset(
-                        'assets/svgs/arrow_left.svg',
-                        width: 12.w,
-                        height: 16.h,
-                        color: AppColor.primary,
-                      ),
-                    ),
-                    Spacer(),
-                    IconButton(
-                      onPressed: () {},
-                      padding: EdgeInsets.all(8.w),
-                      icon: SvgPicture.asset(
-                        'assets/svgs/heart.svg',
-                        width: 16.w,
-                        height: 16.h,
-                        color: AppColor.primary,
-                      ),
-                    ),
-                    SizedBox(width: 6.w),
-                    IconButton(
-                      onPressed: () {},
-                      padding: EdgeInsets.all(8.w),
-                      icon: SvgPicture.asset(
-                        'assets/svgs/share.svg',
-                        width: 16.w,
-                        height: 16.h,
-                        color: AppColor.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
                 height: 0.6.sw,
                 margin: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
@@ -180,7 +198,7 @@ class _ExamDetailScreenState extends State<ExamDetailScreen>
                             Row(
                               children: [
                                 SvgPicture.asset(
-                                  'assets/svgs/clock.svg',
+                                  AppImage.svgClock,
                                   width: 12.w,
                                   height: 12.h,
                                   color: AppColor.primary,
@@ -203,7 +221,7 @@ class _ExamDetailScreenState extends State<ExamDetailScreen>
                         Row(
                           children: [
                             SvgPicture.asset(
-                              'assets/svgs/star.svg',
+                              AppImage.svgStar,
                               width: 12.w,
                               height: 12.h,
                               color: AppColor.warning,
