@@ -31,13 +31,10 @@ class CustomElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final isDesktop = ResponsiveLayout.isDesktop(context);
 
     final horizontalPadding = isDesktop ? 24.0 : 16.w;
     final verticalPadding = isDesktop ? 16.0 : 8.h;
-    final fontSize = isDesktop ? 16.0 : 14.sp;
-    final iconSize = isDesktop ? 24.0 : 20.w;
     final borderRadius = isDesktop ? 12.0 : 12.r;
     final width = isDesktop ? 400.w : this.width;
     final height = isDesktop ? 56.h : this.height;

@@ -3,15 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SeeAllWidget extends StatelessWidget {
-  const SeeAllWidget({super.key, required this.title, this.onSeeAll});
+  const SeeAllWidget({
+    super.key,
+    required this.title,
+    this.onSeeAll,
+    this.seeAllText,
+    this.padding,
+    this.seeAllStyle,
+  });
 
   final String title;
+  final String? seeAllText;
+  final TextStyle? seeAllStyle;
+  final EdgeInsetsGeometry? padding;
   final Function()? onSeeAll;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -25,11 +35,13 @@ class SeeAllWidget extends StatelessWidget {
           TextButton(
             onPressed: onSeeAll,
             child: Text(
-              'see_all'.tr(),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 10.sp,
-              ),
+              seeAllText ?? 'see_all'.tr(),
+              style:
+                  seeAllStyle ??
+                  Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 10.sp,
+                  ),
             ),
           ),
         ],

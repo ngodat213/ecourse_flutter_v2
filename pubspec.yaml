@@ -24,6 +24,8 @@ dependencies:
   flutter_otp_text_field: ^1.4.0+2
   data_table_2: ^2.5.18
   carousel_slider: ^5.0.0
+  readmore: ^3.0.0
+  animated_read_more_text: ^0.0.6
 
 dev_dependencies:
   flutter_test:

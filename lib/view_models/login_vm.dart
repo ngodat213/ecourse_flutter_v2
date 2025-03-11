@@ -24,28 +24,28 @@ class LoginVM extends BaseVM {
 
   Future<void> login() async {
     try {
-      if (!formKey.currentState!.validate()) {
-        setError('invalid_email_or_password'.tr());
-        return;
-      } else {
-        setError(null);
-      }
+      // if (!formKey.currentState!.validate()) {
+      //   setError('invalid_email_or_password'.tr());
+      //   return;
+      // } else {
+      //   setError(null);
+      // }
 
-      final response = await _authRepository.login(
-        emailController.text,
-        passwordController.text,
-      );
+      // final response = await _authRepository.login(
+      //   emailController.text,
+      //   passwordController.text,
+      // );
 
-      if (response.allGood) {
-        final token = response.body['access_token'];
-        final refreshToken = response.body['refresh_token'];
+      // if (response.allGood) {
+      //   final token = response.body['access_token'];
+      //   final refreshToken = response.body['refresh_token'];
 
-        await SharedPrefs.setToken(token);
-        await SharedPrefs.setRefreshToken(refreshToken);
-        AppRoutes.pushAndRemoveUntil(context, AppRoutes.home);
-      } else {
-        setError(response.message ?? 'error_occurred'.tr());
-      }
+      //   await SharedPrefs.setToken(token);
+      //   await SharedPrefs.setRefreshToken(refreshToken);
+      AppRoutes.pushAndRemoveUntil(context, AppRoutes.home);
+      // } else {
+      //   setError(response.message ?? 'error_occurred'.tr());
+      // }
     } catch (e) {
       setError(e.toString());
     } finally {

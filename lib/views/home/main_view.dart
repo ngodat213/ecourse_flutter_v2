@@ -62,7 +62,7 @@ class MainView extends BaseView<HomeVM> {
     return SafeArea(
       child: IndexedStack(
         index: vm.bottomNavigationIndex,
-        children: vm.screens, // Danh sách màn hình từ HomeVM
+        children: vm.screens,
       ),
     );
   }

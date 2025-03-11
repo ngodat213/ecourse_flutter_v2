@@ -2,13 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
+import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/svg_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../core/base/base_view.dart';
-import '../../view_models/home_vm.dart';
+import '../../../core/base/base_view.dart';
+import '../../../view_models/home_vm.dart';
 
 class ProfileView extends BaseView<HomeVM> {
   const ProfileView({super.key});
@@ -44,9 +45,18 @@ class ProfileView extends BaseView<HomeVM> {
     ];
 
     final settingUser = [
-      {'title': 'my_courses'.tr(), 'onPressed': () {}},
-      {'title': 'join_events'.tr(), 'onPressed': () {}},
-      {'title': 'achievements'.tr(), 'onPressed': () {}},
+      {
+        'title': 'my_courses'.tr(),
+        'onPressed': () {
+          AppRoutes.push(context, AppRoutes.myCourse);
+        },
+      },
+      {
+        'title': 'achievements'.tr(),
+        'onPressed': () {
+          AppRoutes.push(context, AppRoutes.myCertificates);
+        },
+      },
       {'title': 'calender'.tr(), 'onPressed': () {}},
     ];
     return SafeArea(
@@ -84,9 +94,9 @@ class ProfileView extends BaseView<HomeVM> {
                             'John Doe',
                             style: Theme.of(
                               context,
-                            ).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.sp,
+                            ).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18.sp,
                             ),
                           ),
                           Text(
@@ -185,7 +195,14 @@ class ListTitleProfile extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                title: Text(settingAccount[index]['title'] as String),
+                title: Text(
+                  settingAccount[index]['title'] as String,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.textSecondary,
+                    fontSize: 13.sp,
+                  ),
+                ),
                 onTap: settingAccount[index]['onPressed'] as VoidCallback,
                 trailing: SvgPicture.asset(
                   AppImage.svgRightArrow,

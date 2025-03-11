@@ -1,10 +1,10 @@
 import 'package:ecourse_flutter_v2/core/repository/user_repository.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/models/user_profile.dart';
-import 'package:ecourse_flutter_v2/views/home/event_view.dart';
-import 'package:ecourse_flutter_v2/views/home/explore_view.dart';
-import 'package:ecourse_flutter_v2/views/home/home_view.dart';
-import 'package:ecourse_flutter_v2/views/home/profile_view.dart';
+import 'package:ecourse_flutter_v2/views/home/widget/explore_view.dart';
+import 'package:ecourse_flutter_v2/views/home/widget/profile_view.dart';
+import 'package:ecourse_flutter_v2/views/home/widget/teacher_home_view.dart';
+import 'package:ecourse_flutter_v2/views/chat/chat_view.dart';
 import 'package:flutter/material.dart';
 
 import '../core/base/base_view_model.dart';
@@ -19,7 +19,12 @@ class HomeVM extends BaseVM {
   @override
   void onInit() {
     super.onInit();
-    getUser();
+    // getUser();
+    notifyListeners();
+  }
+
+  void changeCarouselIndex(int index) {
+    carouselIndex = index;
     notifyListeners();
   }
 
@@ -29,21 +34,21 @@ class HomeVM extends BaseVM {
   }
 
   List<Widget> screens = [
-    const HomeView(),
+    const TeacherHomeView(),
     const ExploreView(),
-    const EventsView(),
+    const ChatView(),
     const ProfileView(),
   ];
 
-  Future<void> getUser() async {
-    setLoading(true);
-    final response = await _userRepository.getUserProfile();
+  // Future<void> getUser() async {
+  //   setLoading(true);
+  //   final response = await _userRepository.getUserProfile();
 
-    if (response.allGood) {
-      userProfile = UserProfile.fromJson(response.body);
-    }
-    setLoading(false);
-  }
+  //   if (response.allGood) {
+  //     userProfile = UserProfile.fromJson(response.body);
+  //   }
+  //   setLoading(false);
+  // }
 
   void redirectToAdmin() {
     if (userProfile?.user?.role == 'admin') {

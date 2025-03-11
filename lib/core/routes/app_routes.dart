@@ -1,9 +1,13 @@
 import 'package:ecourse_flutter_v2/views/admin/admin_view.dart';
 import 'package:ecourse_flutter_v2/views/auth/forget_pw_view.dart';
 import 'package:ecourse_flutter_v2/views/auth/verify_otp_view.dart';
-import 'package:ecourse_flutter_v2/views/course/course_detail_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_detail_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_taking_view.dart';
+import 'package:ecourse_flutter_v2/views/home/widget/course_detail_view.dart';
+import 'package:ecourse_flutter_v2/views/course/course_learn_view.dart';
+import 'package:ecourse_flutter_v2/views/profile/my_certificates.dart';
+import 'package:ecourse_flutter_v2/views/profile/my_course.dart';
+import 'package:ecourse_flutter_v2/views/profile/profile_view.dart';
 import 'package:ecourse_flutter_v2/views/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 import '../../views/auth/login_view.dart';
@@ -19,9 +23,13 @@ class AppRoutes {
   static const String verifyOtp = '/verify-otp';
   static const String forgetPw = '/forget-pw';
   static const String courseDetail = '/course-detail';
+  static const String courseLearn = '/course-learn';
   static const String examDetail = '/exam-detail';
   static const String examTaking = '/exam-taking';
   static const String adminDashboard = '/admin-dashboard';
+  static const String profile = '/profile';
+  static const String myCourse = '/my-course';
+  static const String myCertificates = '/my-certificates';
   // Route map
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -32,9 +40,13 @@ class AppRoutes {
       verifyOtp: (context) => const VerifyOtpView(),
       forgetPw: (context) => const ForgetPwView(),
       courseDetail: (context) => const CourseDetailView(),
+      courseLearn: (context) => const CourseLearnView(),
       examDetail: (context) => const ExamDetailView(),
       examTaking: (context) => const ExamTakingView(),
       adminDashboard: (context) => const AdminView(),
+      profile: (context) => const ProfileView(),
+      myCourse: (context) => const MyCourseView(),
+      myCertificates: (context) => const MyCertificatesView(),
     };
   }
 

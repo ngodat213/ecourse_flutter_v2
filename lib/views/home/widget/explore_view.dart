@@ -5,11 +5,12 @@ import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/widgets/base_text_field.dart';
 import 'package:ecourse_flutter_v2/core/widgets/see_all.dart';
 import 'package:ecourse_flutter_v2/core/widgets/svg_icon_button.dart';
+import 'package:ecourse_flutter_v2/views/home/widget/my_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../core/base/base_view.dart';
-import '../../view_models/home_vm.dart';
+import '../../../core/base/base_view.dart';
+import '../../../view_models/home_vm.dart';
 
 class ExploreView extends BaseView<HomeVM> {
   const ExploreView({super.key});
@@ -43,6 +44,9 @@ class ExploreView extends BaseView<HomeVM> {
           Row(
             children: [
               BaseTextField(
+                onTap: () {
+                  showSearch(context: context, delegate: MySearchDelegate());
+                },
                 height: 35.h,
                 width: 1.sw - 76.w,
                 hintText: 'search'.tr(),
