@@ -1,8 +1,8 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
-import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
-import 'package:ecourse_flutter_v2/core/widgets/list_tile.dart';
+import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
+import 'package:ecourse_flutter_v2/core/widgets/buttons/list_tile.dart';
 import 'package:ecourse_flutter_v2/view_models/exam_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +13,10 @@ class ExamDetailView extends BaseView<ExamVM> {
   const ExamDetailView({super.key});
 
   @override
-  ExamVM createViewModel(BuildContext context) {
+  ExamVM createViewModel(
+    BuildContext context,
+    Map<String, dynamic>? arguments,
+  ) {
     return ExamVM(context);
   }
 

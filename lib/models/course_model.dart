@@ -1,130 +1,112 @@
-import 'instructor_model.dart';
-import 'lesson_model.dart';
+import 'package:ecourse_flutter_v2/models/cloudinary_file.dart';
+
+import 'teacher_model.dart';
 
 class CourseModel {
-  final String id;
-  final String title;
-  final String description;
-  final String aboutCourse;
-  final String thumbnail;
-  final String duration;
-  final double rating;
-  final int studentsCount;
-  final int progressPercentage;
-  final InstructorModel instructor;
-  final List<LessonModel> lessons;
-  final String category;
-  final double price;
-  final double originalPrice;
-  final bool isFavorite;
+  // List<Null>? categories;
+  String? sId;
+  String? title;
+  String? description;
+  int? price;
+  TeacherModel? instructor;
+  String? type;
+  CloudinaryFile? thumnail;
+  String? level;
+  String? status;
+  int? totalDuration;
+  int? lessonCount;
+  int? studentCount;
+  int? rating;
+  int? reviewCount;
+  int? totalRevenue;
+  List<String>? lessons;
+  String? createdAt;
+  String? updatedAt;
 
   CourseModel({
-    this.id = '',
-    required this.title,
-    required this.description,
-    required this.aboutCourse,
-    this.thumbnail = '',
-    this.duration = '',
-    this.rating = 0,
-    this.studentsCount = 0,
-    required this.progressPercentage,
-    required this.instructor,
-    this.lessons = const [],
-    this.category = '',
-    this.price = 0,
-    this.originalPrice = 0,
-    this.isFavorite = false,
+    // this.categories,
+    this.sId,
+    this.title,
+    this.description,
+    this.price,
+    this.instructor,
+    this.type,
+    this.thumnail,
+    this.level,
+    this.status,
+    this.totalDuration,
+    this.lessonCount,
+    this.studentCount,
+    this.rating,
+    this.reviewCount,
+    this.totalRevenue,
+    this.lessons,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  // Constructor để tạo copy của model với một số thuộc tính mới
-  CourseModel copyWith({
-    String? id,
-    String? title,
-    String? description,
-    String? aboutCourse,
-    String? thumbnail,
-    String? duration,
-    double? rating,
-    int? studentsCount,
-    int? progressPercentage,
-    InstructorModel? instructor,
-    List<LessonModel>? lessons,
-    String? category,
-    double? price,
-    double? originalPrice,
-    bool? isFavorite,
-  }) {
-    return CourseModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      description: description ?? this.description,
-      aboutCourse: aboutCourse ?? this.aboutCourse,
-      thumbnail: thumbnail ?? this.thumbnail,
-      duration: duration ?? this.duration,
-      rating: rating ?? this.rating,
-      studentsCount: studentsCount ?? this.studentsCount,
-      progressPercentage: progressPercentage ?? this.progressPercentage,
-      instructor: instructor ?? this.instructor,
-      lessons: lessons ?? this.lessons,
-      category: category ?? this.category,
-      price: price ?? this.price,
-      originalPrice: originalPrice ?? this.originalPrice,
-      isFavorite: isFavorite ?? this.isFavorite,
-    );
+  String get updatedAtString => updatedAt?.split('T')[0] ?? '';
+
+  CourseModel.fromJson(Map<String, dynamic> json) {
+    // if (json['categories'] != null) {
+    //   categories = <Null>[];
+    //   json['categories'].forEach((v) {
+    //     categories!.add(Null.fromJson(v));
+    //   });
+    // }
+    sId = json['_id'];
+    title = json['title'];
+    description = json['description'];
+    price = json['price'];
+    instructor =
+        json['instructor_id'] != null
+            ? TeacherModel.fromJson(json['instructor_id'])
+            : null;
+    type = json['type'];
+    thumnail =
+        json['thumbnail_id'] != null
+            ? CloudinaryFile.fromJson(json['thumbnail_id'])
+            : null;
+    level = json['level'];
+    status = json['status'];
+    totalDuration = json['total_duration'];
+    lessonCount = json['lesson_count'];
+    studentCount = json['student_count'];
+    rating = json['rating'];
+    reviewCount = json['review_count'];
+    totalRevenue = json['total_revenue'];
+    lessons = json['lessons'].cast<String>();
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
   }
 
-  // Từ JSON
-  factory CourseModel.fromJson(Map<String, dynamic> json) {
-    return CourseModel(
-      id: json['id'] ?? '',
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      aboutCourse: json['aboutCourse'] ?? '',
-      thumbnail: json['thumbnail'] ?? '',
-      duration: json['duration'] ?? '',
-      rating: json['rating']?.toDouble() ?? 0.0,
-      studentsCount: json['studentsCount'] ?? 0,
-      progressPercentage: json['progressPercentage'] ?? 0,
-      instructor:
-          json['instructor'] != null
-              ? InstructorModel.fromJson(json['instructor'])
-              : InstructorModel(
-                name: '',
-                profilePicture: '',
-                title: '',
-                bio: '',
-              ),
-      lessons:
-          json['lessons'] != null
-              ? List<LessonModel>.from(
-                json['lessons'].map((x) => LessonModel.fromJson(x)),
-              )
-              : [],
-      category: json['category'] ?? '',
-      price: json['price']?.toDouble() ?? 0.0,
-      originalPrice: json['originalPrice']?.toDouble() ?? 0.0,
-      isFavorite: json['isFavorite'] ?? false,
-    );
-  }
-
-  // Sang JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'description': description,
-      'aboutCourse': aboutCourse,
-      'thumbnail': thumbnail,
-      'duration': duration,
-      'rating': rating,
-      'studentsCount': studentsCount,
-      'progressPercentage': progressPercentage,
-      'instructor': instructor.toJson(),
-      'lessons': lessons.map((x) => x.toJson()).toList(),
-      'category': category,
-      'price': price,
-      'originalPrice': originalPrice,
-      'isFavorite': isFavorite,
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    // if (categories != null) {
+    //   data['categories'] = categories!.map((v) => v.toJson()).toList();
+    // }
+    data['_id'] = sId;
+    data['title'] = title;
+    data['description'] = description;
+    data['price'] = price;
+    if (instructor != null) {
+      data['instructor_id'] = instructor!.toJson();
+    }
+    data['type'] = type;
+    if (thumnail != null) {
+      data['thumbnail_id'] = thumnail!.toJson();
+    }
+    data['level'] = level;
+    data['status'] = status;
+    data['total_duration'] = totalDuration;
+    data['lesson_count'] = lessonCount;
+    data['student_count'] = studentCount;
+    data['rating'] = rating;
+    data['review_count'] = reviewCount;
+    data['total_revenue'] = totalRevenue;
+    data['lessons'] = lessons;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    return data;
   }
 }

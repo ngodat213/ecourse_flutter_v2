@@ -26,6 +26,11 @@ dependencies:
   carousel_slider: ^5.0.0
   readmore: ^3.0.0
   animated_read_more_text: ^0.0.6
+  flutter_emoji_picker: ^1.0.1
+  emoji_picker_flutter: ^4.3.0
+  local_auth: ^2.3.0
+  flutter_dotenv: ^5.2.1
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -55,3 +60,4 @@ flutter:
     - assets/translations/
     - assets/images/onboarding/
     - assets/images/home/
+    - .env

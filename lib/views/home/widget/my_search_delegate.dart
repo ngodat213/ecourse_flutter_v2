@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
-import 'package:ecourse_flutter_v2/core/widgets/see_all.dart';
+import 'package:ecourse_flutter_v2/core/widgets/buttons/see_all_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -99,7 +99,7 @@ class MySearchDelegate extends SearchDelegate {
         Container(
           margin: EdgeInsets.symmetric(horizontal: 16.w),
 
-          child: SeeAllWidget(
+          child: SeeAllButton(
             title: 'recent_searches'.tr(),
             onSeeAll: () {},
             padding: EdgeInsets.zero,

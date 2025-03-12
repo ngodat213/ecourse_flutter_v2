@@ -2,7 +2,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
-import 'package:ecourse_flutter_v2/core/widgets/base_text_field.dart';
+import 'package:ecourse_flutter_v2/core/widgets/text_fields/base_text_field.dart';
 import 'package:ecourse_flutter_v2/models/course.dart';
 import 'package:ecourse_flutter_v2/view_models/admin_vm.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,10 @@ class AdminView extends BaseView<AdminVM> {
   const AdminView({super.key});
 
   @override
-  AdminVM createViewModel(BuildContext context) {
+  AdminVM createViewModel(
+    BuildContext context,
+    Map<String, dynamic>? arguments,
+  ) {
     return AdminVM(context);
   }
 

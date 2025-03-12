@@ -1,11 +1,11 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
-import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
-import 'package:ecourse_flutter_v2/models/instructor_model.dart';
+import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
+import 'package:ecourse_flutter_v2/models/teacher_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InstructorInfoWidget extends StatelessWidget {
-  final InstructorModel instructor;
+  final TeacherModel instructor;
 
   const InstructorInfoWidget({super.key, required this.instructor});
 
@@ -14,16 +14,16 @@ class InstructorInfoWidget extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 0.w),
       leading: CircleAvatar(
-        backgroundImage: AssetImage(instructor.profilePicture),
+        backgroundImage: AssetImage(instructor.profilePicture ?? ''),
       ),
       title: Text(
-        instructor.name,
+        "${instructor.firstName} ${instructor.lastName}",
         style: Theme.of(
           context,
         ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
       ),
       subtitle: Text(
-        instructor.title,
+        instructor.email ?? '',
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
           fontWeight: FontWeight.w500,
           fontSize: 10.sp,

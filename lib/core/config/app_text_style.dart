@@ -1,4 +1,4 @@
-import 'package:ecourse_flutter_v2/utils/responsive_layout.dart';
+import 'package:ecourse_flutter_v2/core/utils/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../core/base/base_view.dart';
-import 'splash_view_model.dart';
+import '../../view_models/splash_view_model.dart';
 
 class SplashView extends BaseView<SplashVM> {
   const SplashView({super.key});
 
   @override
-  SplashVM createViewModel(BuildContext context) {
+  SplashVM createViewModel(
+    BuildContext context,
+    Map<String, dynamic>? arguments,
+  ) {
     return SplashVM(context);
   }
 

@@ -1,6 +1,6 @@
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
-import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
+import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
 import 'package:flutter/material.dart';
 import '../../view_models/onboarding_vm.dart';
 
@@ -8,7 +8,10 @@ class OnboardingView extends BaseView<OnboardingVM> {
   const OnboardingView({super.key});
 
   @override
-  OnboardingVM createViewModel(BuildContext context) {
+  OnboardingVM createViewModel(
+    BuildContext context,
+    Map<String, dynamic>? arguments,
+  ) {
     return OnboardingVM(context);
   }
 

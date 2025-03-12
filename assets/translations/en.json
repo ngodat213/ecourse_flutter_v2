@@ -106,5 +106,16 @@
   "your_ratings": "Your Ratings",
   "view_full_report": "View Full Report",
   "overview": "Overview",
-  "overview_description": "Get top insights about your performance"
+  "overview_description": "Get top insights about your performance",
+  "students": "Students",
+  "chats": "Chats",
+  "groups": "Groups",
+  "my_certificates": "My Certificates",
+  "my_course": "My Course",
+  "about_this_course": "About This Course",
+  "last_update": "Last Update",
+  "buy_course": "Buy Course",
+  "lessons": "Lessons",
+  "rattings": "Rattings",
+  "course_detail": "Course Detail"
 } 

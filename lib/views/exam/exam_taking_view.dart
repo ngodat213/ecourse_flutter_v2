@@ -1,6 +1,6 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
-import 'package:ecourse_flutter_v2/core/widgets/elevated_button.dart';
+import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
 import 'package:ecourse_flutter_v2/view_models/exam_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +11,10 @@ class ExamTakingView extends BaseView<ExamVM> {
   const ExamTakingView({super.key});
 
   @override
-  ExamVM createViewModel(BuildContext context) {
+  ExamVM createViewModel(
+    BuildContext context,
+    Map<String, dynamic>? arguments,
+  ) {
     return ExamVM(context);
   }
 

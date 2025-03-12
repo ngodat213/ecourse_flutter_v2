@@ -1,3 +1,5 @@
+import 'package:ecourse_flutter_v2/models/course_model.dart';
+
 class User {
   String? sId;
   String? firstName;
@@ -8,7 +10,7 @@ class User {
   String? role;
   String? status;
   int? certificateCount;
-  // List<Null>? enrolledCourses;
+  List<CourseModel>? enrolledCourses;
   // List<Null>? teachingCourses;
   // List<Null>? notifications;
   int? unreadNotifications;
@@ -18,6 +20,10 @@ class User {
   String? otp;
   String? otpExpires;
   String? profilePicture;
+  String? about;
+  String? address;
+  String? workingAt;
+  String? level;
 
   User({
     this.sId,
@@ -29,7 +35,7 @@ class User {
     this.role,
     this.status,
     this.certificateCount,
-    // this.enrolledCourses,
+    this.enrolledCourses,
     // this.teachingCourses,
     // this.notifications,
     this.unreadNotifications,
@@ -39,6 +45,10 @@ class User {
     this.otp,
     this.otpExpires,
     this.profilePicture,
+    this.about,
+    this.address,
+    this.workingAt,
+    this.level,
   });
 
   User.fromJson(Map<String, dynamic> json) {
@@ -51,12 +61,12 @@ class User {
     role = json['role'];
     status = json['status'];
     certificateCount = json['certificate_count'];
-    // if (json['enrolled_courses'] != null) {
-    //   enrolledCourses = <Null>[];
-    //   json['enrolled_courses'].forEach((v) {
-    //     enrolledCourses!.add(Null.fromJson(v));
-    //   });
-    // }
+    if (json['enrolled_courses'] != null) {
+      enrolledCourses = <CourseModel>[];
+      json['enrolled_courses'].forEach((v) {
+        enrolledCourses!.add(CourseModel.fromJson(v));
+      });
+    }
     // if (json['teaching_courses'] != null) {
     //   teachingCourses = <Null>[];
     //   json['teaching_courses'].forEach((v) {
@@ -76,6 +86,10 @@ class User {
     otp = json['otp'];
     otpExpires = json['otp_expires'];
     profilePicture = json['profile_picture'];
+    about = json['about'];
+    address = json['address'];
+    workingAt = json['working_at'];
+    level = json['level'];
   }
 
   Map<String, dynamic> toJson() {
@@ -89,10 +103,10 @@ class User {
     data['role'] = role;
     data['status'] = status;
     data['certificate_count'] = certificateCount;
-    // if (this.enrolledCourses != null) {
-    //   data['enrolled_courses'] =
-    //       this.enrolledCourses!.map((v) => v.toJson()).toList();
-    // }
+    if (enrolledCourses != null) {
+      data['enrolled_courses'] =
+          enrolledCourses!.map((v) => v.toJson()).toList();
+    }
     // if (this.teachingCourses != null) {
     //   data['teaching_courses'] =
     //       this.teachingCourses!.map((v) => v.toJson()).toList();
@@ -108,6 +122,10 @@ class User {
     data['otp'] = otp;
     data['otp_expires'] = otpExpires;
     data['profile_picture'] = profilePicture;
+    data['about'] = about;
+    data['address'] = address;
+    data['working_at'] = workingAt;
+    data['level'] = level;
     return data;
   }
 }

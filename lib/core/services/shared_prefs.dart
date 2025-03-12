@@ -29,6 +29,10 @@ class SharedPrefs {
     await _prefs.remove(AppConfig.tokenKey);
   }
 
+  static Future<void> removeRefreshToken() async {
+    await _prefs.remove(AppConfig.refreshTokenKey);
+  }
+
   static Future<void> setUser(UserProfile userProfile) async {
     await _prefs.setString(AppConfig.userKey, jsonEncode(userProfile.toJson()));
   }

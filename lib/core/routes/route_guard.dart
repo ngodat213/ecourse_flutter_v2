@@ -18,6 +18,7 @@ class RouteGuard extends NavigatorObserver {
     AppRoutes.profile,
     AppRoutes.myCourse,
     AppRoutes.myCertificates,
+    AppRoutes.teacherProfile,
   ];
 
   @override

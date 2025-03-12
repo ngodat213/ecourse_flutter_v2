@@ -10,7 +10,10 @@ class CourseLearnView extends BaseView<CourseVM> {
   const CourseLearnView({super.key});
 
   @override
-  CourseVM createViewModel(BuildContext context) {
+  CourseVM createViewModel(
+    BuildContext context,
+    Map<String, dynamic>? arguments,
+  ) {
     return CourseVM(context);
   }
 

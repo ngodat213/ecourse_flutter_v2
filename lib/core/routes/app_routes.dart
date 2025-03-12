@@ -1,18 +1,19 @@
 import 'package:ecourse_flutter_v2/views/admin/admin_view.dart';
-import 'package:ecourse_flutter_v2/views/auth/forget_pw_view.dart';
-import 'package:ecourse_flutter_v2/views/auth/verify_otp_view.dart';
+import 'package:ecourse_flutter_v2/views/forgot_pw/forget_pw_view.dart';
+import 'package:ecourse_flutter_v2/views/verify_otp/verify_otp_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_detail_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_taking_view.dart';
-import 'package:ecourse_flutter_v2/views/home/widget/course_detail_view.dart';
+import 'package:ecourse_flutter_v2/views/course_detail/course_detail_view.dart';
 import 'package:ecourse_flutter_v2/views/course/course_learn_view.dart';
-import 'package:ecourse_flutter_v2/views/profile/my_certificates.dart';
-import 'package:ecourse_flutter_v2/views/profile/my_course.dart';
-import 'package:ecourse_flutter_v2/views/profile/profile_view.dart';
+import 'package:ecourse_flutter_v2/views/my_profile/widget/my_certificates.dart';
+import 'package:ecourse_flutter_v2/views/my_profile/widget/my_course.dart';
+import 'package:ecourse_flutter_v2/views/my_profile/my_profile_view.dart';
+import 'package:ecourse_flutter_v2/views/my_profile/teacher_profile_view.dart';
 import 'package:ecourse_flutter_v2/views/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 import '../../views/auth/login_view.dart';
 import '../../views/onboarding/onboarding_view.dart';
-import '../../views/home/main_view.dart';
+import '../../views/main/main_view.dart';
 
 class AppRoutes {
   // Route names
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String examTaking = '/exam-taking';
   static const String adminDashboard = '/admin-dashboard';
   static const String profile = '/profile';
+  static const String teacherProfile = '/teacher-profile';
   static const String myCourse = '/my-course';
   static const String myCertificates = '/my-certificates';
   // Route map
@@ -44,9 +46,10 @@ class AppRoutes {
       examDetail: (context) => const ExamDetailView(),
       examTaking: (context) => const ExamTakingView(),
       adminDashboard: (context) => const AdminView(),
-      profile: (context) => const ProfileView(),
+      profile: (context) => const MyProfileView(),
       myCourse: (context) => const MyCourseView(),
       myCertificates: (context) => const MyCertificatesView(),
+      teacherProfile: (context) => const TeacherProfileView(),
     };
   }
 

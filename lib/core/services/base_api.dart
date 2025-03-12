@@ -67,7 +67,7 @@ class ErrorResponse {
 }
 
 class BaseAPI {
-  static String domain = 'http://192.168.0.107:3000/api';
+  static String domain = 'http://192.168.0.105:3333/api';
   final Dio _dio = Dio();
 
   Future<Map<String, String>> getHeaders() async {

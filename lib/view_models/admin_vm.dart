@@ -1,6 +1,6 @@
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
-import 'package:ecourse_flutter_v2/core/repository/course_reponsitory.dart';
 import 'package:ecourse_flutter_v2/models/course.dart';
+import 'package:ecourse_flutter_v2/repositories/course_repository.dart';
 import 'package:flutter/material.dart';
 
 class AdminVM extends BaseVM {
@@ -13,7 +13,6 @@ class AdminVM extends BaseVM {
   List<DataRow> rowCourseList = [];
   @override
   void onInit() {
-    super.onInit();
     getCourses();
   }
 

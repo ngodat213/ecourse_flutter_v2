@@ -103,5 +103,17 @@
   "total_revenue": "Tổng doanh thu",
   "total_enrolls": "Tổng đăng ký",
   "your_ratings": "Đánh giá của bạn",
-  "view_full_report": "Xem báo cáo đầy đủ"
+  "view_full_report": "Xem báo cáo đầy đủ",
+  "overview": "Tổng quan",
+  "overview_description": "Nhận thông tin tổng quan về hiệu suất của bạn",
+  "students": "Học sinh",
+  "chats": "Trò chuyện",
+  "groups": "Nhóm",
+  "my_certificates": "Bằng cấp của tôi",
+  "about_this_course": "Về khóa học này",
+  "last_update": "Cập nhật gần đây nhất",
+  "buy_course": "Mua khóa học",
+  "lessons": "Bài học",
+  "rattings": "Đánh giá",
+  "course_detail": "Chi tiết khóa học"
 }
