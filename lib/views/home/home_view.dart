@@ -71,7 +71,12 @@ class HomeView extends BaseView<HomeVM> {
       backgroundColor: AppColor.background,
       actions: [
         SvgIconButton(assetName: AppImage.svgBell, onPressed: () {}),
-        SvgIconButton(assetName: AppImage.svgCart, onPressed: () {}),
+        SvgIconButton(
+          assetName: AppImage.svgCart,
+          onPressed: () {
+            vm.redirectToCart();
+          },
+        ),
       ],
     );
   }

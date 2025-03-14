@@ -9,11 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../core/base/base_view.dart';
-import '../../view_models/home_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/profile_vm.dart';
 
-class ProfileView extends BaseView<ProfileVM> {
-  const ProfileView({super.key});
+class SettingView extends BaseView<ProfileVM> {
+  const SettingView({super.key});
 
   @override
   ProfileVM createViewModel(

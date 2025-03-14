@@ -50,25 +50,33 @@ class AuthRepository {
     required String email,
     required String otp,
   }) async {
-    final response = await _api.fetchData(
-      '/auth/verify-otp',
-      method: ApiMethod.POST,
-      body: {'email': email, 'otp': otp},
-    );
-    return ApiResponse.fromResponse(response.data);
+    try {
+      final response = await _api.fetchData(
+        '/auth/verify-otp',
+        method: ApiMethod.POST,
+        body: {'email': email, 'otp': otp},
+      );
+      return ApiResponse.fromResponse(response.data);
+    } catch (e) {
+      return ApiResponse(success: false, message: e.toString());
+    }
   }
 
   // Gửi lại OTP
   Future<ApiResponse> resendOTP({
     required String userId,
-    String type = 'verification',
+    required String type,
   }) async {
-    final response = await _api.fetchData(
-      '/auth/resend-otp',
-      method: ApiMethod.POST,
-      body: {'userId': userId, 'type': type},
-    );
-    return ApiResponse.fromResponse(response.data);
+    try {
+      final response = await _api.fetchData(
+        '/auth/resend-otp',
+        method: ApiMethod.POST,
+        body: {'userId': userId, 'type': type},
+      );
+      return ApiResponse.fromResponse(response.data);
+    } catch (e) {
+      return ApiResponse(success: false, message: e.toString());
+    }
   }
 
   // Đăng nhập

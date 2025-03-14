@@ -188,7 +188,11 @@ class CourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppRoutes.push(context, AppRoutes.courseDetail, arguments: course);
+        AppRoutes.push(
+          context,
+          AppRoutes.courseDetail,
+          arguments: course.toJson(),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(left: 16.w),
@@ -332,7 +336,11 @@ class ExploreCourses extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppRoutes.push(context, AppRoutes.courseDetail, arguments: course);
+        AppRoutes.push(
+          context,
+          AppRoutes.courseDetail,
+          arguments: course.toJson(),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(left: 12.w),

@@ -54,7 +54,7 @@ class ForgetPwView extends BaseView<LoginVM> {
                   viewModel.onChangeOtp(value);
                 },
                 onSubmit: (String verificationCode) {
-                  viewModel.verifyOtp();
+                  // viewModel.verifyOtp(otp: verificationCode);
                 },
               ),
               SizedBox(height: 32.h),
@@ -71,7 +71,8 @@ class ForgetPwView extends BaseView<LoginVM> {
               Expanded(child: SizedBox()),
               CustomElevatedButton(
                 context: context,
-                onPressed: () => viewModel.verifyOtp(),
+                // onPressed: () => viewModel.verifyOtp(otp: viewModel.otp),
+                onPressed: () {},
                 text: 'verify'.tr(),
               ),
             ],

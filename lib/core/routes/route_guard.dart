@@ -19,6 +19,7 @@ class RouteGuard extends NavigatorObserver {
     AppRoutes.myCourse,
     AppRoutes.myCertificates,
     AppRoutes.teacherProfile,
+    AppRoutes.cart,
   ];
 
   @override

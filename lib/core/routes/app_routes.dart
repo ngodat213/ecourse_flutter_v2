@@ -1,4 +1,5 @@
 import 'package:ecourse_flutter_v2/views/admin/admin_view.dart';
+import 'package:ecourse_flutter_v2/views/cart/cart_view.dart';
 import 'package:ecourse_flutter_v2/views/forgot_pw/forget_pw_view.dart';
 import 'package:ecourse_flutter_v2/views/verify_otp/verify_otp_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_detail_view.dart';
@@ -32,6 +33,7 @@ class AppRoutes {
   static const String teacherProfile = '/teacher-profile';
   static const String myCourse = '/my-course';
   static const String myCertificates = '/my-certificates';
+  static const String cart = '/cart';
   // Route map
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -50,6 +52,7 @@ class AppRoutes {
       myCourse: (context) => const MyCourseView(),
       myCertificates: (context) => const MyCertificatesView(),
       teacherProfile: (context) => const TeacherProfileView(),
+      cart: (context) => const CartView(),
     };
   }
 

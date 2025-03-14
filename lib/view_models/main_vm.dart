@@ -7,7 +7,7 @@ import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:ecourse_flutter_v2/views/chat/chat_list_view.dart';
 import 'package:ecourse_flutter_v2/views/explore/explore_view.dart';
 import 'package:ecourse_flutter_v2/views/home/home_view.dart';
-import 'package:ecourse_flutter_v2/views/setting/profile_view.dart';
+import 'package:ecourse_flutter_v2/views/setting/setting_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,14 +50,14 @@ class MainVM extends BaseVM {
         const HomeView(),
         const ExploreView(),
         const ChatListView(),
-        const ProfileView(),
+        const SettingView(),
       ];
     } else {
       screens = [
         const HomeView(),
         const ExploreView(),
         const ChatListView(),
-        const ProfileView(),
+        const SettingView(),
       ];
     }
     notifyListeners();

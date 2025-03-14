@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 mixin LoginFormMixin on BaseVM {
-  final formKey = GlobalKey<FormState>();
+  final loginFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -24,14 +24,16 @@ mixin LoginFormMixin on BaseVM {
 
 mixin RegisterFormMixin on BaseVM {
   final registerFormKey = GlobalKey<FormState>();
-  final registerNameController = TextEditingController();
+  final registerFirstNameController = TextEditingController();
+  final registerLastNameController = TextEditingController();
   final registerEmailController = TextEditingController();
   final registerPasswordController = TextEditingController();
   final registerConfirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
-    registerNameController.dispose();
+    registerFirstNameController.dispose();
+    registerLastNameController.dispose();
     registerEmailController.dispose();
     registerPasswordController.dispose();
     registerConfirmPasswordController.dispose();

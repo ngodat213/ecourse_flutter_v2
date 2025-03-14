@@ -24,14 +24,14 @@ class LoginView extends BaseView<LoginVM> {
 
   @override
   Widget buildView(BuildContext context, LoginVM viewModel) {
-    return LoginMobileView(viewModel: viewModel);
+    return LoginMobileView(vm: viewModel);
   }
 }
 
 class LoginMobileView extends StatefulWidget {
-  final LoginVM viewModel;
+  final LoginVM vm;
 
-  const LoginMobileView({super.key, required this.viewModel});
+  const LoginMobileView({super.key, required this.vm});
 
   @override
   State<LoginMobileView> createState() => LoginMobileViewState();
@@ -50,8 +50,8 @@ class LoginMobileViewState extends State<LoginMobileView>
 
   void _setupListeners() {
     _tabController.addListener(() {
-      if (widget.viewModel.error != null) {
-        widget.viewModel.clearError();
+      if (widget.vm.error != null) {
+        widget.vm.clearError();
       }
     });
   }
@@ -108,7 +108,7 @@ class LoginMobileViewState extends State<LoginMobileView>
 
   Widget _buildLoginTab(BuildContext context) {
     return Form(
-      key: widget.viewModel.formKey,
+      key: widget.vm.loginFormKey,
       child: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
@@ -142,7 +142,7 @@ class LoginMobileViewState extends State<LoginMobileView>
             SizedBox(
               height: 48.h,
               child: Visibility(
-                visible: widget.viewModel.error != null,
+                visible: widget.vm.error != null,
                 child: Container(
                   height: 48.h,
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -160,7 +160,7 @@ class LoginMobileViewState extends State<LoginMobileView>
                       ),
                       SizedBox(width: 8.w),
                       Text(
-                        widget.viewModel.error ?? '',
+                        widget.vm.error ?? '',
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(color: AppColor.error),
                       ),
@@ -176,7 +176,7 @@ class LoginMobileViewState extends State<LoginMobileView>
             ),
             SizedBox(height: 8.h),
             BaseTextField(
-              controller: widget.viewModel.emailController,
+              controller: widget.vm.emailController,
               labelText: 'email'.tr(),
               prefixIcon: SvgPicture.asset(
                 AppImage.svgUser,
@@ -197,7 +197,7 @@ class LoginMobileViewState extends State<LoginMobileView>
             ),
             SizedBox(height: 8.h),
             BaseTextField(
-              controller: widget.viewModel.passwordController,
+              controller: widget.vm.passwordController,
               labelText: 'password'.tr(),
               prefixIcon: SvgPicture.asset(
                 AppImage.svgLock,
@@ -206,7 +206,7 @@ class LoginMobileViewState extends State<LoginMobileView>
               ),
               obscureText: true,
               textInputAction: TextInputAction.done,
-              onSubmitted: (_) => widget.viewModel.login(),
+              onSubmitted: (_) => widget.vm.login(),
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
@@ -214,7 +214,7 @@ class LoginMobileViewState extends State<LoginMobileView>
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () => widget.viewModel.forgotPassword(),
+                onPressed: () => widget.vm.forgotPassword(),
                 child: Text(
                   'forgot_password'.tr(),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -227,7 +227,7 @@ class LoginMobileViewState extends State<LoginMobileView>
             SizedBox(height: ResponsiveLayout.isDesktop(context) ? 32.h : 16.h),
             CustomElevatedButton(
               context: context,
-              onPressed: () => widget.viewModel.login(),
+              onPressed: () => widget.vm.login(),
               text: 'login'.tr(),
               width: 1.sw,
             ),
@@ -259,7 +259,7 @@ class LoginMobileViewState extends State<LoginMobileView>
 
   Widget _buildRegisterTab(BuildContext context) {
     return Form(
-      key: widget.viewModel.registerFormKey,
+      key: widget.vm.registerFormKey,
       child: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
@@ -271,7 +271,7 @@ class LoginMobileViewState extends State<LoginMobileView>
             SizedBox(
               height: 48.h,
               child: Visibility(
-                visible: widget.viewModel.error != null,
+                visible: widget.vm.error != null,
                 child: Container(
                   height: 48.h,
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -289,7 +289,7 @@ class LoginMobileViewState extends State<LoginMobileView>
                       ),
                       SizedBox(width: 8.w),
                       Text(
-                        widget.viewModel.error ?? '',
+                        widget.vm.error ?? '',
                         style: Theme.of(context).textTheme.labelMedium
                             ?.copyWith(color: AppColor.error),
                       ),
@@ -299,33 +299,69 @@ class LoginMobileViewState extends State<LoginMobileView>
               ),
             ),
             SizedBox(height: 16.h),
-            Text(
-              'fullname'.tr(),
-              style: Theme.of(context).textTheme.labelMedium,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'first_name'.tr(),
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                    SizedBox(height: 8.h),
+                    BaseTextField(
+                      width: 1.sw / 2 - 16.w - 8.w,
+                      controller: widget.vm.registerFirstNameController,
+                      labelText: 'first_name'.tr(),
+                      prefixIcon: SvgPicture.asset(
+                        AppImage.svgUser,
+                        width: 16.w,
+                        height: 16.h,
+                      ),
+                      validator: (value) => Validator.validateFullName(value),
+                      textInputAction: TextInputAction.next,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'last_name'.tr(),
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                    SizedBox(height: 8.h),
+                    BaseTextField(
+                      controller: widget.vm.registerLastNameController,
+                      labelText: 'last_name'.tr(),
+                      width: 1.sw / 2 - 16.w - 8.w,
+                      prefixIcon: SvgPicture.asset(
+                        AppImage.svgUser,
+                        width: 16.w,
+                        height: 16.h,
+                      ),
+                      validator: (value) => Validator.validateFullName(value),
+                      textInputAction: TextInputAction.next,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
             SizedBox(height: 8.h),
-            BaseTextField(
-              controller: widget.viewModel.registerNameController,
-              labelText: 'email'.tr(),
-              prefixIcon: SvgPicture.asset(
-                AppImage.svgUser,
-                width: 16.w,
-                height: 16.h,
-              ),
-              validator: (value) => Validator.validateFullName(value),
-              textInputAction: TextInputAction.next,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-            ),
-            SizedBox(height: 16.h),
             Text(
               'email_address'.tr(),
               style: Theme.of(context).textTheme.labelMedium,
             ),
             SizedBox(height: 8.h),
             BaseTextField(
-              controller: widget.viewModel.registerEmailController,
+              controller: widget.vm.registerEmailController,
               labelText: 'email'.tr(),
               prefixIcon: SvgPicture.asset(
                 AppImage.svgMail,
@@ -346,13 +382,12 @@ class LoginMobileViewState extends State<LoginMobileView>
             ),
             SizedBox(height: 8.h),
             BaseTextField(
-              controller: widget.viewModel.registerPasswordController,
+              controller: widget.vm.registerPasswordController,
               labelText: 'password'.tr(),
               prefixIcon: const Icon(Icons.lock),
               obscureText: true,
               textInputAction: TextInputAction.done,
-              onSubmitted: (_) => widget.viewModel.register(),
-              validator: (value) => Validator.validatePassword(value),
+              onSubmitted: (_) => widget.vm.register(),
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
@@ -364,13 +399,12 @@ class LoginMobileViewState extends State<LoginMobileView>
             ),
             SizedBox(height: 8.h),
             BaseTextField(
-              controller: widget.viewModel.registerConfirmPasswordController,
+              controller: widget.vm.registerConfirmPasswordController,
               labelText: 'confirm_password'.tr(),
               prefixIcon: const Icon(Icons.lock),
               obscureText: true,
               textInputAction: TextInputAction.done,
-              validator: (value) => Validator.validatePassword(value),
-              onSubmitted: (_) => widget.viewModel.register(),
+              onSubmitted: (_) => widget.vm.register(),
               style: Theme.of(
                 context,
               ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
@@ -378,7 +412,7 @@ class LoginMobileViewState extends State<LoginMobileView>
             SizedBox(height: ResponsiveLayout.isDesktop(context) ? 32.h : 16.h),
             CustomElevatedButton(
               context: context,
-              onPressed: () => widget.viewModel.register(),
+              onPressed: () => widget.vm.register(),
               text: 'register'.tr(),
               width: 1.sw,
             ),

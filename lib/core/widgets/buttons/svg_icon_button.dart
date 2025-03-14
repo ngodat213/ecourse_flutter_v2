@@ -7,7 +7,9 @@ class SvgIconButton extends StatelessWidget {
   final double width;
   final double height;
   final Color? color;
+  final EdgeInsetsGeometry? padding;
   final VoidCallback onPressed;
+  final BorderRadius? borderRadius;
 
   SvgIconButton({
     super.key,
@@ -16,12 +18,16 @@ class SvgIconButton extends StatelessWidget {
     double? width,
     double? height,
     this.color,
+    this.padding,
+    this.borderRadius,
   }) : width = width ?? 16.w,
        height = height ?? 16.h;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      padding: padding,
+
       icon: SvgPicture.asset(
         assetName,
         width: width,

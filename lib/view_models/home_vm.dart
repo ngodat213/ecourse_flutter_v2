@@ -50,6 +50,10 @@ class HomeVM extends BaseVM {
     notifyListeners();
   }
 
+  void redirectToCart() {
+    AppRoutes.push(context, AppRoutes.cart);
+  }
+
   void redirectToAdmin() {
     if (userRole == 'admin') {
       AppRoutes.push(context, AppRoutes.adminDashboard);
