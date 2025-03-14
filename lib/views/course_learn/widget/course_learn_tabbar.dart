@@ -1,7 +1,7 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
-import 'package:ecourse_flutter_v2/views/course/widget/content_tab.dart';
-import 'package:ecourse_flutter_v2/views/course/widget/overview_tab.dart';
+import 'package:ecourse_flutter_v2/views/course_learn/widget/content_tab.dart';
+import 'package:ecourse_flutter_v2/views/course_learn/widget/overview_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

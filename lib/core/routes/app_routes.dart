@@ -5,7 +5,7 @@ import 'package:ecourse_flutter_v2/views/verify_otp/verify_otp_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_detail_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_taking_view.dart';
 import 'package:ecourse_flutter_v2/views/course_detail/course_detail_view.dart';
-import 'package:ecourse_flutter_v2/views/course/course_learn_view.dart';
+import 'package:ecourse_flutter_v2/views/course_learn/course_learn_view.dart';
 import 'package:ecourse_flutter_v2/views/my_profile/widget/my_certificates.dart';
 import 'package:ecourse_flutter_v2/views/my_profile/widget/my_course.dart';
 import 'package:ecourse_flutter_v2/views/my_profile/my_profile_view.dart';

@@ -92,17 +92,31 @@ class HomeView extends BaseView<HomeVM> {
             // PromotionSliderWidget(vm: vm),
             UserStreak(),
             SizedBox(height: 16.h),
-            CourseProgressCard(),
-            SeeAllButton(title: 'popular_courses'.tr(), onSeeAll: () {}),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children:
-                    vm.popularCourses
-                        .map((e) => CourseCard(course: e))
-                        .toList(),
+            CourseProgressCard(
+              enrolledCourses: vm.userProfile?.user?.enrolledCourses ?? [],
+            ),
+            Visibility(
+              visible: vm.popularCourses.isNotEmpty,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SeeAllButton(title: 'popular_courses'.tr(), onSeeAll: () {}),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children:
+                            vm.popularCourses
+                                .map((e) => CourseCard(course: e))
+                                .toList(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+
             SizedBox(height: 24.h),
           ],
         ),
@@ -297,7 +311,8 @@ class UserStreak extends StatelessWidget {
 }
 
 class CourseProgressCard extends StatelessWidget {
-  const CourseProgressCard({super.key});
+  const CourseProgressCard({super.key, required this.enrolledCourses});
+  final List<CourseModel> enrolledCourses;
 
   @override
   Widget build(BuildContext context) {
@@ -306,13 +321,16 @@ class CourseProgressCard extends StatelessWidget {
         SeeAllButton(title: 'inprogress'.tr(), onSeeAll: () {}),
         SizedBox(
           height: 116.h,
-          child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return ProgressCourseCard();
-            },
-            itemCount: 5,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return ProgressCourseCard(course: enrolledCourses[index]);
+              },
+              itemCount: enrolledCourses.length,
+            ),
           ),
         ),
       ],
@@ -321,7 +339,8 @@ class CourseProgressCard extends StatelessWidget {
 }
 
 class ProgressCourseCard extends StatelessWidget {
-  const ProgressCourseCard({super.key});
+  const ProgressCourseCard({super.key, required this.course});
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
@@ -342,7 +361,9 @@ class ProgressCourseCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Flutter for beginners',
+                course.title ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(
                   context,
                 ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold),
@@ -356,7 +377,7 @@ class ProgressCourseCard extends StatelessWidget {
                   ),
                   SizedBox(width: 4.w),
                   Text(
-                    'Hydra coder',
+                    '${course.instructor?.firstName} ${course.instructor?.lastName}',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.w400,
                       fontSize: 10.sp,

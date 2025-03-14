@@ -68,7 +68,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
       if (response.allGood) {
         await _handleLoginResponse(response);
 
-        await _loadUserProfile();
+        await loadUserProfile();
         _setError(null);
 
         if (context.mounted) {
@@ -107,7 +107,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
     await SharedPrefs.setString('saved_password', passwordController.text);
   }
 
-  Future<bool> _loadUserProfile() async {
+  Future<bool> loadUserProfile() async {
     final profileResponse = await _userRepository.getUserProfile();
     if (!profileResponse.allGood) {
       _setError(profileResponse.message);

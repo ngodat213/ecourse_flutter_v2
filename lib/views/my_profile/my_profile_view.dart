@@ -226,6 +226,7 @@ class MyProfileView extends BaseView<MyProfileVM> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return CourseCard(
+                  isEnrolled: true,
                   course:
                       vm.userProfile?.user?.enrolledCourses?[index] ??
                       CourseModel(),

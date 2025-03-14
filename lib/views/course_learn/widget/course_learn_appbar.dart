@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CourseAppBar extends StatelessWidget {
-  const CourseAppBar({super.key});
+class CourseLearnAppBar extends StatelessWidget {
+  const CourseLearnAppBar({super.key, required this.title});
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class CourseAppBar extends StatelessWidget {
         ),
         Center(
           child: Text(
-            'Course Detail Detail Detail Detail',
+            title,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),

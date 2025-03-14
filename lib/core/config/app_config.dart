@@ -35,4 +35,6 @@ class AppConfig {
   static const String savedBiometricsKey = 'saved_biometrics';
   static const String userRoleKey = 'user_role';
   static const String userIdKey = 'user_id';
+  static const String tokenExpiryKey = 'token_expiry';
+  static const String isOnboardingSkippedKey = 'is_onboarding_skipped';
 }

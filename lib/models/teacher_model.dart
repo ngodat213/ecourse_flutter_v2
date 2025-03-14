@@ -5,8 +5,6 @@ class TeacherModel {
   String? lastName;
   String? email;
   String? profilePicture;
-  String? createdAt;
-  String? updatedAt;
   String? about;
   String? address;
   String? workingAt;
@@ -21,8 +19,6 @@ class TeacherModel {
     this.lastName,
     this.email,
     this.profilePicture,
-    this.createdAt,
-    this.updatedAt,
     this.about,
     this.address,
     this.workingAt,
@@ -36,8 +32,6 @@ class TeacherModel {
     lastName = json['last_name'];
     email = json['email'];
     profilePicture = json['profile_picture'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
     about = json['about'];
     address = json['address'];
     workingAt = json['working_at'];
@@ -52,8 +46,6 @@ class TeacherModel {
     data['last_name'] = lastName;
     data['email'] = email;
     data['profile_picture'] = profilePicture;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
     data['about'] = about;
     data['address'] = address;
     data['working_at'] = workingAt;

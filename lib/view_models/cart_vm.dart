@@ -1,9 +1,12 @@
 import 'package:ecourse_flutter_v2/models/cart_item.dart';
+import 'package:ecourse_flutter_v2/view_models/login_vm.dart';
+import 'package:ecourse_flutter_v2/views/cart/widgets/payment_success_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
 import 'package:ecourse_flutter_v2/models/payment_method.dart';
 import 'package:ecourse_flutter_v2/repositories/cart_repository.dart';
 import 'package:ecourse_flutter_v2/services/payment_service.dart';
+import 'package:provider/provider.dart';
 
 class CartVM extends BaseVM {
   final CartRepository _cartRepository;
@@ -167,27 +170,12 @@ class CartVM extends BaseVM {
 
       if (response.allGood) {
         final data = response.body;
-        final paymentUrl = data['payment_url'];
         _orderId = data['order_id'];
 
-        // Hiển thị dialog xác nhận
         if (context.mounted) {
-          final result = await _showPaymentConfirmDialog(
-            context,
-            data['amount'].toDouble(),
-            data['courses'],
-          );
-
-          if (result == true) {
-            // Mở URL thanh toán
-            final success = await PaymentService.openPaymentUrl(paymentUrl);
-
-            if (!success && context.mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Không thể mở trang thanh toán')),
-              );
-            }
-          }
+          await _showPaymentSuccessDialog(context);
+          await loadCartItems();
+          await context.read<LoginVM>().loadUserProfile();
         }
       } else {
         _setError(response.message ?? 'Không thể tạo đơn hàng');
@@ -200,55 +188,12 @@ class CartVM extends BaseVM {
     }
   }
 
-  // Dialog xác nhận thanh toán
-  Future<bool?> _showPaymentConfirmDialog(
-    BuildContext context,
-    double amount,
-    List<dynamic> courses,
-  ) async {
-    return showDialog<bool>(
+  // Thêm hàm hiển thị dialog thành công
+  Future<void> _showPaymentSuccessDialog(BuildContext context) async {
+    return showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Xác nhận thanh toán'),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Tổng tiền: \$${amount.toStringAsFixed(2)}'),
-                  const SizedBox(height: 8),
-                  const Text('Các khóa học:'),
-                  const SizedBox(height: 4),
-                  ...courses.map(
-                    (course) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        '• ${course['title']} (\$${course['price']})',
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Phương thức: ${_selectedPaymentMethod!.name}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('Hủy'),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text('Thanh toán ngay'),
-              ),
-            ],
-          ),
+      barrierDismissible: false,
+      builder: (context) => PaymentSuccessDialog(),
     );
   }
 

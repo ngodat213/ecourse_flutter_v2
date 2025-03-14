@@ -13,6 +13,7 @@ class ExploreVM extends BaseVM {
 
   final List<TeacherModel> teachers = [];
   final List<CourseModel> courses = [];
+
   @override
   void onInit() {
     _getTeachers();
@@ -23,6 +24,7 @@ class ExploreVM extends BaseVM {
     try {
       final response = await _userRepository.getTeachers();
       if (response.allGood) {
+        teachers.clear();
         for (var teacher in response.body['data']) {
           teachers.add(TeacherModel.fromJson(teacher));
         }
@@ -45,6 +47,7 @@ class ExploreVM extends BaseVM {
       final response = await _courseRepository.getCourses(filters);
 
       if (response.allGood) {
+        courses.clear();
         for (var e in response.body) {
           courses.add(CourseModel.fromJson(e));
         }
