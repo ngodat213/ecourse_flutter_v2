@@ -50,6 +50,10 @@ class HomeVM extends BaseVM {
     notifyListeners();
   }
 
+  void redirectToCart() {
+    AppRoutes.push(context, AppRoutes.cart);
+  }
+
   void redirectToAdmin() {
     if (userRole == 'admin') {
       AppRoutes.push(context, AppRoutes.adminDashboard);
@@ -70,6 +74,7 @@ class HomeVM extends BaseVM {
       final response = await _courseRepository.getCourses(filters);
 
       if (response.allGood) {
+        _popularCourses.clear();
         for (var e in response.body) {
           _popularCourses.add(CourseModel.fromJson(e));
         }

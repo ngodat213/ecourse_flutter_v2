@@ -7,6 +7,7 @@ import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
+import 'package:ecourse_flutter_v2/core/widgets/buttons/svg_icon_button.dart';
 import 'package:ecourse_flutter_v2/models/course_model.dart';
 import 'package:ecourse_flutter_v2/models/user_profile.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
@@ -38,11 +39,23 @@ class CourseDetailView extends BaseView<CourseDetailVM> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 33.h),
-        child: CustomElevatedButton(
-          onPressed: () {},
-          width: 1.sw, // Full width
-          text: '${'buy_course'.tr()} for ${vm.course?.price}',
-          context: context,
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomElevatedButton(
+                onPressed: () {},
+                text: '${'buy_course'.tr()} for ${vm.course?.price}',
+                context: context,
+              ),
+            ),
+            SizedBox(width: 8.w),
+            SvgIconButton(
+              assetName: AppImage.svgCart,
+              onPressed: () {
+                vm.addToCart();
+              },
+            ),
+          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -207,9 +220,18 @@ class CourseDetailView extends BaseView<CourseDetailVM> {
               ),
 
               SizedBox(height: 16),
-              ListTile(
-                leading: SvgPicture.asset(AppImage.svgWarning),
-                title: Text(vm.course?.updatedAtString ?? ''),
+              Row(
+                children: [
+                  SvgPicture.asset(AppImage.svgWarning),
+                  SizedBox(width: 8.w),
+                  Text(
+                    vm.course?.updatedAtString ?? '',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 10.sp,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

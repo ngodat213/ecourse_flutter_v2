@@ -8,7 +8,9 @@ import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/see_all_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/smart_image.dart';
+import 'package:ecourse_flutter_v2/models/course_model.dart';
 import 'package:ecourse_flutter_v2/view_models/my_profile_vm.dart';
+import 'package:ecourse_flutter_v2/views/explore/explore_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -187,7 +189,7 @@ class MyProfileView extends BaseView<MyProfileVM> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: AnimatedReadMoreText(
-              viewModel.userProfile?.user?.about ?? '',
+              viewModel.userProfile?.user?.about ?? ' ',
               maxLines: 5,
               textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: AppColor.textSecondary,
@@ -217,17 +219,22 @@ class MyProfileView extends BaseView<MyProfileVM> {
             },
           ),
           SizedBox(height: 16.h),
-          // SizedBox(
-          //   height: 252.h,
-          //   child: ListView.builder(
-          //     shrinkWrap: true,
-          //     scrollDirection: Axis.horizontal,
-          //     itemBuilder: (context, index) {
-          //       return CourseCard(course: vm.userProfile?.user?.enrolledCourses?[index]);
-          //     },
-          //     itemCount: vm.userProfile?.user?.enrolledCourses?.length ?? 0,
-          //   ),
-          // ),
+          SizedBox(
+            height: 252.h,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return CourseCard(
+                  isEnrolled: true,
+                  course:
+                      vm.userProfile?.user?.enrolledCourses?[index] ??
+                      CourseModel(),
+                );
+              },
+              itemCount: vm.userProfile?.user?.enrolledCourses?.length ?? 0,
+            ),
+          ),
         ],
       ),
     );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 abstract class BaseVM extends ChangeNotifier {
+  final BuildContext context;
+  bool _disposed = false;
+  bool _mounted = true;
   bool _isLoading = false;
   String? _error;
-  final BuildContext context;
 
   BaseVM(this.context) {
     onInit();
@@ -11,6 +13,7 @@ abstract class BaseVM extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
   String? get error => _error;
+  bool get mounted => _mounted;
 
   // Set loading state
   void setLoading(bool loading) {
@@ -32,11 +35,24 @@ abstract class BaseVM extends ChangeNotifier {
 
   void onInit() {}
 
-  // Dispose resources
+  @override
+  void notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
+  }
+
   @override
   void dispose() {
+    _mounted = false;
+    _disposed = true;
     _error = null;
     _isLoading = false;
     super.dispose();
+  }
+
+  // Helper method để kiểm tra trước khi thực hiện các tác vụ
+  bool canExecute() {
+    return _mounted && !_disposed;
   }
 }

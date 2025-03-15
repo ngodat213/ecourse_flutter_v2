@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/base/base_view_model.dart';
 import '../../../../core/utils/validator.dart';
 import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
+import 'package:ecourse_flutter_v2/views/auth/widgets/otp_verification_sheet.dart';
 
 class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
   final AuthRepository _authRepository;
@@ -55,7 +56,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
 
   // Đăng nhập
   Future<void> login() async {
-    if (!formKey.currentState!.validate()) return;
+    if (!loginFormKey.currentState!.validate()) return;
 
     try {
       _setLoading(true);
@@ -67,7 +68,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
       if (response.allGood) {
         await _handleLoginResponse(response);
 
-        await _loadUserProfile();
+        await loadUserProfile();
         _setError(null);
 
         if (context.mounted) {
@@ -106,7 +107,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
     await SharedPrefs.setString('saved_password', passwordController.text);
   }
 
-  Future<bool> _loadUserProfile() async {
+  Future<bool> loadUserProfile() async {
     final profileResponse = await _userRepository.getUserProfile();
     if (!profileResponse.allGood) {
       _setError(profileResponse.message);
@@ -138,7 +139,10 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
 
   // Đăng ký
   Future<void> register() async {
-    if (!registerFormKey.currentState!.validate()) return;
+    if (!registerFormKey.currentState!.validate()) {
+      _setError('Vui lòng nhập đủ thông tin');
+      return;
+    }
 
     if (registerPasswordController.text !=
         registerConfirmPasswordController.text) {
@@ -146,40 +150,44 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
       return;
     }
 
+    if (Validator.validatePassword(registerPasswordController.text) != null) {
+      _setError('Mật khẩu không hợp lệ');
+      return;
+    }
+
+    if (Validator.validateEmail(registerEmailController.text) != null) {
+      _setError('Email không hợp lệ');
+      return;
+    }
+
     try {
       _setLoading(true);
 
-      // Tách họ và tên
-      final fullName = registerNameController.text.trim();
-      final nameParts = fullName.split(' ');
-      final lastName = nameParts.length > 1 ? nameParts.last : '';
-      final firstName =
-          nameParts.length > 1
-              ? nameParts.sublist(0, nameParts.length - 1).join(' ')
-              : fullName;
-
-      final response = await _authRepository.register(
-        firstName: firstName,
-        lastName: lastName,
+      final response = await _authRepository.registerMobile(
+        firstName: registerFirstNameController.text.trim(),
+        lastName: registerLastNameController.text.trim(),
         email: registerEmailController.text.trim(),
         password: registerPasswordController.text,
       );
 
       if (response.allGood) {
-        // Hiển thị thông báo thành công
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.',
-            ),
-          ),
-        );
-
-        // Reset form
-        registerNameController.clear();
-        registerEmailController.clear();
-        registerPasswordController.clear();
-        registerConfirmPasswordController.clear();
+        // Show modal OTP verification
+        if (context.mounted) {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            builder:
+                (context) => OTPVerificationSheet(
+                  email: registerEmailController.text.trim(),
+                  onVerify: verifyOtp,
+                  onResend: resendOtp,
+                  isResendEnabled: _isResendEnabled,
+                  resendCountdown: _resendCountdown,
+                  isLoading: _isLoading,
+                ),
+          );
+        }
       } else {
         _setError(response.message ?? 'Đăng ký thất bại');
       }
@@ -196,8 +204,8 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
     notifyListeners();
   }
 
-  Future<void> verifyOtp() async {
-    if (_otpCode.length != 5) {
+  Future<void> verifyOtp(String otp) async {
+    if (otp.length != 6) {
       _setError('Vui lòng nhập đủ mã OTP');
       return;
     }
@@ -205,27 +213,23 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
     try {
       _setLoading(true);
       final response = await _authRepository.verifyOTP(
-        email: emailController.text.trim(),
-        otp: _otpCode,
+        email: registerEmailController.text.trim(),
+        otp: otp,
       );
 
       if (response.allGood) {
-        // Nếu đang trong luồng quên mật khẩu
-        if (_verificationToken != null) {
-          Navigator.pushNamed(
-            context,
-            '/reset-password',
-            arguments: {'token': _verificationToken},
-          );
-        } else {
-          // Nếu đang trong luồng xác thực email
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('verify_success'.tr())));
-          Navigator.pushReplacementNamed(context, '/login');
-        }
+        // Đóng modal OTP
+        Navigator.pop(context);
+
+        // Hiển thị thông báo thành công
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Xác thực email thành công')),
+        );
+
+        // Chuyển về màn hình đăng nhập
+        Navigator.pushReplacementNamed(context, '/login');
       } else {
-        _setError(response.message ?? 'verify_failed'.tr());
+        _setError(response.message ?? 'Xác thực thất bại');
       }
     } catch (e) {
       _setError(e.toString());
@@ -241,16 +245,16 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
       _setLoading(true);
       final response = await _authRepository.resendOTP(
         userId: _userId ?? '',
-        type: _verificationToken != null ? 'reset' : 'verification',
+        type: 'verification',
       );
 
       if (response.allGood) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('otp_resent'.tr())));
+        ).showSnackBar(const SnackBar(content: Text('Đã gửi lại mã OTP')));
         _startResendCooldown();
       } else {
-        _setError(response.message ?? 'resend_failed'.tr());
+        _setError(response.message ?? 'Gửi lại mã thất bại');
       }
     } catch (e) {
       _setError(e.toString());

@@ -1,7 +1,5 @@
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
 import 'package:ecourse_flutter_v2/models/chat_model.dart';
-import 'package:flutter/material.dart';
-import 'dart:math';
 
 class ChatVM extends BaseVM {
   List<MessageModel> _messages = [];

@@ -4,6 +4,7 @@ import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
+import 'package:ecourse_flutter_v2/core/widgets/smart_image.dart';
 import 'package:ecourse_flutter_v2/core/widgets/text_fields/base_text_field.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/see_all_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/svg_icon_button.dart';
@@ -93,15 +94,18 @@ class ExploreView extends BaseView<ExploreVM> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 200.h,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return ExploreCourses(course: vm.courses[index]);
-                },
-                itemCount: vm.courses.length,
+            Visibility(
+              visible: vm.courses.isNotEmpty,
+              child: SizedBox(
+                height: 200.h,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return ExploreCourses(course: vm.courses[index]);
+                  },
+                  itemCount: vm.courses.length,
+                ),
               ),
             ),
             SeeAllButton(title: 'find_subjects'.tr(), onSeeAll: () {}),
@@ -181,14 +185,27 @@ class CategoryCard extends StatelessWidget {
 }
 
 class CourseCard extends StatelessWidget {
-  const CourseCard({super.key, required this.course});
+  const CourseCard({super.key, required this.course, this.isEnrolled = false});
   final CourseModel course;
+  final bool isEnrolled;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppRoutes.push(context, AppRoutes.courseDetail, arguments: course);
+        if (!isEnrolled) {
+          AppRoutes.push(
+            context,
+            AppRoutes.courseDetail,
+            arguments: course.toJson(),
+          );
+        } else {
+          AppRoutes.push(
+            context,
+            AppRoutes.courseLearn,
+            arguments: course.toJson(),
+          );
+        }
       },
       child: Container(
         margin: EdgeInsets.only(left: 16.w),
@@ -197,10 +214,14 @@ class CourseCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CachedNetworkImage(
-              imageUrl: course.thumnail?.url ?? '',
+            SmartImage(
+              source: course.thumnail?.url ?? '',
               fit: BoxFit.cover,
               width: 0.5.sw - 24.w,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8.r),
+                topRight: Radius.circular(8.r),
+              ),
             ),
             Container(
               decoration: BoxDecoration(
@@ -248,28 +269,33 @@ class CourseCard extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 6.h),
-                  Row(
-                    children: [
-                      Text(
-                        '${course.price}',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.sp,
+                  if (!isEnrolled)
+                    Row(
+                      children: [
+                        Text(
+                          '${course.price}',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.sp,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 6.w),
-                      Text(
-                        '${course.price}',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13.sp,
-                          decoration: TextDecoration.lineThrough,
-                          color: AppColor.textSecondaryDark,
-                          decorationColor: AppColor.textSecondaryDark,
+                        SizedBox(width: 6.w),
+                        Text(
+                          '${course.price}',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13.sp,
+                            decoration: TextDecoration.lineThrough,
+                            color: AppColor.textSecondaryDark,
+                            decorationColor: AppColor.textSecondaryDark,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                   SizedBox(height: 8.h),
                 ],
               ),
@@ -289,7 +315,11 @@ class TeacherItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppRoutes.push(context, AppRoutes.teacherProfile, arguments: teacher);
+        AppRoutes.push(
+          context,
+          AppRoutes.teacherProfile,
+          arguments: teacher.toJson(),
+        );
       },
       child: SizedBox(
         width: 0.3.sw - 16.w,
@@ -332,7 +362,11 @@ class ExploreCourses extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppRoutes.push(context, AppRoutes.courseDetail, arguments: course);
+        AppRoutes.push(
+          context,
+          AppRoutes.courseDetail,
+          arguments: course.toJson(),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(left: 12.w),

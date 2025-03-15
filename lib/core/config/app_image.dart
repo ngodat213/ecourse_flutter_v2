@@ -40,4 +40,5 @@ class AppImage {
   static const String svgMore = '${_svg}more.svg';
   static const String svgCheck = '${_svg}check.svg';
   static const String svgSend = '${_svg}send.svg';
+  static const String svgLike = '${_svg}like.svg';
 }
