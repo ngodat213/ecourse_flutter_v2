@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class FileMetadata {
@@ -91,5 +93,6 @@ class CloudinaryFile {
     };
   }
 
-  String get url => '${dotenv.env['BASE_CLOUDINARY_URL']}$publicId.$format';
+  String get url =>
+      '${dotenv.env['BASE_CLOUDINARY_URL']}$fileType${dotenv.env['BASE_UPLOAD_URL']}$publicId.$format';
 }

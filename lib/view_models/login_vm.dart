@@ -4,8 +4,6 @@ import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 import 'package:ecourse_flutter_v2/mixin/login_form_mixin.dart';
 import 'package:ecourse_flutter_v2/models/user_profile.dart';
-import 'package:ecourse_flutter_v2/repositories/auth_repository.dart';
-import 'package:ecourse_flutter_v2/repositories/user_repository.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,15 +13,7 @@ import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
 import 'package:ecourse_flutter_v2/views/auth/widgets/otp_verification_sheet.dart';
 
 class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
-  final AuthRepository _authRepository;
-  final UserRepository _userRepository;
-
-  LoginVM(
-    super.context, {
-    AuthRepository? authRepository,
-    UserRepository? userRepository,
-  }) : _authRepository = authRepository ?? AuthRepository(),
-       _userRepository = userRepository ?? UserRepository();
+  LoginVM(super.context);
 
   // OTP state
   String _otpCode = '';
@@ -60,7 +50,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
 
     try {
       _setLoading(true);
-      final response = await _authRepository.login(
+      final response = await authRepository.login(
         email: emailController.text.trim(),
         password: passwordController.text,
       );
@@ -108,7 +98,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
   }
 
   Future<bool> loadUserProfile() async {
-    final profileResponse = await _userRepository.getUserProfile();
+    final profileResponse = await userRepository.getUserProfile();
     if (!profileResponse.allGood) {
       _setError(profileResponse.message);
       await _clearTokens();
@@ -163,7 +153,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
     try {
       _setLoading(true);
 
-      final response = await _authRepository.registerMobile(
+      final response = await authRepository.registerMobile(
         firstName: registerFirstNameController.text.trim(),
         lastName: registerLastNameController.text.trim(),
         email: registerEmailController.text.trim(),
@@ -212,7 +202,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
 
     try {
       _setLoading(true);
-      final response = await _authRepository.verifyOTP(
+      final response = await authRepository.verifyOTP(
         email: registerEmailController.text.trim(),
         otp: otp,
       );
@@ -243,7 +233,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
 
     try {
       _setLoading(true);
-      final response = await _authRepository.resendOTP(
+      final response = await authRepository.resendOTP(
         userId: _userId ?? '',
         type: 'verification',
       );
@@ -291,7 +281,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
 
     try {
       _setLoading(true);
-      final response = await _authRepository.forgotPasswordMobile(
+      final response = await authRepository.forgotPasswordMobile(
         email: emailController.text.trim(),
       );
 
@@ -320,7 +310,7 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
 
     try {
       _setLoading(true);
-      final response = await _authRepository.resetPassword(
+      final response = await authRepository.resetPassword(
         token: _verificationToken!,
         newPassword: newPassword,
       );

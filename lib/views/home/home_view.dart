@@ -346,7 +346,11 @@ class ProgressCourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        AppRoutes.push(context, AppRoutes.courseLearn);
+        AppRoutes.push(
+          context,
+          AppRoutes.courseLearn,
+          arguments: course.toJson(),
+        );
       },
       child: Card(
         elevation: 2,

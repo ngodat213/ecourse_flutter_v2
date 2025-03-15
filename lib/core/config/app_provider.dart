@@ -1,6 +1,7 @@
 import 'package:ecourse_flutter_v2/core/providers/theme_provider.dart';
 import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
 import 'package:ecourse_flutter_v2/view_models/chat_vm.dart';
+import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/login_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/course_detail_vm.dart';
@@ -31,6 +32,7 @@ class AppProvider {
     ChangeNotifierProvider(create: (context) => MyProfileVM(context)),
     ChangeNotifierProvider(create: (context) => TeacherProfileVM(context)),
     ChangeNotifierProvider(create: (context) => CourseDetailVM(context)),
+    ChangeNotifierProvider(create: (context) => CourseLearnVM(context, null)),
   ];
 
   static void disposeProviders(BuildContext context) {
@@ -45,5 +47,6 @@ class AppProvider {
     context.read<TeacherProfileVM>().dispose();
     context.read<ThemeProvider>().dispose();
     context.read<CourseDetailVM>().dispose();
+    context.read<CourseLearnVM>().dispose();
   }
 }

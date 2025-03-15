@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/mixin/video_player_mixin.dart';
 import 'package:ecourse_flutter_v2/models/course_model.dart';
 import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/course_learn_appbar.dart';
@@ -34,18 +36,31 @@ class CourseLearnScreen extends StatefulWidget {
 }
 
 class _CourseLearnScreenState extends State<CourseLearnScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, ChewiePlayerMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
+
+    // Khởi tạo video player với URL ban đầu
+    if (widget.viewModel.videoUrl != null) {
+      initializePlayer(widget.viewModel.videoUrl!);
+    }
+
+    // Đăng ký callback khi URL video thay đổi
+    widget.viewModel.onVideoUrlChanged = () {
+      if (widget.viewModel.videoUrl != null) {
+        initializePlayer(widget.viewModel.videoUrl!);
+      }
+    };
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    widget.viewModel.onVideoUrlChanged = null;
     super.dispose();
   }
 
@@ -62,15 +77,42 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 0.6.sw,
-                margin: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: AppColor.secondary,
-                  borderRadius: BorderRadius.circular(8.r),
+              if (widget.viewModel.videoUrl != null)
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    margin: EdgeInsets.all(8.w),
+                    child: buildVideoPlayer(),
+                  ),
+                )
+              else
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    margin: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      color: AppColor.secondary,
+                      borderRadius: BorderRadius.circular(8.r),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          widget.viewModel.course?.thumnail?.url ?? '',
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
+              CourseTabBar(
+                course: widget.viewModel.course!,
+                tabController: _tabController,
+                lessons: widget.viewModel.lessons,
+                lessonProgress: widget.viewModel.lessonProgress,
+                currentLessonContentId:
+                    widget.viewModel.currentProgressId ?? '',
+                onContentSelected: (content) {
+                  widget.viewModel.onContentSelected(content);
+                },
               ),
-              CourseTabBar(tabController: _tabController),
             ],
           ),
         ),

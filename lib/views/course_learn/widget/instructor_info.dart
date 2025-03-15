@@ -1,5 +1,7 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
+import 'package:ecourse_flutter_v2/core/widgets/smart_image.dart';
 import 'package:ecourse_flutter_v2/models/teacher_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,8 +15,11 @@ class InstructorInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 0.w),
-      leading: CircleAvatar(
-        backgroundImage: AssetImage(instructor.profilePicture ?? ''),
+      leading: SmartImage(
+        source: instructor.profilePicture ?? AppConstants.defaultAvatar,
+        width: 40.w,
+        height: 40.w,
+        borderRadius: BorderRadius.circular(20.r),
       ),
       title: Text(
         "${instructor.firstName} ${instructor.lastName}",
