@@ -2,6 +2,7 @@ import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
 import 'package:ecourse_flutter_v2/models/course_model.dart';
 import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
 import 'package:ecourse_flutter_v2/models/lesson_model.dart';
+import 'package:ecourse_flutter_v2/models/quiz_model.dart';
 import 'package:ecourse_flutter_v2/models/user_progress_model.dart';
 import 'package:ecourse_flutter_v2/repositories/course_repository.dart';
 import 'package:ecourse_flutter_v2/repositories/lesson_repository.dart';
@@ -22,9 +23,10 @@ class CourseLearnVM extends BaseVM {
   List<UserProgressModel> lessonProgress = [];
   String? currentProgressId;
   String? videoUrl;
+  QuizModel? quiz;
   bool isLoadingVideo = false;
   Function? onVideoUrlChanged;
-
+  Function? onQuizChanged;
   Future<void> _initData() async {
     try {
       if (course?.sId == null) return;
@@ -62,11 +64,16 @@ class CourseLearnVM extends BaseVM {
         isLoadingVideo = false;
         // Gọi callback để khởi tạo lại video player
         onVideoUrlChanged?.call();
+      } else if (content.type == LessonContentType.quiz) {
+        videoUrl = null;
+        quiz = content.quiz;
+        notifyListeners();
+        onQuizChanged?.call();
       } else {
         videoUrl = null;
+        quiz = null;
+        notifyListeners();
       }
-
-      notifyListeners();
     } catch (e) {
       setError(e.toString());
       isLoadingVideo = false;
@@ -146,6 +153,7 @@ class CourseLearnVM extends BaseVM {
     videoUrl = null;
     currentProgressId = null;
     onVideoUrlChanged = null;
+    onQuizChanged = null;
     super.dispose();
   }
 }

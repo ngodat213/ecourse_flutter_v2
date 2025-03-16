@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/mixin/quiz_player_mixin.dart';
 import 'package:ecourse_flutter_v2/mixin/video_player_mixin.dart';
 import 'package:ecourse_flutter_v2/models/course_model.dart';
 import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
@@ -36,7 +37,7 @@ class CourseLearnScreen extends StatefulWidget {
 }
 
 class _CourseLearnScreenState extends State<CourseLearnScreen>
-    with SingleTickerProviderStateMixin, ChewiePlayerMixin {
+    with SingleTickerProviderStateMixin, ChewiePlayerMixin, QuizPlayerMixin {
   late TabController _tabController;
 
   @override
@@ -49,10 +50,20 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
       initializePlayer(widget.viewModel.videoUrl!);
     }
 
+    if (widget.viewModel.quiz != null) {
+      initQuiz(widget.viewModel.quiz!);
+    }
+
     // Đăng ký callback khi URL video thay đổi
     widget.viewModel.onVideoUrlChanged = () {
       if (widget.viewModel.videoUrl != null) {
         initializePlayer(widget.viewModel.videoUrl!);
+      }
+    };
+
+    widget.viewModel.onQuizChanged = () {
+      if (widget.viewModel.quiz != null) {
+        initQuiz(widget.viewModel.quiz!);
       }
     };
   }
@@ -61,6 +72,7 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
   void dispose() {
     _tabController.dispose();
     widget.viewModel.onVideoUrlChanged = null;
+    widget.viewModel.onQuizChanged = null;
     super.dispose();
   }
 
@@ -83,6 +95,14 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
                   child: Container(
                     margin: EdgeInsets.all(8.w),
                     child: buildVideoPlayer(),
+                  ),
+                )
+              else if (widget.viewModel.quiz != null)
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    margin: EdgeInsets.all(8.w),
+                    child: buildQuizPlayer(context),
                   ),
                 )
               else

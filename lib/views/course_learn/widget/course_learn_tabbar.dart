@@ -12,12 +12,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CourseTabBar extends StatelessWidget {
   const CourseTabBar({
     super.key,
-    required TabController tabController,
-    required List<LessonModel> lessons,
-    required CourseModel course,
-    required List<UserProgressModel> lessonProgress,
-    required String currentLessonContentId,
-    required Function(LessonContentModel) onContentSelected,
+    required this.tabController,
+    required this.lessons,
+    required this.lessonProgress,
+    required this.currentLessonContentId,
+    required this.onContentSelected,
+    required this.course,
   });
 
   final TabController tabController;
@@ -65,7 +65,7 @@ class CourseTabBar extends StatelessWidget {
                   ContentTab(
                     lessons: lessons,
                     lessonProgress: lessonProgress,
-                    currentProgressId: currentProgressId,
+                    currentProgressId: currentLessonContentId,
                     onContentSelected: (content) => onContentSelected(content),
                   ),
                   OverviewTab(course: course),

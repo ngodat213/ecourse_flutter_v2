@@ -1,5 +1,6 @@
 import 'package:ecourse_flutter_v2/enums/lesson_content_type.enum.dart';
 import 'package:ecourse_flutter_v2/models/cloudinary_file.dart';
+import 'package:ecourse_flutter_v2/models/quiz_model.dart';
 
 class LessonContentModel {
   String? sId;
@@ -9,6 +10,7 @@ class LessonContentModel {
   int? order;
   int? duration;
   CloudinaryFile? video;
+  QuizModel? quiz;
   // List<Null>? attachments;
   // List<Null>? requirements;
   // List<Null>? comments;
@@ -26,6 +28,7 @@ class LessonContentModel {
     this.order,
     this.duration,
     this.video,
+    this.quiz,
     // this.attachments,
     // this.requirements,
     // this.comments,
@@ -45,6 +48,7 @@ class LessonContentModel {
     duration = json['duration'].ceil();
     video =
         json['video'] != null ? CloudinaryFile.fromJson(json['video']) : null;
+    quiz = json['quiz'] != null ? QuizModel.fromJson(json['quiz']) : null;
     // if (json['attachments'] != null) {
     //   attachments = <Null>[];
     //   json['attachments'].forEach((v) {
@@ -80,6 +84,9 @@ class LessonContentModel {
     data['duration'] = duration;
     if (video != null) {
       data['video'] = video!.toJson();
+    }
+    if (quiz != null) {
+      data['quiz'] = quiz!.toJson();
     }
     // if (this.attachments != null) {
     //   data['attachments'] = this.attachments!.map((v) => v.toJson()).toList();
