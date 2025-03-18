@@ -1,11 +1,8 @@
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
 import 'package:ecourse_flutter_v2/models/teacher_model.dart';
-import 'package:ecourse_flutter_v2/repositories/user_repository.dart';
 
 class TeacherProfileVM extends BaseVM {
   TeacherProfileVM(super.context, {this.teacherProfile});
-
-  final UserRepository _userRepository = UserRepository();
 
   final TeacherModel? teacherProfile;
   String? teacherId;

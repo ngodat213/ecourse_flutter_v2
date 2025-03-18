@@ -11,7 +11,7 @@ class RouteGuard extends NavigatorObserver {
     AppRoutes.courseDetail,
     AppRoutes.verifyOtp,
     AppRoutes.forgetPw,
-    AppRoutes.examDetail,
+    // AppRoutes.examDetail,
     AppRoutes.examTaking,
     AppRoutes.courseLearn,
     AppRoutes.adminDashboard,

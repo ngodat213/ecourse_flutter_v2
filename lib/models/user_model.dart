@@ -1,5 +1,3 @@
-import 'package:ecourse_flutter_v2/models/course_model.dart';
-
 enum UserRole { student, instructor, admin, superAdmin }
 
 enum UserStatus { pending, active, blocked }

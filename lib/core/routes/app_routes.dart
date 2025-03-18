@@ -26,7 +26,7 @@ class AppRoutes {
   static const String forgetPw = '/forget-pw';
   static const String courseDetail = '/course-detail';
   static const String courseLearn = '/course-learn';
-  static const String examDetail = '/exam-detail';
+  // static const String examDetail = '/exam-detail';
   static const String examTaking = '/exam-taking';
   static const String adminDashboard = '/admin-dashboard';
   static const String profile = '/profile';
@@ -45,7 +45,7 @@ class AppRoutes {
       forgetPw: (context) => const ForgetPwView(),
       courseDetail: (context) => const CourseDetailView(),
       courseLearn: (context) => const CourseLearnView(),
-      examDetail: (context) => const ExamDetailView(),
+      // examDetail: (context) => const ExamDetailView(),
       examTaking: (context) => const ExamTakingView(),
       adminDashboard: (context) => const AdminView(),
       profile: (context) => const MyProfileView(),

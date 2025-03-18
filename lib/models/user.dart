@@ -51,6 +51,8 @@ class User {
     this.level,
   });
 
+  String get fullName => '$firstName $lastName';
+
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     firstName = json['first_name'];
