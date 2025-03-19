@@ -14,7 +14,7 @@ class RouteGuard extends NavigatorObserver {
     // AppRoutes.examDetail,
     AppRoutes.examTaking,
     AppRoutes.courseLearn,
-    AppRoutes.adminDashboard,
+    // AppRoutes.adminDashboard,
     AppRoutes.profile,
     AppRoutes.myCourse,
     AppRoutes.myCertificates,

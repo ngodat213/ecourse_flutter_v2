@@ -22,7 +22,7 @@ class CourseLearnVM extends BaseVM {
   List<LessonModel> lessons = [];
   List<UserProgressModel> lessonProgress = [];
   String? currentProgressId;
-  String? videoUrl;
+  LessonContentModel? currentContent;
   QuizModel? quiz;
   bool isLoadingVideo = false;
   Function? onVideoUrlChanged;
@@ -31,9 +31,9 @@ class CourseLearnVM extends BaseVM {
     try {
       if (course?.sId == null) return;
       await Future.wait([
-        getCourse(course!.sId!),
-        getCourseLessons(course!.sId!),
-        getCourseProgress(course!.sId!),
+        _getCourse(course!.sId!),
+        _getCourseLessons(course!.sId!),
+        _getCourseProgress(course!.sId!),
       ]);
     } catch (e) {
       setError(e.toString());
@@ -46,31 +46,22 @@ class CourseLearnVM extends BaseVM {
 
       currentProgressId = content.sId;
 
+      await _createContentProgress(content.sId!);
       // Nếu là video, cập nhật URL và thông báo để khởi tạo player
       if (content.type == LessonContentType.video) {
         isLoadingVideo = true;
+        currentContent = content;
+
         notifyListeners();
-
-        // Lấy URL video nếu chưa có
-        if (content.video?.url == null) {
-          final response = await _lessonRepository.getLessonVideo(content.sId!);
-          if (response.allGood) {
-            videoUrl = response.body['url'];
-          }
-        } else {
-          videoUrl = content.video?.url;
-        }
-
         isLoadingVideo = false;
-        // Gọi callback để khởi tạo lại video player
         onVideoUrlChanged?.call();
       } else if (content.type == LessonContentType.quiz) {
-        videoUrl = null;
+        currentContent = content;
         quiz = content.quiz;
         notifyListeners();
         onQuizChanged?.call();
       } else {
-        videoUrl = null;
+        currentContent = null;
         quiz = null;
         notifyListeners();
       }
@@ -81,7 +72,22 @@ class CourseLearnVM extends BaseVM {
     }
   }
 
-  Future<void> getCourse(String courseId) async {
+  Future<void> _createContentProgress(String contentId) async {
+    if (!lessonProgress.any(
+      (element) => element.lessonContent!.sId == contentId,
+    )) {
+      final response = await _progressRepository.createContentProgress(
+        course!.sId!,
+        contentId,
+      );
+      if (response.allGood) {
+        lessonProgress.add(UserProgressModel.fromJson(response.body));
+      }
+      notifyListeners();
+    }
+  }
+
+  Future<void> _getCourse(String courseId) async {
     setLoading(true);
     final response = await _courseRepository.getCourseById(courseId);
     if (response.allGood) {
@@ -91,7 +97,7 @@ class CourseLearnVM extends BaseVM {
     setLoading(false);
   }
 
-  Future<void> getCourseLessons(String courseId) async {
+  Future<void> _getCourseLessons(String courseId) async {
     setLoading(true);
     final response = await _lessonRepository.getLessons(courseId);
     if (response.allGood) {
@@ -103,54 +109,40 @@ class CourseLearnVM extends BaseVM {
     setLoading(false);
   }
 
-  Future<void> getCourseProgress(String courseId) async {
+  Future<void> _getCourseProgress(String courseId) async {
     try {
-      final response = await _progressRepository.getAllProgress(courseId);
+      final response = await _progressRepository.getCourseProgress(courseId);
       if (response.allGood) {
         for (var progress in response.body) {
           lessonProgress.add(UserProgressModel.fromJson(progress));
         }
       }
-      currentProgressId = lessonProgress.last.lessonId;
+      onContentSelected(lessonProgress.last.lessonContent!);
       notifyListeners();
     } catch (e) {
       setError(e.toString());
     }
   }
 
-  Future<void> updateLessonProgress(String lessonId, double progress) async {
-    final response = await _progressRepository.updateProgress(lessonId, {
-      'progress_percent': progress,
-    });
+  Future<void> markContentComplete(String contentId) async {
+    // Tìm content trong lessonProgress
+    final existingProgress = lessonProgress.firstWhere(
+      (element) => element.lessonContent?.sId == contentId,
+    );
 
-    if (response.allGood) {
-      lessonProgress
-          .firstWhere((element) => element.lessonId == lessonId)
-          .progressPercent = progress;
-      notifyListeners();
+    // Chỉ call API nếu content chưa completed
+    if (existingProgress.status != 'completed') {
+      final response = await _progressRepository.markContentComplete(contentId);
+      if (response.allGood) {
+        existingProgress.status = 'completed';
+        notifyListeners();
+      }
     }
-  }
-
-  Future<void> markLessonComplete(String lessonId) async {
-    final response = await _progressRepository.markLessonComplete(lessonId);
-    if (response.allGood) {
-      lessonProgress
-          .firstWhere((element) => element.lessonId == lessonId)
-          .progressPercent = 100;
-      notifyListeners();
-    }
-  }
-
-  double getLessonProgress(String lessonId) {
-    return lessonProgress
-            .firstWhere((element) => element.lessonId == lessonId)
-            .progressPercent ??
-        0;
   }
 
   @override
   void dispose() {
-    videoUrl = null;
+    currentContent = null;
     currentProgressId = null;
     onVideoUrlChanged = null;
     onQuizChanged = null;

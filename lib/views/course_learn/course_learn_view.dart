@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/enums/lesson_content_type.enum.dart';
 import 'package:ecourse_flutter_v2/mixin/quiz_player_mixin.dart';
 import 'package:ecourse_flutter_v2/mixin/video_player_mixin.dart';
 import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/services/learning_time_service.dart';
 import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/course_learn_appbar.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/course_learn_tabbar.dart';
@@ -46,24 +49,44 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
     _tabController = TabController(length: 3, vsync: this);
 
     // Khởi tạo video player với URL ban đầu
-    if (widget.viewModel.videoUrl != null) {
-      initializePlayer(widget.viewModel.videoUrl!);
+    if (widget.viewModel.currentContent != null &&
+        widget.viewModel.currentContent!.type == LessonContentType.video) {
+      initializePlayer(widget.viewModel.currentContent!, () {
+        widget.viewModel.markContentComplete(
+          widget.viewModel.currentContent!.sId!,
+        );
+      });
     }
 
-    if (widget.viewModel.quiz != null) {
-      initQuiz(widget.viewModel.quiz!);
+    if (widget.viewModel.currentContent != null &&
+        widget.viewModel.currentContent!.type == LessonContentType.quiz) {
+      initQuiz(widget.viewModel.currentContent!, () {
+        widget.viewModel.markContentComplete(
+          widget.viewModel.currentContent!.sId!,
+        );
+      });
     }
 
     // Đăng ký callback khi URL video thay đổi
     widget.viewModel.onVideoUrlChanged = () {
-      if (widget.viewModel.videoUrl != null) {
-        initializePlayer(widget.viewModel.videoUrl!);
+      if (widget.viewModel.currentContent != null &&
+          widget.viewModel.currentContent?.type == LessonContentType.video) {
+        initializePlayer(widget.viewModel.currentContent!, () {
+          widget.viewModel.markContentComplete(
+            widget.viewModel.currentContent!.sId!,
+          );
+        });
       }
     };
 
     widget.viewModel.onQuizChanged = () {
-      if (widget.viewModel.quiz != null) {
-        initQuiz(widget.viewModel.quiz!);
+      if (widget.viewModel.currentContent != null &&
+          widget.viewModel.currentContent!.type == LessonContentType.quiz) {
+        initQuiz(widget.viewModel.currentContent!, () {
+          widget.viewModel.markContentComplete(
+            widget.viewModel.currentContent!.sId!,
+          );
+        });
       }
     };
   }
@@ -89,7 +112,9 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (widget.viewModel.videoUrl != null)
+              if (widget.viewModel.currentContent != null &&
+                  widget.viewModel.currentContent!.type ==
+                      LessonContentType.video)
                 AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Container(
@@ -97,7 +122,9 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
                     child: buildVideoPlayer(),
                   ),
                 )
-              else if (widget.viewModel.quiz != null)
+              else if (widget.viewModel.currentContent != null &&
+                  widget.viewModel.currentContent!.type ==
+                      LessonContentType.quiz)
                 AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Container(

@@ -42,6 +42,7 @@ class ContentTab extends StatelessWidget {
               currentContentIndex: position,
               currentContentId: currentProgressId,
               onContentSelected: (content) => onContentSelected(content),
+              lessonProgress: lessonProgress,
             ),
           );
         },
@@ -56,6 +57,7 @@ class SelectionItem extends StatelessWidget {
   final String currentContentId;
   final Function(LessonContentModel) onContentSelected;
   final int index;
+  final List<UserProgressModel> lessonProgress;
 
   const SelectionItem({
     super.key,
@@ -64,6 +66,7 @@ class SelectionItem extends StatelessWidget {
     this.currentContentId = '',
     required this.onContentSelected,
     required this.index,
+    required this.lessonProgress,
   });
 
   @override
@@ -109,7 +112,7 @@ class SelectionItem extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               Text(
-                'Progress $index / ${lesson.contents?.length} | ${lesson.duration != null
+                'Progress ${lessonProgress.where((lesson) => lesson.status == 'completed').length} / ${lesson.contents?.length} | ${lesson.duration != null
                     ? lesson.duration! ~/ 60 != 0
                         ? '${lesson.duration! ~/ 60}h ${lesson.duration! % 60} min'
                         : '${lesson.duration!} min'
@@ -121,15 +124,23 @@ class SelectionItem extends StatelessWidget {
               ),
             ],
           ),
-          children: List.generate(
-            lesson.contents?.length ?? 0,
-            (index) => LessonContentItem(
-              content: lesson.contents![index],
+          children: List.generate(lesson.contents?.length ?? 0, (index) {
+            final content = lesson.contents![index];
+            final isCompleted =
+                lessonProgress
+                    .firstWhere(
+                      (element) => element.lessonContent?.sId == content.sId,
+                    )
+                    .status ==
+                'completed';
+            return LessonContentItem(
+              content: content,
               index: index + 1,
-              isSelected: lesson.contents![index].sId == currentContentId,
-              onTap: () => onContentSelected(lesson.contents![index]),
-            ),
-          ),
+              isSelected: content.sId == currentContentId,
+              isCompleted: isCompleted,
+              onTap: () => onContentSelected(content),
+            );
+          }),
         ),
       ),
     );
@@ -141,6 +152,7 @@ class LessonContentItem extends StatelessWidget {
   final int index;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool isCompleted;
 
   const LessonContentItem({
     super.key,
@@ -148,6 +160,7 @@ class LessonContentItem extends StatelessWidget {
     required this.index,
     this.isSelected = false,
     required this.onTap,
+    required this.isCompleted,
   });
 
   @override
@@ -208,16 +221,16 @@ class LessonContentItem extends StatelessWidget {
                 ],
               ),
             ),
-            // if (content.isCompleted)
-            //   Container(
-            //     width: 24.w,
-            //     height: 24.w,
-            //     decoration: BoxDecoration(
-            //       color: Colors.green,
-            //       shape: BoxShape.circle,
-            //     ),
-            //     child: Icon(Icons.check, color: Colors.white, size: 16.sp),
-            //   ),
+            if (isCompleted)
+              Container(
+                width: 24.w,
+                height: 24.w,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.check, color: Colors.white, size: 16.sp),
+              ),
           ],
         ),
       ),

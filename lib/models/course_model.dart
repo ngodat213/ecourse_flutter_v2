@@ -19,7 +19,7 @@ class CourseModel {
   int? rating;
   int? reviewCount;
   int? totalRevenue;
-  // List<String>? lessons;
+  List<String>? lessons;
   String? createdAt;
   String? updatedAt;
 
@@ -40,7 +40,7 @@ class CourseModel {
     this.rating,
     this.reviewCount,
     this.totalRevenue,
-    // this.lessons,
+    this.lessons,
     this.createdAt,
     this.updatedAt,
   });
@@ -75,7 +75,7 @@ class CourseModel {
     rating = json['rating'];
     reviewCount = json['review_count'];
     totalRevenue = json['total_revenue'];
-    // lessons = json['lessons'].cast<String>();
+    lessons = json['lessons'] != null ? json['lessons'].cast<String>() : [];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -104,7 +104,7 @@ class CourseModel {
     data['rating'] = rating;
     data['review_count'] = reviewCount;
     data['total_revenue'] = totalRevenue;
-    // data['lessons'] = lessons;
+    data['lessons'] = lessons;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;

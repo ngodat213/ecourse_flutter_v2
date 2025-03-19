@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
 import 'package:ecourse_flutter_v2/models/quiz_model.dart';
 import 'package:ecourse_flutter_v2/models/quiz_question_model.dart';
 import 'package:ecourse_flutter_v2/models/user_profile.dart';
 import 'package:ecourse_flutter_v2/repositories/quiz_repository.dart';
+import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +15,7 @@ enum ExamStatus { taking, submit }
 
 class ExamVM extends BaseVM {
   // Constructor
-  ExamVM(super.context, {required this.quiz, required this.questions}) {
+  ExamVM(super.context, {required this.content, required this.questions}) {
     _quizRepository = QuizRepository();
     startTimer();
   }
@@ -22,7 +24,7 @@ class ExamVM extends BaseVM {
   late final QuizRepository _quizRepository;
 
   // Properties
-  final QuizModel quiz;
+  final LessonContentModel content;
   final List<QuizQuestionModel> questions;
   ExamStatus status = ExamStatus.taking;
   UserProfile? profileUser;
@@ -76,7 +78,7 @@ class ExamVM extends BaseVM {
 
   /// Khởi động timer đếm ngược
   void startTimer() {
-    _time = quiz.duration ?? 0;
+    _time = content.quiz?.duration ?? 0;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_time > 0) {
         _time--;
@@ -103,14 +105,13 @@ class ExamVM extends BaseVM {
 
       // Gọi API submit
       final response = await _quizRepository.submitQuiz(
-        quiz.sId ?? '',
+        content.quiz?.sId ?? '',
         answers,
       );
 
       if (response.allGood) {
         // Cập nhật kết quả từ response
         _updateExamResult(response.body);
-
         // Chuyển trạng thái sang đã nộp bài
         status = ExamStatus.submit;
         notifyListeners();

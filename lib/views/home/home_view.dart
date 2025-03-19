@@ -11,6 +11,9 @@ import 'package:ecourse_flutter_v2/core/widgets/buttons/see_all_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/smart_image.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/svg_icon_button.dart';
 import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/models/course_progress_model.dart';
+import 'package:ecourse_flutter_v2/services/learning_time_service.dart';
+import 'package:ecourse_flutter_v2/services/streak_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -90,10 +93,11 @@ class HomeView extends BaseView<HomeVM> {
           children: [
             NotificationSchedule(),
             // PromotionSliderWidget(vm: vm),
-            UserStreak(),
+            UserStreak(currentStreak: vm.userProfile?.user?.currentStreak ?? 0),
             SizedBox(height: 16.h),
             CourseProgressCard(
               enrolledCourses: vm.userProfile?.user?.enrolledCourses ?? [],
+              courseProgress: vm.courseProgress,
             ),
             Visibility(
               visible: vm.popularCourses.isNotEmpty,
@@ -217,7 +221,8 @@ class NotificationSchedule extends StatelessWidget {
 }
 
 class UserStreak extends StatelessWidget {
-  const UserStreak({super.key});
+  const UserStreak({super.key, required this.currentStreak});
+  final int currentStreak;
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +264,7 @@ class UserStreak extends StatelessWidget {
                   children: [
                     Image.asset(AppImage.imgStreak, width: 50.w, height: 50.w),
                     Text(
-                      '0 days',
+                      '$currentStreak days',
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -273,33 +278,45 @@ class UserStreak extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    CircularProgressIndicator(
-                      value: 0.5,
-                      color: AppColor.primary,
-                    ),
-                    SizedBox(width: 16.w),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                StreamBuilder(
+                  stream: Stream.periodic(const Duration(seconds: 1)),
+                  builder: (context, snapshot) {
+                    return Row(
                       children: [
-                        Text(
-                          '0 days',
-                          style: Theme.of(context).textTheme.labelSmall
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                        CircularProgressIndicator(
+                          value:
+                              LearningTimeService.minutesWatchTime /
+                              (StreakService.TIME_LIMIT ~/ 60),
+                          color: AppColor.primary,
+                          backgroundColor: Colors.grey[300],
                         ),
-                        Text(
-                          'Current streak',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.labelSmall?.copyWith(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10.sp,
-                          ),
+                        SizedBox(width: 16.w),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${LearningTimeService.minutesWatchTime}/${StreakService.TIME_LIMIT ~/ 60} Course minutes',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                            Text(
+                              'Current streak',
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelSmall?.copyWith(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ],
             ),
@@ -311,11 +328,20 @@ class UserStreak extends StatelessWidget {
 }
 
 class CourseProgressCard extends StatelessWidget {
-  const CourseProgressCard({super.key, required this.enrolledCourses});
+  const CourseProgressCard({
+    super.key,
+    required this.enrolledCourses,
+    required this.courseProgress,
+  });
   final List<CourseModel> enrolledCourses;
+  final List<CourseProgressModel>? courseProgress;
 
   @override
   Widget build(BuildContext context) {
+    if (enrolledCourses.isEmpty) {
+      return Container();
+    }
+
     return Column(
       children: [
         SeeAllButton(title: 'inprogress'.tr(), onSeeAll: () {}),
@@ -327,7 +353,22 @@ class CourseProgressCard extends StatelessWidget {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                return ProgressCourseCard(course: enrolledCourses[index]);
+                if (courseProgress != null) {
+                  final progress = courseProgress!.firstWhere(
+                    (element) => element.courseId == enrolledCourses[index].sId,
+                    orElse:
+                        () => CourseProgressModel(
+                          courseId: enrolledCourses[index].sId!,
+                          progress: 0,
+                        ),
+                  );
+
+                  return ProgressCourseCard(
+                    course: enrolledCourses[index],
+                    courseProgress: progress,
+                  );
+                }
+                return Container();
               },
               itemCount: enrolledCourses.length,
             ),
@@ -339,8 +380,13 @@ class CourseProgressCard extends StatelessWidget {
 }
 
 class ProgressCourseCard extends StatelessWidget {
-  const ProgressCourseCard({super.key, required this.course});
+  const ProgressCourseCard({
+    super.key,
+    required this.course,
+    required this.courseProgress,
+  });
   final CourseModel course;
+  final CourseProgressModel courseProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -404,7 +450,7 @@ class ProgressCourseCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '60%',
+                        '${(courseProgress.progress * 100).toInt()}%',
                         style: TextStyle(
                           fontSize: 10.sp,
                           fontWeight: FontWeight.bold,
@@ -414,7 +460,7 @@ class ProgressCourseCard extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   LinearProgressIndicator(
-                    value: 0.6,
+                    value: courseProgress.progress,
                     backgroundColor: Colors.grey[300],
                     valueColor: AlwaysStoppedAnimation<Color>(AppColor.primary),
                     borderRadius: BorderRadius.circular(2.r),

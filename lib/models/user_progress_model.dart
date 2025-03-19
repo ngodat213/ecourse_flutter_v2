@@ -1,10 +1,12 @@
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
+
 class UserProgressModel {
   String? sId;
   String? userId;
   String? courseId;
   String? lessonId;
+  LessonContentModel? lessonContent;
   String? status;
-  double? progressPercent;
   String? createdAt;
   String? updatedAt;
   int? iV;
@@ -14,8 +16,8 @@ class UserProgressModel {
     this.userId,
     this.courseId,
     this.lessonId,
+    this.lessonContent,
     this.status,
-    this.progressPercent,
     this.createdAt,
     this.updatedAt,
     this.iV,
@@ -26,8 +28,8 @@ class UserProgressModel {
     userId = json['user_id'];
     courseId = json['course_id'];
     lessonId = json['lesson_id'];
+    lessonContent = LessonContentModel.fromJson(json['content_id']);
     status = json['status'];
-    progressPercent = json['progress_percent'].toDouble();
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
@@ -39,8 +41,8 @@ class UserProgressModel {
     data['user_id'] = userId;
     data['course_id'] = courseId;
     data['lesson_id'] = lessonId;
+    data['lesson_content'] = lessonContent?.toJson();
     data['status'] = status;
-    data['progress_percent'] = progressPercent;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;

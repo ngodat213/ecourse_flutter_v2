@@ -4,7 +4,7 @@ import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/smart_image.dart';
-import 'package:ecourse_flutter_v2/models/quiz_model.dart';
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
 import 'package:ecourse_flutter_v2/models/quiz_question_model.dart';
 import 'package:ecourse_flutter_v2/view_models/exam_vm.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +21,14 @@ class ExamTakingView extends BaseView<ExamVM> {
     BuildContext context,
     Map<String, dynamic>? arguments,
   ) {
-    final QuizModel quiz = QuizModel.fromJson(arguments!['quiz']);
+    final LessonContentModel content = LessonContentModel.fromJson(
+      arguments!['content'],
+    );
     final List<QuizQuestionModel> questions =
         (arguments['questions'] as List)
             .map((q) => QuizQuestionModel.fromJson(q))
             .toList();
-    return ExamVM(context, quiz: quiz, questions: questions);
+    return ExamVM(context, content: content, questions: questions);
   }
 
   @override
@@ -94,7 +96,13 @@ class ExamTakingView extends BaseView<ExamVM> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed:
+                        () => {
+                          if (vm.status == ExamStatus.submit)
+                            {Navigator.pop(context, true)}
+                          else
+                            {Navigator.pop(context)},
+                        },
                     padding: EdgeInsets.all(6.w),
                     style: IconButton.styleFrom(
                       backgroundColor: AppColor.primary.withOpacity(0.3),

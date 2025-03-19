@@ -1,7 +1,7 @@
-import 'package:ecourse_flutter_v2/models/course.dart';
+import 'package:ecourse_flutter_v2/models/course_model.dart';
 
 class Stats {
-  List<Course>? courses;
+  List<CourseModel>? courses;
   // List<Null>? students;
   // List<Null>? ratings;
 
@@ -12,9 +12,9 @@ class Stats {
 
   Stats.fromJson(Map<String, dynamic> json) {
     if (json['courses'] != null) {
-      courses = <Course>[];
+      courses = <CourseModel>[];
       json['courses'].forEach((v) {
-        courses!.add(Course.fromJson(v));
+        courses!.add(CourseModel.fromJson(v));
       });
     }
     // if (json['students'] != null) {

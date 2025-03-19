@@ -1,16 +1,41 @@
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/services/streak_service.dart';
+import 'dart:async';
+import 'package:ecourse_flutter_v2/services/learning_time_service.dart';
 
 mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
   VideoPlayerController? videoPlayerController;
   ChewieController? chewieController;
   bool _isInitializing = false;
   bool _isFullScreen = false;
+  bool _hasCalledOnFinish = false;
 
-  Future<void> initializePlayer(String videoUrl) async {
+  StreakService? _streakService;
+  int _currentVideoWatchDuration = 0;
+  Timer? _streakTimer;
+
+  Duration _lastPosition = Duration.zero;
+  int _actualWatchedTime = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _initStreakService();
+  }
+
+  Future<void> _initStreakService() async {
+    _streakService = await StreakService.getInstance();
+  }
+
+  Future<void> initializePlayer(
+    LessonContentModel content,
+    Function? onFinish,
+  ) async {
     if (_isInitializing) return;
 
     _isInitializing = true;
@@ -18,8 +43,35 @@ mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
 
     try {
       videoPlayerController = VideoPlayerController.networkUrl(
-        Uri.parse(videoUrl),
+        Uri.parse(content.video!.url),
       );
+
+      _addVideoListeners();
+
+      videoPlayerController?.addListener(() {
+        if (videoPlayerController?.value.isPlaying == true) {
+          _trackWatchTime();
+        }
+
+        if (videoPlayerController?.value.isInitialized == true &&
+            videoPlayerController?.value.position != null &&
+            videoPlayerController?.value.duration != null &&
+            videoPlayerController!.value.duration.inMilliseconds > 0) {
+          final position = videoPlayerController!.value.position;
+          final duration = videoPlayerController!.value.duration;
+          final isNearEnd =
+              position >= duration - const Duration(milliseconds: 500);
+
+          if (isNearEnd && !videoPlayerController!.value.isPlaying) {
+            if (!_hasCalledOnFinish) {
+              _hasCalledOnFinish = true;
+              onFinish?.call();
+            }
+          } else if (!isNearEnd) {
+            _hasCalledOnFinish = false;
+          }
+        }
+      });
 
       await videoPlayerController?.initialize();
 
@@ -41,7 +93,7 @@ mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
                     style: TextStyle(color: AppColor.error),
                   ),
                   TextButton(
-                    onPressed: () => initializePlayer(videoUrl),
+                    onPressed: () => initializePlayer(content, onFinish),
                     child: const Text('Thử lại'),
                   ),
                 ],
@@ -74,7 +126,7 @@ mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
       debugPrint('Platform error: ${e.message}');
       await Future.delayed(const Duration(milliseconds: 500));
       if (mounted) {
-        initializePlayer(videoUrl);
+        initializePlayer(content, onFinish);
       }
     } catch (e) {
       debugPrint('Error initializing video player: $e');
@@ -117,28 +169,72 @@ mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  Future<void> disposeControllers() async {
-    if (chewieController != null) {
-      chewieController?.removeListener(_onFullScreenChanged);
-      chewieController?.dispose();
-      chewieController = null;
-    }
+  void _trackWatchTime() {
+    videoPlayerController?.addListener(() {
+      if (videoPlayerController?.value.isPlaying == true) {
+        // Bắt đầu đếm khi video play
+        LearningTimeService.startCounting();
+      } else {
+        // Tạm dừng đếm khi video pause
+        LearningTimeService.pauseCounting();
+      }
+    });
+  }
 
-    if (videoPlayerController != null) {
-      await videoPlayerController?.dispose();
-      videoPlayerController = null;
+  Future<void> _updateWatchDuration() async {
+    if (_actualWatchedTime > 0 && _streakService != null) {
+      await _streakService!.addWatchDuration(_actualWatchedTime);
     }
+  }
+
+  // Thêm listener cho việc seek video
+  void _addVideoListeners() {
+    videoPlayerController?.addListener(() {
+      if (videoPlayerController?.value.isPlaying == true) {
+        _trackWatchTime();
+      }
+
+      // Kiểm tra nếu user seek video
+      final currentPosition = videoPlayerController?.value.position;
+      if (currentPosition != null &&
+          (currentPosition - _lastPosition).abs() >
+              const Duration(seconds: 2)) {
+        // Reset last position nếu user seek
+        _lastPosition = currentPosition;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    LearningTimeService.pauseCounting();
+    _streakTimer?.cancel();
+    disposeControllers();
+    super.dispose();
+  }
+
+  Future<void> disposeControllers() async {
+    // Update lần cuối trước khi dispose
+    await _updateWatchDuration();
+
+    _lastPosition = Duration.zero;
+    _actualWatchedTime = 0;
+
+    _streakTimer?.cancel();
+    _streakTimer = null;
+    _currentVideoWatchDuration = 0;
+
+    chewieController?.removeListener(_onFullScreenChanged);
+    chewieController?.dispose();
+    await videoPlayerController?.dispose();
+    chewieController = null;
+    videoPlayerController = null;
+    _hasCalledOnFinish = false;
 
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
     );
-  }
-
-  @override
-  void dispose() {
-    disposeControllers();
-    super.dispose();
   }
 }

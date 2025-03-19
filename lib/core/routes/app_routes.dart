@@ -28,7 +28,7 @@ class AppRoutes {
   static const String courseLearn = '/course-learn';
   // static const String examDetail = '/exam-detail';
   static const String examTaking = '/exam-taking';
-  static const String adminDashboard = '/admin-dashboard';
+  // static const String adminDashboard = '/admin-dashboard';
   static const String profile = '/profile';
   static const String teacherProfile = '/teacher-profile';
   static const String myCourse = '/my-course';
@@ -47,7 +47,7 @@ class AppRoutes {
       courseLearn: (context) => const CourseLearnView(),
       // examDetail: (context) => const ExamDetailView(),
       examTaking: (context) => const ExamTakingView(),
-      adminDashboard: (context) => const AdminView(),
+      // adminDashboard: (context) => const AdminView(),
       profile: (context) => const MyProfileView(),
       myCourse: (context) => const MyCourseView(),
       myCertificates: (context) => const MyCertificatesView(),

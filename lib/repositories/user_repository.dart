@@ -3,6 +3,8 @@ import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 import 'package:ecourse_flutter_v2/core/services/file_utils.dart';
 
 class UserRepository extends BaseAPI {
+  final BaseAPI _api = BaseAPI();
+
   Future<ApiResponse> getUserProfile() async {
     try {
       final response = await fetchData(
@@ -167,6 +169,35 @@ class UserRepository extends BaseAPI {
     try {
       final response = await fetchData(
         '${AppConfig.teachers}/$id',
+        method: ApiMethod.GET,
+      );
+      return ApiResponse.fromResponse(response.data);
+    } catch (e) {
+      return ApiResponse(success: false, message: e.toString());
+    }
+  }
+
+  /// Cập nhật streak khi học đủ thời gian
+  Future<ApiResponse> updateStreak({
+    required int duration,
+    required String type,
+  }) async {
+    try {
+      final response = await _api.fetchData(
+        '/users/streak/increment',
+        method: ApiMethod.POST,
+      );
+      return ApiResponse.fromResponse(response.data);
+    } catch (e) {
+      return ApiResponse(success: false, message: e.toString());
+    }
+  }
+
+  /// Lấy thông tin streak của user
+  Future<ApiResponse> getStreakInfo() async {
+    try {
+      final response = await _api.fetchData(
+        '/user/streak',
         method: ApiMethod.GET,
       );
       return ApiResponse.fromResponse(response.data);

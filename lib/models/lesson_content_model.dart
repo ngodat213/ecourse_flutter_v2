@@ -79,7 +79,7 @@ class LessonContentModel {
     data['_id'] = sId;
     data['lesson_id'] = lessonId;
     data['title'] = title;
-    data['type'] = type;
+    data['type'] = type?.name;
     data['order'] = order;
     data['duration'] = duration;
     if (video != null) {

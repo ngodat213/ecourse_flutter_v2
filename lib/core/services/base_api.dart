@@ -67,7 +67,7 @@ class ErrorResponse {
 }
 
 class BaseAPI {
-  static String domain = 'https://a417-112-197-18-106.ngrok-free.app/api';
+  static String domain = 'https://9a71-112-197-36-236.ngrok-free.app/api';
   final Dio _dio = Dio();
 
   Future<Map<String, String>> getHeaders() async {
