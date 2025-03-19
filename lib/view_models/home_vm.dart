@@ -1,30 +1,35 @@
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
+import 'package:ecourse_flutter_v2/models/course_progress_model.dart';
 import 'package:ecourse_flutter_v2/models/user_profile.dart';
 import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/models/user_progress_model.dart';
 import 'package:ecourse_flutter_v2/repositories/course_repository.dart';
+import 'package:ecourse_flutter_v2/repositories/user_progress_repository.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:provider/provider.dart';
 
 import '../core/base/base_view_model.dart';
 
 class HomeVM extends BaseVM {
-  final CourseRepository _courseRepository;
+  final CourseRepository _courseRepository = CourseRepository();
+  final UserProgressRepository _progressRepository = UserProgressRepository();
 
   int carouselIndex = 0;
   String? userRole;
   UserProfile? userProfile;
   // Popular courses state
-  final List<CourseModel> _popularCourses = [];
+  final List<CourseModel> popularCourses = [];
+  final List<CourseProgressModel> courseProgress = [];
   bool _isLoadingCourses = false;
   String? _courseError;
 
   // Getters
-  List<CourseModel> get popularCourses => _popularCourses;
   bool get isLoadingCourses => _isLoadingCourses;
   String? get courseError => _courseError;
 
-  HomeVM(super.context, {CourseRepository? courseRepository})
-    : _courseRepository = courseRepository ?? CourseRepository();
+  HomeVM(super.context) {
+    _initFromSharedPrefs();
+  }
 
   void _initFromSharedPrefs() {
     final userData = context.read<UserVM>().userProfile;
@@ -40,8 +45,9 @@ class HomeVM extends BaseVM {
 
   @override
   void onInit() {
-    _loadPopularCourses();
     _initFromSharedPrefs();
+    _getCourseProgress();
+    _loadPopularCourses();
     notifyListeners();
   }
 
@@ -54,9 +60,36 @@ class HomeVM extends BaseVM {
     AppRoutes.push(context, AppRoutes.cart);
   }
 
-  void redirectToAdmin() {
-    if (userRole == 'admin') {
-      AppRoutes.push(context, AppRoutes.adminDashboard);
+  Future<void> _getCourseProgress() async {
+    try {
+      if (userProfile?.user?.enrolledCourses != null) {
+        // Clear courseProgress trước khi thêm mới
+        courseProgress.clear();
+
+        for (var course in userProfile!.user!.enrolledCourses ?? []) {
+          final response = await _progressRepository.getCourseProgress(
+            course.sId!,
+          );
+          if (response.allGood) {
+            int finishedLesson = 0;
+            for (var progress in response.body) {
+              final progressModel = UserProgressModel.fromJson(progress);
+              if (progressModel.status == 'completed') {
+                finishedLesson++;
+              }
+            }
+            courseProgress.add(
+              CourseProgressModel(
+                courseId: course.sId!,
+                progress: finishedLesson / (course.lessons?.length ?? 1),
+              ),
+            );
+          }
+        }
+        notifyListeners();
+      }
+    } catch (e) {
+      setError(e.toString());
     }
   }
 
@@ -74,9 +107,9 @@ class HomeVM extends BaseVM {
       final response = await _courseRepository.getCourses(filters);
 
       if (response.allGood) {
-        _popularCourses.clear();
+        popularCourses.clear();
         for (var e in response.body) {
-          _popularCourses.add(CourseModel.fromJson(e));
+          popularCourses.add(CourseModel.fromJson(e));
         }
         notifyListeners();
         _setCourseError(null);

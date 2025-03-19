@@ -1,74 +1,27 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
 import 'package:ecourse_flutter_v2/models/lesson_model.dart';
+import 'package:ecourse_flutter_v2/models/user_progress_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ContentTab extends StatelessWidget {
-  const ContentTab({super.key});
+  const ContentTab({
+    super.key,
+    required this.lessons,
+    required this.onContentSelected,
+    required this.lessonProgress,
+    required this.currentProgressId,
+  });
+
+  final List<LessonModel> lessons;
+  final Function(LessonContentModel) onContentSelected;
+  final List<UserProgressModel> lessonProgress;
+  final String currentProgressId;
 
   @override
   Widget build(BuildContext context) {
     // Mock data cho lessons
-    final lessons = [
-      LessonModel(
-        id: '1',
-        number: '1',
-        title: 'Introduction',
-        duration: '10min',
-        contents: [
-          LessonContentModel(
-            id: '1-1',
-            title: 'Course Introduction',
-            duration: '5min',
-            type: LessonContentType.video,
-            isCompleted: true,
-          ),
-          LessonContentModel(
-            id: '1-2',
-            title: 'Premiere Pro Introduction',
-            duration: '4min',
-            type: LessonContentType.video,
-            isCompleted: false,
-          ),
-          LessonContentModel(
-            id: '1-3',
-            title: 'Convenient Resources',
-            duration: '1min',
-            type: LessonContentType.document,
-            isCompleted: false,
-          ),
-        ],
-      ),
-      LessonModel(
-        id: '2',
-        number: '2',
-        title: 'Getting Started',
-        duration: '15min',
-        contents: [
-          LessonContentModel(
-            id: '2-1',
-            title: 'Setting Up Your Workspace',
-            duration: '5min',
-            type: LessonContentType.video,
-            isCompleted: false,
-          ),
-          LessonContentModel(
-            id: '2-2',
-            title: 'Basic Editing Techniques',
-            duration: '7min',
-            type: LessonContentType.video,
-            isCompleted: false,
-          ),
-          LessonContentModel(
-            id: '2-3',
-            title: 'First Quiz',
-            duration: '3min',
-            type: LessonContentType.quiz,
-            isCompleted: false,
-          ),
-        ],
-      ),
-    ];
 
     return Expanded(
       child: ListView.builder(
@@ -85,10 +38,11 @@ class ContentTab extends StatelessWidget {
             padding: EdgeInsets.only(top: index == 0 ? 16.h : 0),
             child: SelectionItem(
               lesson: lessons[index],
+              index: index,
               currentContentIndex: position,
-              onContentSelected: (lessonId, contentIndex) {
-                print('Selected lesson: $lessonId, content: $contentIndex');
-              },
+              currentContentId: currentProgressId,
+              onContentSelected: (content) => onContentSelected(content),
+              lessonProgress: lessonProgress,
             ),
           );
         },
@@ -100,13 +54,19 @@ class ContentTab extends StatelessWidget {
 class SelectionItem extends StatelessWidget {
   final LessonModel lesson;
   final int currentContentIndex;
-  final Function(String, int) onContentSelected;
+  final String currentContentId;
+  final Function(LessonContentModel) onContentSelected;
+  final int index;
+  final List<UserProgressModel> lessonProgress;
 
   const SelectionItem({
     super.key,
     required this.lesson,
     this.currentContentIndex = -1,
+    this.currentContentId = '',
     required this.onContentSelected,
+    required this.index,
+    required this.lessonProgress,
   });
 
   @override
@@ -144,7 +104,7 @@ class SelectionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Lesson ${lesson.number}: ${lesson.title}',
+                'Lesson ${index + 1}: ${lesson.title}',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 13.sp,
@@ -152,7 +112,11 @@ class SelectionItem extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               Text(
-                'Progress ${lesson.number} / ${lesson.contents.length} | ${lesson.duration}',
+                'Progress ${lessonProgress.where((lesson) => lesson.status == 'completed').length} / ${lesson.contents?.length} | ${lesson.duration != null
+                    ? lesson.duration! ~/ 60 != 0
+                        ? '${lesson.duration! ~/ 60}h ${lesson.duration! % 60} min'
+                        : '${lesson.duration!} min'
+                    : '0 min'}',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey,
                   fontSize: 10.sp,
@@ -160,15 +124,23 @@ class SelectionItem extends StatelessWidget {
               ),
             ],
           ),
-          children: List.generate(
-            lesson.contents.length,
-            (index) => LessonContentItem(
-              content: lesson.contents[index],
+          children: List.generate(lesson.contents?.length ?? 0, (index) {
+            final content = lesson.contents![index];
+            final isCompleted =
+                lessonProgress
+                    .firstWhere(
+                      (element) => element.lessonContent?.sId == content.sId,
+                    )
+                    .status ==
+                'completed';
+            return LessonContentItem(
+              content: content,
               index: index + 1,
-              isSelected: index == currentContentIndex,
-              onTap: () => onContentSelected(lesson.id, index),
-            ),
-          ),
+              isSelected: content.sId == currentContentId,
+              isCompleted: isCompleted,
+              onTap: () => onContentSelected(content),
+            );
+          }),
         ),
       ),
     );
@@ -180,6 +152,7 @@ class LessonContentItem extends StatelessWidget {
   final int index;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool isCompleted;
 
   const LessonContentItem({
     super.key,
@@ -187,6 +160,7 @@ class LessonContentItem extends StatelessWidget {
     required this.index,
     this.isSelected = false,
     required this.onTap,
+    required this.isCompleted,
   });
 
   @override
@@ -220,7 +194,7 @@ class LessonContentItem extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                        _getContentTypeIcon(content.type),
+                        _getContentTypeIcon(content.type?.name ?? ''),
                         size: 14.sp,
                         color:
                             isSelected
@@ -229,7 +203,11 @@ class LessonContentItem extends StatelessWidget {
                       ),
                       SizedBox(width: 4.w),
                       Text(
-                        content.duration,
+                        content.duration != null
+                            ? content.duration! ~/ 60 != 0
+                                ? '${content.duration! ~/ 60}h ${content.duration! % 60} min'
+                                : '${content.duration!} min'
+                            : '0 min',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color:
                               isSelected
@@ -243,7 +221,7 @@ class LessonContentItem extends StatelessWidget {
                 ],
               ),
             ),
-            if (content.isCompleted)
+            if (isCompleted)
               Container(
                 width: 24.w,
                 height: 24.w,
@@ -259,14 +237,16 @@ class LessonContentItem extends StatelessWidget {
     );
   }
 
-  IconData _getContentTypeIcon(LessonContentType type) {
+  IconData _getContentTypeIcon(String type) {
     switch (type) {
-      case LessonContentType.video:
+      case 'video':
         return Icons.play_circle_outline;
-      case LessonContentType.document:
+      case 'document':
         return Icons.article_outlined;
-      case LessonContentType.quiz:
+      case 'quiz':
         return Icons.quiz_outlined;
+      default:
+        return Icons.play_circle_outline;
     }
   }
 }

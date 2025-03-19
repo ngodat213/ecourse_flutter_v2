@@ -1,7 +1,6 @@
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
-import 'package:ecourse_flutter_v2/view_models/home_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/main_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

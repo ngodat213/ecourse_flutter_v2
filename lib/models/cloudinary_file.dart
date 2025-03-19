@@ -91,5 +91,6 @@ class CloudinaryFile {
     };
   }
 
-  String get url => '${dotenv.env['BASE_CLOUDINARY_URL']}$publicId.$format';
+  String get url =>
+      '${dotenv.env['BASE_CLOUDINARY_URL']}$fileType${dotenv.env['BASE_UPLOAD_URL']}$publicId.$format';
 }

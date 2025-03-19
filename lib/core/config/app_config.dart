@@ -19,11 +19,10 @@ class AppConfig {
 
   /// Course
   static const String courses = '/courses';
-  static const String courseCategories = '/course-categories';
-  static const String courseChapters = '/course-chapters';
-  static const String courseLessons = '/course-lessons';
-  static const String courseQuizzes = '/course-quizzes';
-  static const String courseQuizQuestions = '/course-quiz-questions';
+
+  /// Lesson
+  static const String lessons = '/lessons/course';
+
   // Shared Preferences Keys
   static const String tokenKey = 'token';
   static const String refreshTokenKey = 'refresh_token';

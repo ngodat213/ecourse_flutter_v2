@@ -67,7 +67,7 @@ class ErrorResponse {
 }
 
 class BaseAPI {
-  static String domain = 'http://192.168.0.105:3333/api';
+  static String domain = 'https://9a71-112-197-36-236.ngrok-free.app/api';
   final Dio _dio = Dio();
 
   Future<Map<String, String>> getHeaders() async {
@@ -85,6 +85,8 @@ class BaseAPI {
     ApiMethod method = ApiMethod.GET,
   }) async {
     try {
+      print('$domain$url');
+
       final options = Options(
         method: apiMethod[method],
         headers: includeHeaders ? headers : await getHeaders(),

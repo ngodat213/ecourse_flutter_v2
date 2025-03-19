@@ -1,5 +1,4 @@
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
-import 'package:ecourse_flutter_v2/models/cart_item.dart';
 
 class CartRepository {
   final BaseAPI _api;

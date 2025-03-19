@@ -24,6 +24,8 @@ class User {
   String? address;
   String? workingAt;
   String? level;
+  int? currentStreak;
+  int? longestStreak;
 
   User({
     this.sId,
@@ -49,7 +51,11 @@ class User {
     this.address,
     this.workingAt,
     this.level,
+    this.currentStreak,
+    this.longestStreak,
   });
+
+  String get fullName => '$firstName $lastName';
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -90,6 +96,8 @@ class User {
     address = json['address'];
     workingAt = json['working_at'];
     level = json['level'];
+    currentStreak = json['current_streak'];
+    longestStreak = json['longest_streak'];
   }
 
   Map<String, dynamic> toJson() {
@@ -126,6 +134,8 @@ class User {
     data['address'] = address;
     data['working_at'] = workingAt;
     data['level'] = level;
+    data['current_streak'] = currentStreak;
+    data['longest_streak'] = longestStreak;
     return data;
   }
 }

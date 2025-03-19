@@ -1,5 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
+import 'package:ecourse_flutter_v2/enums/lesson_content_type.enum.dart';
+import 'package:ecourse_flutter_v2/mixin/quiz_player_mixin.dart';
+import 'package:ecourse_flutter_v2/mixin/video_player_mixin.dart';
 import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/services/learning_time_service.dart';
 import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/course_learn_appbar.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/course_learn_tabbar.dart';
@@ -34,18 +40,62 @@ class CourseLearnScreen extends StatefulWidget {
 }
 
 class _CourseLearnScreenState extends State<CourseLearnScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, ChewiePlayerMixin, QuizPlayerMixin {
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
+
+    // Khởi tạo video player với URL ban đầu
+    if (widget.viewModel.currentContent != null &&
+        widget.viewModel.currentContent!.type == LessonContentType.video) {
+      initializePlayer(widget.viewModel.currentContent!, () {
+        widget.viewModel.markContentComplete(
+          widget.viewModel.currentContent!.sId!,
+        );
+      });
+    }
+
+    if (widget.viewModel.currentContent != null &&
+        widget.viewModel.currentContent!.type == LessonContentType.quiz) {
+      initQuiz(widget.viewModel.currentContent!, () {
+        widget.viewModel.markContentComplete(
+          widget.viewModel.currentContent!.sId!,
+        );
+      });
+    }
+
+    // Đăng ký callback khi URL video thay đổi
+    widget.viewModel.onVideoUrlChanged = () {
+      if (widget.viewModel.currentContent != null &&
+          widget.viewModel.currentContent?.type == LessonContentType.video) {
+        initializePlayer(widget.viewModel.currentContent!, () {
+          widget.viewModel.markContentComplete(
+            widget.viewModel.currentContent!.sId!,
+          );
+        });
+      }
+    };
+
+    widget.viewModel.onQuizChanged = () {
+      if (widget.viewModel.currentContent != null &&
+          widget.viewModel.currentContent!.type == LessonContentType.quiz) {
+        initQuiz(widget.viewModel.currentContent!, () {
+          widget.viewModel.markContentComplete(
+            widget.viewModel.currentContent!.sId!,
+          );
+        });
+      }
+    };
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    widget.viewModel.onVideoUrlChanged = null;
+    widget.viewModel.onQuizChanged = null;
     super.dispose();
   }
 
@@ -62,15 +112,54 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 0.6.sw,
-                margin: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: AppColor.secondary,
-                  borderRadius: BorderRadius.circular(8.r),
+              if (widget.viewModel.currentContent != null &&
+                  widget.viewModel.currentContent!.type ==
+                      LessonContentType.video)
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    margin: EdgeInsets.all(8.w),
+                    child: buildVideoPlayer(),
+                  ),
+                )
+              else if (widget.viewModel.currentContent != null &&
+                  widget.viewModel.currentContent!.type ==
+                      LessonContentType.quiz)
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    margin: EdgeInsets.all(8.w),
+                    child: buildQuizPlayer(context),
+                  ),
+                )
+              else
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    margin: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      color: AppColor.secondary,
+                      borderRadius: BorderRadius.circular(8.r),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                          widget.viewModel.course?.thumnail?.url ?? '',
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
+              CourseTabBar(
+                course: widget.viewModel.course!,
+                tabController: _tabController,
+                lessons: widget.viewModel.lessons,
+                lessonProgress: widget.viewModel.lessonProgress,
+                currentLessonContentId:
+                    widget.viewModel.currentProgressId ?? '',
+                onContentSelected: (content) {
+                  widget.viewModel.onContentSelected(content);
+                },
               ),
-              CourseTabBar(tabController: _tabController),
             ],
           ),
         ),

@@ -1,162 +1,70 @@
-enum LessonContentType { video, document, quiz }
-
-class LessonContentModel {
-  final String id;
-  final String title;
-  final String duration;
-  final LessonContentType type;
-  final bool isCompleted;
-  final String resourceUrl;
-
-  LessonContentModel({
-    required this.id,
-    required this.title,
-    required this.duration,
-    required this.type,
-    this.isCompleted = false,
-    this.resourceUrl = '',
-  });
-
-  LessonContentModel copyWith({
-    String? id,
-    String? title,
-    String? duration,
-    LessonContentType? type,
-    bool? isCompleted,
-    String? resourceUrl,
-  }) {
-    return LessonContentModel(
-      id: id ?? this.id,
-      title: title ?? this.title,
-      duration: duration ?? this.duration,
-      type: type ?? this.type,
-      isCompleted: isCompleted ?? this.isCompleted,
-      resourceUrl: resourceUrl ?? this.resourceUrl,
-    );
-  }
-
-  // Từ JSON
-  factory LessonContentModel.fromJson(Map<String, dynamic> json) {
-    return LessonContentModel(
-      id: json['id'] ?? '',
-      title: json['title'] ?? '',
-      duration: json['duration'] ?? '',
-      type: _typeFromString(json['type'] ?? 'video'),
-      isCompleted: json['isCompleted'] ?? false,
-      resourceUrl: json['resourceUrl'] ?? '',
-    );
-  }
-
-  // Sang JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'duration': duration,
-      'type': _typeToString(type),
-      'isCompleted': isCompleted,
-      'resourceUrl': resourceUrl,
-    };
-  }
-
-  // Helper methods để chuyển đổi enum <-> string
-  static LessonContentType _typeFromString(String type) {
-    switch (type) {
-      case 'video':
-        return LessonContentType.video;
-      case 'document':
-        return LessonContentType.document;
-      case 'quiz':
-        return LessonContentType.quiz;
-      default:
-        return LessonContentType.video;
-    }
-  }
-
-  static String _typeToString(LessonContentType type) {
-    switch (type) {
-      case LessonContentType.video:
-        return 'video';
-      case LessonContentType.document:
-        return 'document';
-      case LessonContentType.quiz:
-        return 'quiz';
-    }
-  }
-}
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
 
 class LessonModel {
-  final String id;
-  final String number;
-  final String title;
-  final String duration;
-  final List<LessonContentModel> contents;
-  final int completedContentsCount;
+  String? sId;
+  String? courseId;
+  String? title;
+  String? description;
+  int? duration;
+  bool? isFree;
+  String? status;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+  List<LessonContentModel>? contents;
+  String? id;
 
   LessonModel({
-    required this.id,
-    required this.number,
-    required this.title,
-    required this.duration,
-    required this.contents,
-    int? completedContentsCount,
-  }) : completedContentsCount =
-           completedContentsCount ??
-           contents.where((content) => content.isCompleted).length;
+    this.sId,
+    this.courseId,
+    this.title,
+    this.description,
+    this.duration,
+    this.isFree,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+    this.contents,
+    this.id,
+  });
 
-  // Constructor để tạo copy của model với một số thuộc tính mới
-  LessonModel copyWith({
-    String? id,
-    String? number,
-    String? title,
-    String? duration,
-    List<LessonContentModel>? contents,
-    int? completedContentsCount,
-  }) {
-    return LessonModel(
-      id: id ?? this.id,
-      number: number ?? this.number,
-      title: title ?? this.title,
-      duration: duration ?? this.duration,
-      contents: contents ?? this.contents,
-      completedContentsCount: completedContentsCount,
-    );
+  LessonModel.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    courseId = json['course_id'];
+    title = json['title'];
+    description = json['description'];
+    duration = json['duration'].ceil();
+    isFree = json['is_free'];
+    status = json['status'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+    if (json['contents'] != null) {
+      contents = <LessonContentModel>[];
+      json['contents'].forEach((v) {
+        contents!.add(LessonContentModel.fromJson(v));
+      });
+    }
+    id = json['id'];
   }
 
-  // Trạng thái hoàn thành của bài học
-  bool get isCompleted => completedContentsCount == contents.length;
-
-  // Tỷ lệ phần trăm hoàn thành
-  int get progressPercentage =>
-      contents.isEmpty ? 0 : (completedContentsCount * 100 ~/ contents.length);
-
-  // Từ JSON
-  factory LessonModel.fromJson(Map<String, dynamic> json) {
-    final contentsList =
-        (json['contents'] as List?)
-            ?.map((x) => LessonContentModel.fromJson(x))
-            .toList() ??
-        <LessonContentModel>[];
-
-    return LessonModel(
-      id: json['id'] ?? '',
-      number: json['number'] ?? '',
-      title: json['title'] ?? '',
-      duration: json['duration'] ?? '',
-      contents: contentsList,
-      completedContentsCount: json['completedContentsCount'],
-    );
-  }
-
-  // Sang JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'number': number,
-      'title': title,
-      'duration': duration,
-      'contents': contents.map((content) => content.toJson()).toList(),
-      'completedContentsCount': completedContentsCount,
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['course_id'] = courseId;
+    data['title'] = title;
+    data['description'] = description;
+    data['duration'] = duration;
+    data['is_free'] = isFree;
+    data['status'] = status;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    if (contents != null) {
+      data['contents'] = contents!.map((v) => v.toJson()).toList();
+    }
+    data['id'] = id;
+    return data;
   }
 }

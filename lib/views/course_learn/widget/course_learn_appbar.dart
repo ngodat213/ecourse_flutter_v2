@@ -13,24 +13,17 @@ class CourseLearnAppBar extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Positioned(
-          left: 8.w,
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: SvgPicture.asset(
-              AppImage.svgArrowLeft,
-              width: 16.w,
-              height: 16.w,
-              color: AppColor.primary,
-            ),
-          ),
-        ),
         Center(
-          child: Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+          child: SizedBox(
+            width: 0.6.sw,
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+            ),
           ),
         ),
         Positioned(
@@ -40,6 +33,18 @@ class CourseLearnAppBar extends StatelessWidget {
             padding: EdgeInsets.all(4.w),
             icon: SvgPicture.asset(
               AppImage.svgMore,
+              width: 16.w,
+              height: 16.w,
+              color: AppColor.primary,
+            ),
+          ),
+        ),
+        Positioned(
+          left: 8.w,
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: SvgPicture.asset(
+              AppImage.svgArrowLeft,
               width: 16.w,
               height: 16.w,
               color: AppColor.primary,

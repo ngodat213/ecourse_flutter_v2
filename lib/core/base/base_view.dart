@@ -37,6 +37,8 @@ abstract class BaseView<T extends BaseVM> extends StatelessWidget {
       child: Consumer<T>(
         builder: (context, viewModel, _) {
           return Scaffold(
+            extendBody: true,
+            extendBodyBehindAppBar: true,
             appBar: buildAppBar(context, viewModel),
             backgroundColor: AppColor.background,
             body: Stack(

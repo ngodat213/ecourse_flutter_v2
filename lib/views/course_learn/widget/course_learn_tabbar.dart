@@ -1,15 +1,31 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
+import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/models/lesson_model.dart';
+import 'package:ecourse_flutter_v2/models/user_progress_model.dart';
+import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/content_tab.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/overview_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CourseTabBar extends StatelessWidget {
-  const CourseTabBar({super.key, required TabController tabController})
-    : _tabController = tabController;
+  const CourseTabBar({
+    super.key,
+    required this.tabController,
+    required this.lessons,
+    required this.lessonProgress,
+    required this.currentLessonContentId,
+    required this.onContentSelected,
+    required this.course,
+  });
 
-  final TabController _tabController;
+  final TabController tabController;
+  final List<LessonModel> lessons;
+  final List<UserProgressModel> lessonProgress;
+  final Function(LessonContentModel) onContentSelected;
+  final String currentLessonContentId;
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +36,7 @@ class CourseTabBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           TabBar(
-            controller: _tabController,
+            controller: tabController,
             indicatorColor: AppColor.primary,
             dividerHeight: 1,
             padding: EdgeInsets.zero,
@@ -38,23 +54,22 @@ class CourseTabBar extends StatelessWidget {
               color: AppColor.accent,
               fontSize: 13.sp,
             ),
-            tabs: [
-              Text('Content'),
-              Text('Overview'),
-              Text('Discussions'),
-              Text('Quiz'),
-            ],
+            tabs: [Text('Content'), Text('Overview'), Text('Discussions')],
           ),
           SizedBox(
             height: 1.sw,
             child: Expanded(
               child: TabBarView(
-                controller: _tabController,
+                controller: tabController,
                 children: [
-                  ContentTab(),
-                  OverviewTab(),
+                  ContentTab(
+                    lessons: lessons,
+                    lessonProgress: lessonProgress,
+                    currentProgressId: currentLessonContentId,
+                    onContentSelected: (content) => onContentSelected(content),
+                  ),
+                  OverviewTab(course: course),
                   DiscussionTabBar(),
-                  ContentTab(),
                 ],
               ),
             ),
