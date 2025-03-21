@@ -13,7 +13,7 @@ class LearningTimeService {
   }
 
   static int get minutesWatchTime {
-    final minutes = _sessionWatchTime ~/ 60;
+    final minutes = _sessionWatchTime;
     return minutes;
   }
 

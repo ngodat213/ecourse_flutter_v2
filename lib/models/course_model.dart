@@ -1,9 +1,10 @@
 import 'package:ecourse_flutter_v2/models/cloudinary_file.dart';
+import 'package:ecourse_flutter_v2/view_models/category_model.dart';
 
 import 'teacher_model.dart';
 
 class CourseModel {
-  // List<Null>? categories;
+  List<CategoryModel>? categories;
   String? sId;
   String? title;
   String? description;
@@ -48,12 +49,12 @@ class CourseModel {
   String get updatedAtString => updatedAt?.split('T')[0] ?? '';
 
   CourseModel.fromJson(Map<String, dynamic> json) {
-    // if (json['categories'] != null) {
-    //   categories = <Null>[];
-    //   json['categories'].forEach((v) {
-    //     categories!.add(Null.fromJson(v));
-    //   });
-    // }
+    if (json['categories'] != null) {
+      categories = <CategoryModel>[];
+      json['categories'].forEach((v) {
+        categories!.add(CategoryModel.fromJson(v));
+      });
+    }
     sId = json['_id'];
     title = json['title'];
     description = json['description'];
@@ -82,9 +83,9 @@ class CourseModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    // if (categories != null) {
-    //   data['categories'] = categories!.map((v) => v.toJson()).toList();
-    // }
+    if (categories != null) {
+      data['categories'] = categories!.map((v) => v.toJson()).toList();
+    }
     data['_id'] = sId;
     data['title'] = title;
     data['description'] = description;

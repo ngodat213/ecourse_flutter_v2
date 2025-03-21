@@ -1,8 +1,6 @@
-import 'package:ecourse_flutter_v2/views/admin/admin_view.dart';
 import 'package:ecourse_flutter_v2/views/cart/cart_view.dart';
 import 'package:ecourse_flutter_v2/views/forgot_pw/forget_pw_view.dart';
 import 'package:ecourse_flutter_v2/views/verify_otp/verify_otp_view.dart';
-import 'package:ecourse_flutter_v2/views/exam/exam_detail_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_taking_view.dart';
 import 'package:ecourse_flutter_v2/views/course_detail/course_detail_view.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/course_learn_view.dart';
@@ -28,7 +26,6 @@ class AppRoutes {
   static const String courseLearn = '/course-learn';
   // static const String examDetail = '/exam-detail';
   static const String examTaking = '/exam-taking';
-  // static const String adminDashboard = '/admin-dashboard';
   static const String profile = '/profile';
   static const String teacherProfile = '/teacher-profile';
   static const String myCourse = '/my-course';
@@ -47,7 +44,6 @@ class AppRoutes {
       courseLearn: (context) => const CourseLearnView(),
       // examDetail: (context) => const ExamDetailView(),
       examTaking: (context) => const ExamTakingView(),
-      // adminDashboard: (context) => const AdminView(),
       profile: (context) => const MyProfileView(),
       myCourse: (context) => const MyCourseView(),
       myCertificates: (context) => const MyCertificatesView(),

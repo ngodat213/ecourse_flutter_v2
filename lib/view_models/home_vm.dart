@@ -108,7 +108,7 @@ class HomeVM extends BaseVM {
 
       if (response.allGood) {
         popularCourses.clear();
-        for (var e in response.body) {
+        for (var e in response.body['data']) {
           popularCourses.add(CourseModel.fromJson(e));
         }
         notifyListeners();

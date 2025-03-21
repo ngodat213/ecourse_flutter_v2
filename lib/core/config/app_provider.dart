@@ -11,6 +11,7 @@ import 'package:ecourse_flutter_v2/view_models/my_profile_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/teacher_profile_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/profile_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/teacher_vm.dart';
+import 'package:ecourse_flutter_v2/view_models/learning_streak_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -33,6 +34,10 @@ class AppProvider {
     ChangeNotifierProvider(create: (context) => TeacherProfileVM(context)),
     ChangeNotifierProvider(create: (context) => CourseDetailVM(context)),
     ChangeNotifierProvider(create: (context) => CourseLearnVM(context, null)),
+    ChangeNotifierProvider(
+      create: (context) => LearningStreakVM(context),
+      lazy: false,
+    ),
   ];
 
   static void disposeProviders(BuildContext context) {
@@ -48,5 +53,6 @@ class AppProvider {
     context.read<ThemeProvider>().dispose();
     context.read<CourseDetailVM>().dispose();
     context.read<CourseLearnVM>().dispose();
+    context.read<LearningStreakVM>().dispose();
   }
 }
