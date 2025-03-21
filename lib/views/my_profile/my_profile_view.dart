@@ -114,7 +114,7 @@ class MyProfileView extends BaseView<MyProfileVM> {
                 Row(
                   children: [
                     Text(
-                      '11.111 Followers, ',
+                      '${viewModel.userProfile?.user?.followersCount} Followers, ',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w500,
                         color: AppColor.textSecondary,
@@ -132,45 +132,6 @@ class MyProfileView extends BaseView<MyProfileVM> {
                   ],
                 ),
                 SizedBox(height: 16.h),
-                Row(
-                  children: [
-                    CustomElevatedButton(
-                      height: 30.h,
-                      context: context,
-                      leading: Container(
-                        padding: EdgeInsets.only(right: 3.w),
-                        child: SvgPicture.asset(
-                          AppImage.svgPlus,
-                          color: AppColor.textPrimaryDark,
-                        ),
-                      ),
-                      text: 'Follow',
-                      textStyle: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.textPrimaryDark,
-                        fontSize: 10.sp,
-                      ),
-                      onPressed: () {},
-                    ),
-                    SizedBox(width: 12.w),
-                    CustomElevatedButton(
-                      context: context,
-                      height: 30.h,
-                      backgroundColor: AppColor.background,
-                      textStyle: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.textPrimary,
-                        fontSize: 10.sp,
-                      ),
-                      text: 'More',
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

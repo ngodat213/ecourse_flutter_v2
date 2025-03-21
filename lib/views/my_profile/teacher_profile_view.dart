@@ -69,14 +69,17 @@ class TeacherProfileView extends BaseView<TeacherProfileVM> {
                     decoration: BoxDecoration(
                       color: AppColor.cardColor,
                       shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(
-                          viewModel.teacherProfile?.profilePicture ??
-                              AppConstants.defaultAvatar,
-                        ),
-                        fit: BoxFit.cover,
-                      ),
+
                       border: Border.all(color: AppColor.background, width: 3),
+                    ),
+                    child: SmartImage(
+                      source:
+                          viewModel.teacherProfile?.profilePicture ??
+                          AppConstants.defaultAvatar,
+                      width: 0.25.sw,
+                      height: 0.25.sw,
+                      fit: BoxFit.cover,
+                      isCircle: true,
                     ),
                   ),
                 ),
@@ -134,44 +137,47 @@ class TeacherProfileView extends BaseView<TeacherProfileVM> {
                   ],
                 ),
                 SizedBox(height: 16.h),
-                Row(
-                  children: [
-                    CustomElevatedButton(
-                      height: 30.h,
-                      context: context,
-                      leading: Container(
-                        padding: EdgeInsets.only(right: 3.w),
-                        child: SvgPicture.asset(
-                          AppImage.svgPlus,
-                          color: AppColor.textPrimaryDark,
+                Visibility(
+                  visible: !viewModel.isInstructor(),
+                  child: Row(
+                    children: [
+                      CustomElevatedButton(
+                        height: 30.h,
+                        context: context,
+                        leading: Container(
+                          padding: EdgeInsets.only(right: 3.w),
+                          child: SvgPicture.asset(
+                            AppImage.svgPlus,
+                            color: AppColor.textPrimaryDark,
+                          ),
                         ),
+                        text: 'Follow',
+                        textStyle: Theme.of(
+                          context,
+                        ).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.textPrimaryDark,
+                          fontSize: 10.sp,
+                        ),
+                        onPressed: () {},
                       ),
-                      text: 'Follow',
-                      textStyle: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.textPrimaryDark,
-                        fontSize: 10.sp,
+                      SizedBox(width: 12.w),
+                      CustomElevatedButton(
+                        context: context,
+                        height: 30.h,
+                        backgroundColor: AppColor.background,
+                        textStyle: Theme.of(
+                          context,
+                        ).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: AppColor.textPrimary,
+                          fontSize: 10.sp,
+                        ),
+                        text: 'More',
+                        onPressed: () {},
                       ),
-                      onPressed: () {},
-                    ),
-                    SizedBox(width: 12.w),
-                    CustomElevatedButton(
-                      context: context,
-                      height: 30.h,
-                      backgroundColor: AppColor.background,
-                      textStyle: Theme.of(
-                        context,
-                      ).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: AppColor.textPrimary,
-                        fontSize: 10.sp,
-                      ),
-                      text: 'More',
-                      onPressed: () {},
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

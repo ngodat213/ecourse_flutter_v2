@@ -41,13 +41,19 @@ class ExploreVM extends BaseVM {
   }
 
   Future<void> _getCategories() async {
-    final response = await _categoryRepository.getCategories();
-    if (response.allGood) {
-      categories.clear();
-      for (var e in response.body) {
-        categories.add(CategoryModel.fromJson(e, includeCourses: true));
+    try {
+      final response = await _categoryRepository.getCategories();
+      if (response.allGood) {
+        categories.clear();
+        for (var e in response.body) {
+          categories.add(CategoryModel.fromJson(e, includeCourses: true));
+        }
+        notifyListeners();
+      } else {
+        setError(response.message);
       }
-      notifyListeners();
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -60,6 +66,8 @@ class ExploreVM extends BaseVM {
           teachers.add(TeacherModel.fromJson(teacher));
         }
         notifyListeners();
+      } else {
+        setError(response.message);
       }
     } catch (e) {
       print(e);

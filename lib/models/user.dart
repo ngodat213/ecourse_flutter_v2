@@ -13,6 +13,7 @@ class User {
   List<CourseModel>? enrolledCourses;
   // List<Null>? teachingCourses;
   // List<Null>? notifications;
+  int? followersCount;
   int? unreadNotifications;
   String? createdAt;
   String? updatedAt;
@@ -38,6 +39,7 @@ class User {
     this.status,
     this.certificateCount,
     this.enrolledCourses,
+    this.followersCount,
     // this.teachingCourses,
     // this.notifications,
     this.unreadNotifications,
@@ -98,6 +100,7 @@ class User {
     level = json['level'];
     currentStreak = json['current_streak'];
     longestStreak = json['longest_streak'];
+    followersCount = json['followers_count'];
   }
 
   Map<String, dynamic> toJson() {
