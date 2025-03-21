@@ -1,12 +1,13 @@
 import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/services/streak_service.dart';
 import 'dart:async';
-import 'package:ecourse_flutter_v2/services/learning_time_service.dart';
+import 'package:ecourse_flutter_v2/view_models/learning_streak_vm.dart';
 
 mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
   VideoPlayerController? videoPlayerController;
@@ -22,9 +23,12 @@ mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
   Duration _lastPosition = Duration.zero;
   int _actualWatchedTime = 0;
 
+  late final LearningStreakVM _streakVM;
+
   @override
   void initState() {
     super.initState();
+    _streakVM = context.read<LearningStreakVM>();
     _initStreakService();
   }
 
@@ -172,11 +176,9 @@ mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
   void _trackWatchTime() {
     videoPlayerController?.addListener(() {
       if (videoPlayerController?.value.isPlaying == true) {
-        // Bắt đầu đếm khi video play
-        LearningTimeService.startCounting();
+        _streakVM.startTracking();
       } else {
-        // Tạm dừng đếm khi video pause
-        LearningTimeService.pauseCounting();
+        _streakVM.pauseTracking();
       }
     });
   }
@@ -207,7 +209,7 @@ mixin ChewiePlayerMixin<T extends StatefulWidget> on State<T> {
 
   @override
   void dispose() {
-    LearningTimeService.pauseCounting();
+    _streakVM.pauseTracking();
     _streakTimer?.cancel();
     disposeControllers();
     super.dispose();
