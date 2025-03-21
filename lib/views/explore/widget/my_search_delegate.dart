@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/see_all_button.dart';
-import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
 import 'package:ecourse_flutter_v2/view_models/explore_vm.dart';
 import 'package:ecourse_flutter_v2/views/explore/widget/list_view_course_item.dart';
 import 'package:flutter/material.dart';

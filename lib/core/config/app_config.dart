@@ -1,5 +1,5 @@
 class AppConfig {
-  static const String baseUrl = 'http://192.168.0.105:3333/api';
+  static const String baseUrl = 'http://localhost:3000/api';
   static const int connectTimeout = 5000;
   static const int receiveTimeout = 3000;
 
@@ -10,8 +10,16 @@ class AppConfig {
 
   // API Endpoints
   /// Auth
+  static const String auth = '/auth';
   static const String login = '/auth/login';
   static const String register = '/auth/register/mobile';
+  static const String forgotPassword = '/auth/forgot-password';
+  static const String resetPassword = '/auth/reset-password';
+  static const String verifyToken = '/auth/verify-token';
+  static const String refreshToken = '/auth/refresh-token';
+  static const String logout = '/auth/logout';
+  static const String verifyEmail = '/auth/verify-email';
+
   // User
   static const String users = '/users';
   static const String userProfile = '/users/profile';
@@ -22,6 +30,9 @@ class AppConfig {
 
   /// Lesson
   static const String lessons = '/lessons/course';
+
+  /// Orders
+  static const String orders = '/orders';
 
   // Shared Preferences Keys
   static const String tokenKey = 'token';

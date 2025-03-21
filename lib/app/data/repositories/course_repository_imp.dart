@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:ecourse_flutter_v2/app/domain/repositories/course_repository.dart';
 import 'package:ecourse_flutter_v2/core/config/app_config.dart';
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 
-class CourseRepository {
+class CourseRepositoryImpl implements CourseRepository {
   final BaseAPI _baseAPI = BaseAPI();
 
   // Lấy danh sách khóa học với filter
+  @override
   Future<ApiResponse> getCourses([Map<String, dynamic>? filters]) async {
     final response = await _baseAPI.fetchData(
       AppConfig.courses,
@@ -16,6 +18,7 @@ class CourseRepository {
   }
 
   // Lấy chi tiết khóa học
+  @override
   Future<ApiResponse> getCourseById(String id) async {
     final response = await _baseAPI.fetchData(
       '${AppConfig.courses}/$id',
@@ -25,6 +28,7 @@ class CourseRepository {
   }
 
   // Lấy danh sách khóa học đã đăng ký
+  @override
   Future<ApiResponse> getEnrolledCourses() async {
     final response = await _baseAPI.fetchData(
       '${AppConfig.courses}/my/enrolled',
@@ -34,6 +38,7 @@ class CourseRepository {
   }
 
   // Đăng ký khóa học
+  @override
   Future<ApiResponse> enrollCourse(String courseId) async {
     final response = await _baseAPI.fetchData(
       '${AppConfig.courses}/$courseId/enroll',
@@ -43,9 +48,12 @@ class CourseRepository {
   }
 
   // Tạo khóa học mới
+  @override
   Future<ApiResponse> createCourse({
     required String title,
     required String description,
+    required String categoryId,
+    required String instructorId,
     required double price,
     required String type,
     String? level,
@@ -71,6 +79,7 @@ class CourseRepository {
   }
 
   // Cập nhật khóa học
+  @override
   Future<ApiResponse> updateCourse({
     required String courseId,
     String? title,
@@ -102,6 +111,7 @@ class CourseRepository {
   }
 
   // Build query filters
+  @override
   Map<String, dynamic> buildFilters({
     String? search,
     String? level,

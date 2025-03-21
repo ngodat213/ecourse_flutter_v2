@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
-import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
-import 'package:ecourse_flutter_v2/models/quiz_question_model.dart';
-import 'package:ecourse_flutter_v2/models/user_profile.dart';
-import 'package:ecourse_flutter_v2/repositories/quiz_repository.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/quiz_question_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user_profile.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/quiz_repository_impl.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:provider/provider.dart';
 
@@ -14,12 +14,11 @@ enum ExamStatus { taking, submit }
 class ExamVM extends BaseVM {
   // Constructor
   ExamVM(super.context, {required this.content, required this.questions}) {
-    _quizRepository = QuizRepository();
     startTimer();
   }
 
   // Dependencies
-  late final QuizRepository _quizRepository;
+  late final QuizRepositoryImpl _quizRepository = QuizRepositoryImpl();
 
   // Properties
   final LessonContentModel content;

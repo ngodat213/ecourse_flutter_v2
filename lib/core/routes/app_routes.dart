@@ -8,11 +8,14 @@ import 'package:ecourse_flutter_v2/views/my_profile/widget/my_certificates.dart'
 import 'package:ecourse_flutter_v2/views/my_profile/widget/my_course.dart';
 import 'package:ecourse_flutter_v2/views/my_profile/my_profile_view.dart';
 import 'package:ecourse_flutter_v2/views/my_profile/teacher_profile_view.dart';
+import 'package:ecourse_flutter_v2/views/setting/widget/transaction_history.dart';
 import 'package:ecourse_flutter_v2/views/splash/splash_view.dart';
 import 'package:flutter/material.dart';
 import '../../views/auth/login_view.dart';
 import '../../views/onboarding/onboarding_view.dart';
 import '../../views/main/main_view.dart';
+import '../../views/setting/widget/contact_us.dart';
+import '../../views/setting/widget/password_security.dart';
 
 class AppRoutes {
   // Route names
@@ -31,6 +34,9 @@ class AppRoutes {
   static const String myCourse = '/my-course';
   static const String myCertificates = '/my-certificates';
   static const String cart = '/cart';
+  static const String transactionHistory = '/transaction-history';
+  static const String passwordSecurity = '/password-security';
+  static const String contactUs = '/contact-us';
   // Route map
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -49,6 +55,9 @@ class AppRoutes {
       myCertificates: (context) => const MyCertificatesView(),
       teacherProfile: (context) => const TeacherProfileView(),
       cart: (context) => const CartView(),
+      transactionHistory: (context) => const TransactionHistoryView(),
+      passwordSecurity: (context) => const PasswordSecurityView(),
+      contactUs: (context) => const ContactUsView(),
     };
   }
 

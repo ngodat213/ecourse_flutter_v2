@@ -7,7 +7,7 @@ import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/smart_image.dart';
-import 'package:ecourse_flutter_v2/models/teacher_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/teacher_model.dart';
 import 'package:ecourse_flutter_v2/view_models/teacher_profile_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

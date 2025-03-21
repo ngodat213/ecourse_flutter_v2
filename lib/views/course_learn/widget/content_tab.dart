@@ -1,7 +1,7 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
-import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
-import 'package:ecourse_flutter_v2/models/lesson_model.dart';
-import 'package:ecourse_flutter_v2/models/user_progress_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user_progress_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

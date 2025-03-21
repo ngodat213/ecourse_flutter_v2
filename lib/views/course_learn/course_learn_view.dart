@@ -3,7 +3,7 @@ import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/enums/lesson_content_type.enum.dart';
 import 'package:ecourse_flutter_v2/mixin/quiz_player_mixin.dart';
 import 'package:ecourse_flutter_v2/mixin/video_player_mixin.dart';
-import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
 import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/course_learn_appbar.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/course_learn_tabbar.dart';

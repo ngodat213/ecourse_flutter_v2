@@ -1,5 +1,5 @@
-import 'package:ecourse_flutter_v2/models/answer_model.dart';
-import 'package:ecourse_flutter_v2/models/cloudinary_file.dart';
+import 'package:ecourse_flutter_v2/app/data/models/answer_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/cloudinary_file.dart';
 
 class QuizQuestionModel {
   String? sId;

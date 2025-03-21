@@ -1,5 +1,5 @@
 import '../core/services/api_service.dart';
-import '../models/user.dart';
+import '../app/data/models/user.dart';
 
 class HomeService {
   final ApiService _apiService;

@@ -118,5 +118,11 @@
   "course_detail": "Chi tiết khóa học",
   "first_name": "Tên",
   "last_name": "Họ",
-  "courses_enrolled": "Khóa học đã đăng ký"
+  "courses_enrolled": "Khóa học đã đăng ký",
+  "transaction_success": "Giao dịch thành công",
+  "transaction_failed": "Giao dịch thất bại",
+  "transaction_pending": "Giao dịch chờ",
+  "transaction_refunded": "Giao dịch hoàn trả",
+  "transaction_expired": "Giao dịch hết hạn",
+  "transaction_cancelled": "Giao dịch đã hủy"
 }

@@ -120,5 +120,11 @@
   "course_detail": "Course Detail",
   "first_name": "First Name",
   "last_name": "Last Name",
-  "courses_enrolled": "Courses Enrolled"
+  "courses_enrolled": "Courses Enrolled",
+  "transaction_success": "Transaction Success",
+  "transaction_failed": "Transaction Failed",
+  "transaction_pending": "Transaction Pending",
+  "transaction_refunded": "Transaction Refunded",
+  "transaction_expired": "Transaction Expired",
+  "transaction_cancelled": "Transaction Cancelled"
 } 

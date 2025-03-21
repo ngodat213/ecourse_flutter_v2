@@ -1,13 +1,15 @@
+import 'package:ecourse_flutter_v2/app/domain/repositories/user_repository.dart';
 import 'package:ecourse_flutter_v2/core/config/app_config.dart';
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 import 'package:ecourse_flutter_v2/core/services/file_utils.dart';
 
-class UserRepository extends BaseAPI {
+class UserRepositoryImpl implements UserRepository {
   final BaseAPI _api = BaseAPI();
 
+  @override
   Future<ApiResponse> getUserProfile() async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         AppConfig.userProfile,
         method: ApiMethod.GET,
       );
@@ -17,9 +19,10 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> updateProfile(Map<String, dynamic> data) async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         AppConfig.userProfile,
         method: ApiMethod.PUT,
         body: data,
@@ -30,12 +33,13 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> changePassword({
     required String currentPassword,
     required String newPassword,
   }) async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         AppConfig.changePassword,
         method: ApiMethod.PUT,
         body: {'currentPassword': currentPassword, 'newPassword': newPassword},
@@ -46,6 +50,7 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> uploadAvatar(String filePath) async {
     try {
       // Kiểm tra file có tồn tại và là ảnh không
@@ -67,7 +72,7 @@ class UserRepository extends BaseAPI {
       // Tạo tên file unique
       final fileName = generateUniqueFileName(getFileName(filePath));
 
-      final response = await fileUpload(
+      final response = await _api.fileUpload(
         AppConfig.uploadAvatar,
         file: file,
         method: ApiMethod.POST,
@@ -80,6 +85,7 @@ class UserRepository extends BaseAPI {
   }
 
   // Admin only
+  @override
   Future<ApiResponse> getAllUsers({
     int page = 1,
     int limit = 10,
@@ -87,7 +93,7 @@ class UserRepository extends BaseAPI {
     String sort = '-createdAt',
   }) async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         AppConfig.adminUsers,
         method: ApiMethod.GET,
         params: {
@@ -103,9 +109,10 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> getUserById(String id) async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         '${AppConfig.adminUsers}/$id',
         method: ApiMethod.GET,
       );
@@ -115,9 +122,10 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> updateUser(String id, Map<String, dynamic> data) async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         '${AppConfig.adminUsers}/$id',
         method: ApiMethod.PUT,
         body: data,
@@ -128,9 +136,10 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> deleteUser(String id) async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         '${AppConfig.adminUsers}/$id',
         method: ApiMethod.DELETE,
       );
@@ -140,9 +149,10 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> setUserRole(String userId, String role) async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         AppConfig.setUserRole,
         method: ApiMethod.PUT,
         body: {'userId': userId, 'role': role},
@@ -153,9 +163,10 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> getTeachers() async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         AppConfig.teachers,
         method: ApiMethod.GET,
       );
@@ -165,9 +176,10 @@ class UserRepository extends BaseAPI {
     }
   }
 
+  @override
   Future<ApiResponse> getTeacherById(String id) async {
     try {
-      final response = await fetchData(
+      final response = await _api.fetchData(
         '${AppConfig.teachers}/$id',
         method: ApiMethod.GET,
       );
@@ -178,6 +190,7 @@ class UserRepository extends BaseAPI {
   }
 
   /// Cập nhật streak khi học đủ thời gian
+  @override
   Future<ApiResponse> updateStreak({
     required int duration,
     required String type,
@@ -194,6 +207,7 @@ class UserRepository extends BaseAPI {
   }
 
   /// Lấy thông tin streak của user
+  @override
   Future<ApiResponse> getStreakInfo() async {
     try {
       final response = await _api.fetchData(

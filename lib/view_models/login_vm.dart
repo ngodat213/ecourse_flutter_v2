@@ -3,7 +3,7 @@ import 'package:ecourse_flutter_v2/core/config/app_config.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 import 'package:ecourse_flutter_v2/mixin/login_form_mixin.dart';
-import 'package:ecourse_flutter_v2/models/user_profile.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user_profile.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,12 +1,14 @@
+import 'package:ecourse_flutter_v2/app/domain/repositories/auth_repository.dart';
+import 'package:ecourse_flutter_v2/app/domain/repositories/user_repository.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
-import 'package:ecourse_flutter_v2/repositories/auth_repository.dart';
-import 'package:ecourse_flutter_v2/repositories/user_repository.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/auth_repository_impl.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/user_repository_impl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 mixin LoginFormMixin on BaseVM {
-  final UserRepository userRepository = UserRepository();
-  final AuthRepository authRepository = AuthRepository();
+  final UserRepository userRepository = UserRepositoryImpl();
+  final AuthRepository authRepository = AuthRepositoryImpl();
 
   final loginFormKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
