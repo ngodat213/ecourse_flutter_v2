@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
 import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
-import 'package:ecourse_flutter_v2/models/quiz_model.dart';
 import 'package:ecourse_flutter_v2/models/quiz_question_model.dart';
 import 'package:ecourse_flutter_v2/models/user_profile.dart';
 import 'package:ecourse_flutter_v2/repositories/quiz_repository.dart';
-import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:provider/provider.dart';
 
