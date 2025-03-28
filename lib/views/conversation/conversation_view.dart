@@ -1,21 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ecourse_flutter_v2/app/data/models/conversation_model.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
-import 'package:ecourse_flutter_v2/view_models/chat_vm.dart';
+import 'package:ecourse_flutter_v2/view_models/conversation_vm.dart';
 import 'package:ecourse_flutter_v2/views/chat/chat_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ChatListView extends BaseView<ChatVM> {
-  const ChatListView({super.key});
+class ConversationView extends BaseView<ConversationVM> {
+  const ConversationView({super.key});
 
   @override
-  ChatVM createViewModel(
+  ConversationVM createViewModel(
     BuildContext context,
     Map<String, dynamic>? arguments,
   ) {
-    return ChatVM(context);
+    return ConversationVM(context);
   }
 
   // @override
@@ -35,14 +36,14 @@ class ChatListView extends BaseView<ChatVM> {
   // }
 
   @override
-  Widget buildView(BuildContext context, ChatVM viewModel) {
+  Widget buildView(BuildContext context, ConversationVM viewModel) {
     return Column(children: [ChatContent(viewModel: viewModel)]);
   }
 }
 
 class ChatContent extends StatefulWidget {
   const ChatContent({super.key, required this.viewModel});
-  final ChatVM viewModel;
+  final ConversationVM viewModel;
 
   @override
   State<ChatContent> createState() => _ChatContentState();
@@ -73,7 +74,10 @@ class _ChatContentState extends State<ChatContent>
           child: Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [ChatTabBar(), ChatTabBar()],
+              children: [
+                ChatTabBar(conversations: widget.viewModel.conversations),
+                ChatTabBar(conversations: widget.viewModel.groupConversations),
+              ],
             ),
           ),
         ),
@@ -83,20 +87,22 @@ class _ChatContentState extends State<ChatContent>
 }
 
 class ChatTabBar extends StatelessWidget {
-  const ChatTabBar({super.key});
-
+  const ChatTabBar({super.key, required this.conversations});
+  final List<ConversationModel> conversations;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListView.builder(
-        itemCount: 10,
+        itemCount: conversations.length,
         itemBuilder: (context, index) {
           return InkWell(
             onTap: () {
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                builder: (context) => ChatDetailView(chatId: '1'),
+                builder:
+                    (context) =>
+                        ChatDetailView(conversation: conversations[index]),
               );
             },
             child: Container(
@@ -125,18 +131,27 @@ class ChatTabBar extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Text(
-                              'Adobe Premiere Pro Course',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium?.copyWith(
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
+                            SizedBox(
+                              width: 1.sw - 100.w - 32.w,
+                              child: Text(
+                                conversations[index].name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(
+                                  context,
+                                ).textTheme.bodyMedium?.copyWith(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             Spacer(),
                             Text(
-                              '12:00',
+                              conversations[index].lastMessage?.createdAt
+                                      .toLocal()
+                                      .toString()
+                                      .substring(11, 16) ??
+                                  '',
                               style: Theme.of(
                                 context,
                               ).textTheme.bodyMedium?.copyWith(
@@ -147,12 +162,15 @@ class ChatTabBar extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          'You: If Anyone wants to ask questions, I’m here t...',
+                          conversations[index].lastMessage?.content ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(
                             context,
-                          ).textTheme.bodyMedium?.copyWith(fontSize: 12.sp),
+                          ).textTheme.bodyMedium?.copyWith(
+                            fontSize: 12.sp,
+                            color: AppColor.textSecondary,
+                          ),
                         ),
                       ],
                     ),

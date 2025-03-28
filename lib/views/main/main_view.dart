@@ -23,7 +23,8 @@ class MainView extends BaseView<MainVM> {
       {'icon': AppImage.svgHome, 'label': 'Home', 'index': 0},
       {'icon': AppImage.svgExplore, 'label': 'Explore', 'index': 1},
       {'icon': AppImage.svgEvents, 'label': 'Events', 'index': 2},
-      {'icon': AppImage.svgProfile, 'label': 'Profile', 'index': 3},
+      {'icon': AppImage.svgInfo, 'label': 'Streak', 'index': 3},
+      {'icon': AppImage.svgProfile, 'label': 'Profile', 'index': 4},
     ];
     return BottomNavigationBar(
       currentIndex: vm.bottomNavigationIndex,
