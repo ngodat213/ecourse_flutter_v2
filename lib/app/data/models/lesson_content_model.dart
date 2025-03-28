@@ -1,6 +1,6 @@
 import 'package:ecourse_flutter_v2/enums/lesson_content_type.enum.dart';
-import 'package:ecourse_flutter_v2/models/cloudinary_file.dart';
-import 'package:ecourse_flutter_v2/models/quiz_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/cloudinary_file.dart';
+import 'package:ecourse_flutter_v2/app/data/models/quiz_model.dart';
 
 class LessonContentModel {
   String? sId;

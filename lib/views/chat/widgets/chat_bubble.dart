@@ -1,5 +1,5 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
-import 'package:ecourse_flutter_v2/models/chat_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/chat_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';

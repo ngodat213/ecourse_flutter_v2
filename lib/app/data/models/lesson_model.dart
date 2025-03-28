@@ -1,4 +1,4 @@
-import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_content_model.dart';
 
 class LessonModel {
   String? sId;

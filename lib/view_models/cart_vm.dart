@@ -1,15 +1,16 @@
-import 'package:ecourse_flutter_v2/models/cart_item.dart';
+import 'package:ecourse_flutter_v2/app/data/models/cart_item.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/cart_repository_impl.dart';
 import 'package:ecourse_flutter_v2/view_models/login_vm.dart';
 import 'package:ecourse_flutter_v2/views/cart/widgets/payment_success_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
-import 'package:ecourse_flutter_v2/models/payment_method.dart';
-import 'package:ecourse_flutter_v2/repositories/cart_repository.dart';
+import 'package:ecourse_flutter_v2/app/data/models/payment_method.dart';
+import 'package:ecourse_flutter_v2/app/domain/repositories/cart_repository.dart';
 import 'package:ecourse_flutter_v2/services/payment_service.dart';
 import 'package:provider/provider.dart';
 
 class CartVM extends BaseVM {
-  final CartRepository _cartRepository;
+  final CartRepository _cartRepository = CartRepositoryImpl();
 
   List<CartItem> _cartItems = [];
   double _totalAmount = 0;
@@ -41,8 +42,7 @@ class CartVM extends BaseVM {
     ),
   ];
 
-  CartVM(super.context, {CartRepository? cartRepository})
-    : _cartRepository = cartRepository ?? CartRepository() {
+  CartVM(super.context) {
     loadCartItems();
   }
 
@@ -165,7 +165,7 @@ class CartVM extends BaseVM {
       notifyListeners();
 
       final response = await _cartRepository.checkout(
-        _selectedPaymentMethod?.id,
+        _selectedPaymentMethod?.id ?? '',
       );
 
       if (response.allGood) {

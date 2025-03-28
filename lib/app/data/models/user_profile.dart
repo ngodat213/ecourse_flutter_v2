@@ -1,5 +1,5 @@
-import 'package:ecourse_flutter_v2/models/stats.dart';
-import 'package:ecourse_flutter_v2/models/user.dart';
+import 'package:ecourse_flutter_v2/app/data/models/stats.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user.dart';
 
 class UserProfile {
   User? user;

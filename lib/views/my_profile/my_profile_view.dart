@@ -8,7 +8,7 @@ import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/see_all_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/smart_image.dart';
-import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
 import 'package:ecourse_flutter_v2/view_models/my_profile_vm.dart';
 import 'package:ecourse_flutter_v2/views/explore/explore_view.dart';
 import 'package:flutter/material.dart';

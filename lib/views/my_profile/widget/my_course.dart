@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
-import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
 import 'package:ecourse_flutter_v2/view_models/my_profile_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

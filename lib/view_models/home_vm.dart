@@ -1,18 +1,19 @@
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
-import 'package:ecourse_flutter_v2/models/course_progress_model.dart';
-import 'package:ecourse_flutter_v2/models/user_profile.dart';
-import 'package:ecourse_flutter_v2/models/course_model.dart';
-import 'package:ecourse_flutter_v2/models/user_progress_model.dart';
-import 'package:ecourse_flutter_v2/repositories/course_repository.dart';
-import 'package:ecourse_flutter_v2/repositories/user_progress_repository.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_progress_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user_profile.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user_progress_model.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/course_repository_imp.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/user_progress_repository_impl.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:provider/provider.dart';
 
 import '../core/base/base_view_model.dart';
 
 class HomeVM extends BaseVM {
-  final CourseRepository _courseRepository = CourseRepository();
-  final UserProgressRepository _progressRepository = UserProgressRepository();
+  final CourseRepositoryImpl _courseRepository = CourseRepositoryImpl();
+  final UserProgressRepositoryImpl _progressRepository =
+      UserProgressRepositoryImpl();
 
   int carouselIndex = 0;
   String? userRole;

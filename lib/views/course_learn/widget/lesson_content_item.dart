@@ -1,5 +1,5 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
-import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_content_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ecourse_flutter_v2/enums/lesson_content_type.enum.dart';
