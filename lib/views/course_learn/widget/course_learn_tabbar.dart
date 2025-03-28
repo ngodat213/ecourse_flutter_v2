@@ -1,9 +1,9 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_constants.dart';
-import 'package:ecourse_flutter_v2/models/course_model.dart';
-import 'package:ecourse_flutter_v2/models/lesson_model.dart';
-import 'package:ecourse_flutter_v2/models/user_progress_model.dart';
-import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user_progress_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_content_model.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/content_tab.dart';
 import 'package:ecourse_flutter_v2/views/course_learn/widget/overview_tab.dart';
 import 'package:flutter/material.dart';

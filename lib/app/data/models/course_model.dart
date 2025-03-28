@@ -1,4 +1,4 @@
-import 'package:ecourse_flutter_v2/models/cloudinary_file.dart';
+import 'package:ecourse_flutter_v2/app/data/models/cloudinary_file.dart';
 import 'package:ecourse_flutter_v2/view_models/category_model.dart';
 
 import 'teacher_model.dart';

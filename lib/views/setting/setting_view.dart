@@ -41,10 +41,24 @@ class SettingView extends BaseView<ProfileVM> {
   @override
   Widget buildView(BuildContext context, ProfileVM vm) {
     final settingAccount = [
-      {'title': 'name_phone_email'.tr(), 'onPressed': () {}},
-      {'title': 'password_security'.tr(), 'onPressed': () {}},
-      {'title': 'transaction_history'.tr(), 'onPressed': () {}},
-      {'title': 'contact_us'.tr(), 'onPressed': () {}},
+      {
+        'title': 'password_security'.tr(),
+        'onPressed': () {
+          AppRoutes.push(context, AppRoutes.passwordSecurity);
+        },
+      },
+      {
+        'title': 'transaction_history'.tr(),
+        'onPressed': () {
+          AppRoutes.push(context, AppRoutes.transactionHistory);
+        },
+      },
+      {
+        'title': 'contact_us'.tr(),
+        'onPressed': () {
+          AppRoutes.push(context, AppRoutes.contactUs);
+        },
+      },
     ];
 
     final settingUser = [
@@ -94,7 +108,7 @@ class SettingView extends BaseView<ProfileVM> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'John Doe',
+                            '${vm.userProfile?.user?.firstName} ${vm.userProfile?.user?.lastName}',
                             style: Theme.of(
                               context,
                             ).textTheme.titleLarge?.copyWith(
@@ -103,7 +117,7 @@ class SettingView extends BaseView<ProfileVM> {
                             ),
                           ),
                           Text(
-                            'UI/UX Designer',
+                            vm.userProfile?.user?.level ?? '',
                             style: Theme.of(
                               context,
                             ).textTheme.titleSmall?.copyWith(
@@ -125,16 +139,21 @@ class SettingView extends BaseView<ProfileVM> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'edit_profile'.tr(),
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w400,
-                          color: AppColor.primary,
+                      TextButton(
+                        onPressed: vm.redirectToProfile,
+                        child: Text(
+                          'edit_profile'.tr(),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: AppColor.primary,
+                          ),
                         ),
                       ),
                       SvgIconButton(
                         assetName: AppImage.svgRightArrow,
-                        onPressed: () {},
+                        onPressed: vm.redirectToProfile,
                       ),
                     ],
                   ),

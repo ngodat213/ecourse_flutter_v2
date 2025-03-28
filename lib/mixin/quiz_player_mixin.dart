@@ -1,14 +1,15 @@
+import 'package:ecourse_flutter_v2/app/domain/repositories/quiz_repository.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
-import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
-import 'package:ecourse_flutter_v2/models/quiz_question_model.dart';
-import 'package:ecourse_flutter_v2/repositories/quiz_repository.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/quiz_question_model.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/quiz_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 mixin QuizPlayerMixin<T extends StatefulWidget> on State<T> {
-  final QuizRepository _quizRepository = QuizRepository();
+  final QuizRepository _quizRepository = QuizRepositoryImpl();
 
   LessonContentModel? content;
   List<QuizQuestionModel> questions = [];

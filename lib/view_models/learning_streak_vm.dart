@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../core/base/base_view_model.dart';
-import '../repositories/user_repository.dart';
+import '../app/data/repositories/user_repository_impl.dart';
 
 class LearningStreakVM extends BaseVM {
-  final UserRepository _userRepository = UserRepository();
+  final UserRepositoryImpl _userRepository = UserRepositoryImpl();
 
   LearningStreakVM(context) : super(context);
 

@@ -1,4 +1,4 @@
-import 'package:ecourse_flutter_v2/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
 
 class Stats {
   List<CourseModel>? courses;

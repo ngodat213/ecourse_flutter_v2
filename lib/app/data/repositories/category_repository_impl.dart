@@ -1,10 +1,12 @@
+import 'package:ecourse_flutter_v2/app/domain/repositories/category_repository.dart';
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 
-class CategoryRepository {
+class CategoryRepositoryImpl implements CategoryRepository {
   final BaseAPI _api;
 
-  CategoryRepository({BaseAPI? api}) : _api = api ?? BaseAPI();
+  CategoryRepositoryImpl({BaseAPI? api}) : _api = api ?? BaseAPI();
 
+  @override
   Future<ApiResponse> getCategories() async {
     try {
       final response = await _api.fetchData(

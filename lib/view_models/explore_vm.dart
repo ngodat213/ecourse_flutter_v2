@@ -1,16 +1,16 @@
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
-import 'package:ecourse_flutter_v2/models/course_model.dart';
-import 'package:ecourse_flutter_v2/models/teacher_model.dart';
-import 'package:ecourse_flutter_v2/repositories/category_repository.dart';
-import 'package:ecourse_flutter_v2/repositories/course_repository.dart';
-import 'package:ecourse_flutter_v2/repositories/user_repository.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/teacher_model.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/category_repository_impl.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/course_repository_imp.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/user_repository_impl.dart';
 import 'package:ecourse_flutter_v2/view_models/category_model.dart';
 
 class ExploreVM extends BaseVM {
-  final UserRepository _userRepository = UserRepository();
-  final CourseRepository _courseRepository = CourseRepository();
-  final CategoryRepository _categoryRepository = CategoryRepository();
+  final UserRepositoryImpl _userRepository = UserRepositoryImpl();
+  final CourseRepositoryImpl _courseRepository = CourseRepositoryImpl();
+  final CategoryRepositoryImpl _categoryRepository = CategoryRepositoryImpl();
   ExploreVM(super.context);
 
   final List<TeacherModel> teachers = [];

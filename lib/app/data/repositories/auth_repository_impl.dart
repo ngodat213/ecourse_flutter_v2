@@ -1,11 +1,13 @@
+import 'package:ecourse_flutter_v2/app/domain/repositories/auth_repository.dart';
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 
-class AuthRepository {
+class AuthRepositoryImpl implements AuthRepository {
   final BaseAPI _api;
 
-  AuthRepository({BaseAPI? api}) : _api = api ?? BaseAPI();
+  AuthRepositoryImpl({BaseAPI? api}) : _api = api ?? BaseAPI();
 
   // Đăng ký tài khoản qua email
+  @override
   Future<ApiResponse> register({
     required String firstName,
     required String lastName,
@@ -26,6 +28,7 @@ class AuthRepository {
   }
 
   // Đăng ký qua mobile (OTP)
+  @override
   Future<ApiResponse> registerMobile({
     required String firstName,
     required String lastName,
@@ -46,6 +49,7 @@ class AuthRepository {
   }
 
   // Xác thực OTP
+  @override
   Future<ApiResponse> verifyOTP({
     required String email,
     required String otp,
@@ -63,6 +67,7 @@ class AuthRepository {
   }
 
   // Gửi lại OTP
+  @override
   Future<ApiResponse> resendOTP({
     required String userId,
     required String type,
@@ -80,6 +85,7 @@ class AuthRepository {
   }
 
   // Đăng nhập
+  @override
   Future<ApiResponse> login({
     required String email,
     required String password,
@@ -93,6 +99,7 @@ class AuthRepository {
   }
 
   // Quên mật khẩu qua email
+  @override
   Future<ApiResponse> forgotPassword({required String email}) async {
     final response = await _api.fetchData(
       '/auth/forgot-password',
@@ -103,6 +110,7 @@ class AuthRepository {
   }
 
   // Quên mật khẩu qua mobile (OTP)
+  @override
   Future<ApiResponse> forgotPasswordMobile({required String email}) async {
     final response = await _api.fetchData(
       '/auth/forgot-password/mobile',
@@ -113,6 +121,7 @@ class AuthRepository {
   }
 
   // Đặt lại mật khẩu với token
+  @override
   Future<ApiResponse> resetPassword({
     required String token,
     required String newPassword,
@@ -126,6 +135,7 @@ class AuthRepository {
   }
 
   // Đặt lại mật khẩu với OTP
+  @override
   Future<ApiResponse> resetPasswordWithOTP({
     required String userId,
     required String otp,
@@ -140,6 +150,7 @@ class AuthRepository {
   }
 
   // Refresh token
+  @override
   Future<ApiResponse> refreshToken({required String refreshToken}) async {
     final response = await _api.fetchData(
       '/auth/refresh-token',
@@ -150,6 +161,7 @@ class AuthRepository {
   }
 
   // Đăng xuất
+  @override
   Future<ApiResponse> logout({required String refreshToken}) async {
     final response = await _api.fetchData(
       '/auth/logout',

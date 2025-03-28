@@ -1,6 +1,6 @@
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ecourse_flutter_v2/repositories/user_repository.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/user_repository_impl.dart';
 
 class StreakService {
   static const String _WATCH_DURATION_KEY = 'watch_duration';
@@ -9,14 +9,14 @@ class StreakService {
   static const int TIME_LIMIT = 30 * 60; // 5 phút
 
   final SharedPreferences _prefs;
-  final UserRepository _userRepository;
+  final UserRepositoryImpl _userRepository;
 
   // Singleton pattern
   static StreakService? _instance;
   static Future<StreakService> getInstance() async {
     if (_instance == null) {
       final prefs = await SharedPreferences.getInstance();
-      _instance = StreakService._(prefs, UserRepository());
+      _instance = StreakService._(prefs, UserRepositoryImpl());
     }
     return _instance!;
   }

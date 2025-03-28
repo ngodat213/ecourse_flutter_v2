@@ -1,18 +1,22 @@
+import 'package:ecourse_flutter_v2/app/domain/repositories/course_repository.dart';
+import 'package:ecourse_flutter_v2/app/domain/repositories/lesson_repository.dart';
+import 'package:ecourse_flutter_v2/app/domain/repositories/user_progress_repository.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view_model.dart';
-import 'package:ecourse_flutter_v2/models/course_model.dart';
-import 'package:ecourse_flutter_v2/models/lesson_content_model.dart';
-import 'package:ecourse_flutter_v2/models/lesson_model.dart';
-import 'package:ecourse_flutter_v2/models/quiz_model.dart';
-import 'package:ecourse_flutter_v2/models/user_progress_model.dart';
-import 'package:ecourse_flutter_v2/repositories/course_repository.dart';
-import 'package:ecourse_flutter_v2/repositories/lesson_repository.dart';
-import 'package:ecourse_flutter_v2/repositories/user_progress_repository.dart';
+import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_content_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/lesson_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/quiz_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user_progress_model.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/course_repository_imp.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/lesson_repository_impl.dart';
+import 'package:ecourse_flutter_v2/app/data/repositories/user_progress_repository_impl.dart';
 import 'package:ecourse_flutter_v2/enums/lesson_content_type.enum.dart';
 
 class CourseLearnVM extends BaseVM {
-  final CourseRepository _courseRepository = CourseRepository();
-  final LessonRepository _lessonRepository = LessonRepository();
-  final UserProgressRepository _progressRepository = UserProgressRepository();
+  final CourseRepository _courseRepository = CourseRepositoryImpl();
+  final LessonRepository _lessonRepository = LessonRepositoryImpl();
+  final UserProgressRepository _progressRepository =
+      UserProgressRepositoryImpl();
 
   CourseLearnVM(super.context, this.course) {
     _initData();

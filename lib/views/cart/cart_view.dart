@@ -1,7 +1,7 @@
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/widgets/buttons/elevated_button.dart';
 import 'package:ecourse_flutter_v2/core/widgets/smart_image.dart';
-import 'package:ecourse_flutter_v2/models/cart_item.dart';
+import 'package:ecourse_flutter_v2/app/data/models/cart_item.dart';
 import 'package:ecourse_flutter_v2/view_models/cart_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

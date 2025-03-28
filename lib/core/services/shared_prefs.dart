@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:ecourse_flutter_v2/models/user_profile.dart';
+import 'package:ecourse_flutter_v2/app/data/models/user_profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_config.dart';
 
