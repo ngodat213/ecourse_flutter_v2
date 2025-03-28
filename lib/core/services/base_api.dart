@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:ecourse_flutter_v2/core/config/app_config.dart';
 import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
 
 enum ApiStatus { succeeded, failed, internetUnavailable }
@@ -67,7 +68,7 @@ class ErrorResponse {
 }
 
 class BaseAPI {
-  static String domain = 'https://c15e-112-197-36-236.ngrok-free.app/api';
+  static String domain = '${AppConfig.baseUrl}/api';
   final Dio _dio = Dio();
 
   Future<Map<String, String>> getHeaders() async {

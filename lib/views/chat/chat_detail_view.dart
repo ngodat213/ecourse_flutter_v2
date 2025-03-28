@@ -1,3 +1,4 @@
+import 'package:ecourse_flutter_v2/app/data/models/conversation_model.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
 import 'package:ecourse_flutter_v2/core/config/app_image.dart';
@@ -9,16 +10,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ChatDetailView extends BaseView<ChatVM> {
-  final String chatId;
+  final ConversationModel conversation;
 
-  const ChatDetailView({super.key, required this.chatId});
+  const ChatDetailView({super.key, required this.conversation});
 
   @override
   ChatVM createViewModel(
     BuildContext context,
     Map<String, dynamic>? arguments,
   ) {
-    return ChatVM(context)..loadChatDetail(chatId);
+    return ChatVM(context)..loadChatDetail(conversation.id);
   }
 
   @override
@@ -131,7 +132,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         final message = messages[index];
         final showTime =
             index == 0 ||
-            messages[index].createdAt.day != messages[index - 1].createdAt.day;
+            messages[index].createdAt!.day !=
+                messages[index - 1].createdAt!.day;
 
         return Column(
           children: [
@@ -139,7 +141,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.h),
                 child: Text(
-                  _formatMessageDate(message.createdAt),
+                  _formatMessageDate(message.createdAt!),
                   style: TextStyle(
                     color: AppColor.textSecondary,
                     fontSize: 12.sp,
@@ -148,7 +150,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               ),
             ChatBubble(
               message: message,
-              isMe: message.senderId == widget.viewModel.currentUserId,
+              isMe:
+                  message.sender!.sId ==
+                  widget.viewModel.currentUserId?.user?.sId,
             ),
           ],
         );

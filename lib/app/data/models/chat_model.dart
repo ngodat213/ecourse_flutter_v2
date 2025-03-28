@@ -1,191 +1,104 @@
-enum MessageType { text, image, file, voice }
+import 'package:ecourse_flutter_v2/enums/message_type.enum.dart';
 
-class MessageModel {
-  final String id;
-  final String senderId;
-  final String receiverId;
-  final String content;
-  final MessageType type;
-  final DateTime createdAt;
-  final bool isRead;
-  final String? fileUrl;
-  final int? fileSize;
+class ChatModel {
+  String? sId;
+  String? conversation;
+  Sender? sender;
+  String? content;
+  MessageType? contentType;
+  List<ReadBy>? readBy;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? iV;
 
-  MessageModel({
-    required this.id,
-    required this.senderId,
-    required this.receiverId,
-    required this.content,
-    required this.type,
-    required this.createdAt,
-    this.isRead = false,
-    this.fileUrl,
-    this.fileSize,
+  ChatModel({
+    this.sId,
+    this.conversation,
+    this.sender,
+    this.content,
+    this.contentType,
+    this.readBy,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
   });
 
-  // Tạo bản sao với các thuộc tính mới
-  MessageModel copyWith({
-    String? id,
-    String? senderId,
-    String? receiverId,
-    String? content,
-    MessageType? type,
-    DateTime? createdAt,
-    bool? isRead,
-    String? fileUrl,
-    int? fileSize,
-  }) {
-    return MessageModel(
-      id: id ?? this.id,
-      senderId: senderId ?? this.senderId,
-      receiverId: receiverId ?? this.receiverId,
-      content: content ?? this.content,
-      type: type ?? this.type,
-      createdAt: createdAt ?? this.createdAt,
-      isRead: isRead ?? this.isRead,
-      fileUrl: fileUrl ?? this.fileUrl,
-      fileSize: fileSize ?? this.fileSize,
-    );
+  ChatModel.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    conversation = json['conversation'];
+    sender = json['sender'] != null ? Sender.fromJson(json['sender']) : null;
+    content = json['content'];
+    contentType =
+        json['contentType'] != null
+            ? MessageType.values.byName(json['contentType'])
+            : null;
+    if (json['readBy'] != null) {
+      readBy = <ReadBy>[];
+      json['readBy'].forEach((v) {
+        readBy!.add(ReadBy.fromJson(v));
+      });
+    }
+    createdAt = DateTime.parse(json['createdAt']);
+    updatedAt = DateTime.parse(json['updatedAt']);
+    iV = json['__v'];
   }
 
-  // Từ JSON
-  factory MessageModel.fromJson(Map<String, dynamic> json) {
-    return MessageModel(
-      id: json['id'] ?? '',
-      senderId: json['senderId'] ?? '',
-      receiverId: json['receiverId'] ?? '',
-      content: json['content'] ?? '',
-      type: _messageTypeFromString(json['type'] ?? 'text'),
-      createdAt:
-          json['createdAt'] != null
-              ? DateTime.parse(json['createdAt'])
-              : DateTime.now(),
-      isRead: json['isRead'] ?? false,
-      fileUrl: json['fileUrl'],
-      fileSize: json['fileSize'],
-    );
-  }
-
-  // Sang JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'senderId': senderId,
-      'receiverId': receiverId,
-      'content': content,
-      'type': _messageTypeToString(type),
-      'createdAt': createdAt.toIso8601String(),
-      'isRead': isRead,
-      'fileUrl': fileUrl,
-      'fileSize': fileSize,
-    };
-  }
-
-  // Helper methods để chuyển đổi enum <-> string
-  static MessageType _messageTypeFromString(String type) {
-    switch (type) {
-      case 'text':
-        return MessageType.text;
-      case 'image':
-        return MessageType.image;
-      case 'file':
-        return MessageType.file;
-      case 'voice':
-        return MessageType.voice;
-      default:
-        return MessageType.text;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['conversation'] = conversation;
+    if (sender != null) {
+      data['sender'] = sender!.toJson();
     }
-  }
-
-  static String _messageTypeToString(MessageType type) {
-    switch (type) {
-      case MessageType.text:
-        return 'text';
-      case MessageType.image:
-        return 'image';
-      case MessageType.file:
-        return 'file';
-      case MessageType.voice:
-        return 'voice';
+    data['content'] = content;
+    data['contentType'] = contentType?.name;
+    if (readBy != null) {
+      data['readBy'] = readBy!.map((v) => v.toJson()).toList();
     }
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
+    data['__v'] = iV;
+    return data;
   }
 }
 
-class ChatModel {
-  final String id;
-  final String name;
-  final String avatarUrl;
-  final List<String> participantIds;
-  final MessageModel? lastMessage;
-  final int unreadCount;
-  final bool isOnline;
-  final DateTime lastActive;
+class Sender {
+  String? sId;
+  String? email;
 
-  ChatModel({
-    required this.id,
-    required this.name,
-    this.avatarUrl = '',
-    required this.participantIds,
-    this.lastMessage,
-    this.unreadCount = 0,
-    this.isOnline = false,
-    DateTime? lastActive,
-  }) : lastActive = lastActive ?? DateTime.now();
+  Sender({this.sId, this.email});
 
-  // Tạo bản sao với các thuộc tính mới
-  ChatModel copyWith({
-    String? id,
-    String? name,
-    String? avatarUrl,
-    List<String>? participantIds,
-    MessageModel? lastMessage,
-    int? unreadCount,
-    bool? isOnline,
-    DateTime? lastActive,
-  }) {
-    return ChatModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      avatarUrl: avatarUrl ?? this.avatarUrl,
-      participantIds: participantIds ?? this.participantIds,
-      lastMessage: lastMessage ?? this.lastMessage,
-      unreadCount: unreadCount ?? this.unreadCount,
-      isOnline: isOnline ?? this.isOnline,
-      lastActive: lastActive ?? this.lastActive,
-    );
+  Sender.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    email = json['email'];
   }
 
-  // Từ JSON
-  factory ChatModel.fromJson(Map<String, dynamic> json) {
-    return ChatModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      avatarUrl: json['avatarUrl'] ?? '',
-      participantIds: List<String>.from(json['participantIds'] ?? []),
-      lastMessage:
-          json['lastMessage'] != null
-              ? MessageModel.fromJson(json['lastMessage'])
-              : null,
-      unreadCount: json['unreadCount'] ?? 0,
-      isOnline: json['isOnline'] ?? false,
-      lastActive:
-          json['lastActive'] != null
-              ? DateTime.parse(json['lastActive'])
-              : DateTime.now(),
-    );
-  }
-
-  // Sang JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'avatarUrl': avatarUrl,
-      'participantIds': participantIds,
-      'lastMessage': lastMessage?.toJson(),
-      'unreadCount': unreadCount,
-      'isOnline': isOnline,
-      'lastActive': lastActive.toIso8601String(),
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['email'] = email;
+    return data;
+  }
+}
+
+class ReadBy {
+  String? user;
+  String? sId;
+  String? readAt;
+
+  ReadBy({this.user, this.sId, this.readAt});
+
+  ReadBy.fromJson(Map<String, dynamic> json) {
+    user = json['user'];
+    sId = json['_id'];
+    readAt = json['readAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['user'] = user;
+    data['_id'] = sId;
+    data['readAt'] = readAt;
+    return data;
   }
 }

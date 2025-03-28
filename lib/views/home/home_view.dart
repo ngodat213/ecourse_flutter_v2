@@ -6,7 +6,6 @@ import 'package:ecourse_flutter_v2/views/home/widget/course_list_card.dart';
 import 'package:ecourse_flutter_v2/views/home/widget/course_progress_card.dart';
 import 'package:ecourse_flutter_v2/views/home/widget/home_app_bar.dart';
 import 'package:ecourse_flutter_v2/views/home/widget/notification_schedule.dart';
-import 'package:ecourse_flutter_v2/views/home/widget/user_streak.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/base/base_view.dart';
@@ -55,7 +54,6 @@ class HomeView extends BaseView<HomeVM> {
           children: [
             NotificationSchedule(),
             // PromotionSliderWidget(vm: vm),
-            UserStreak(currentStreak: vm.userProfile?.user?.currentStreak ?? 0),
             SizedBox(height: 16.h),
             CourseProgressCard(
               enrolledCourses: vm.userProfile?.user?.enrolledCourses ?? [],
