@@ -1,5 +1,4 @@
 import 'package:animated_read_more_text/animated_read_more_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/base/base_view.dart';
 import 'package:ecourse_flutter_v2/core/config/app_color.dart';
