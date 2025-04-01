@@ -54,7 +54,7 @@ class CourseTabBar extends StatelessWidget {
               color: AppColor.accent,
               fontSize: 13.sp,
             ),
-            tabs: [Text('Content'), Text('Overview'), Text('Discussions')],
+            tabs: [Text('Content'), Text('Overview')],
           ),
           SizedBox(
             height: 1.sw,
@@ -69,7 +69,6 @@ class CourseTabBar extends StatelessWidget {
                     onContentSelected: (content) => onContentSelected(content),
                   ),
                   OverviewTab(course: course),
-                  DiscussionTabBar(),
                 ],
               ),
             ),

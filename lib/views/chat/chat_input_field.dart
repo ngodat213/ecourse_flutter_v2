@@ -5,16 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:io';
+import 'dart:async';
 
 class ChatInputField extends StatefulWidget {
   final Function(String) onSendMessage;
   final Function()? onAttachmentPressed;
+  final Function(String)? onTextChanged;
+  final Function(bool)? onTypingStatusChanged;
+  final TextEditingController? controller;
   final String hintText;
 
   const ChatInputField({
     super.key,
     required this.onSendMessage,
     this.onAttachmentPressed,
+    this.onTextChanged,
+    this.onTypingStatusChanged,
+    this.controller,
     this.hintText = 'Viết tin nhắn...',
   });
 
@@ -23,14 +30,17 @@ class ChatInputField extends StatefulWidget {
 }
 
 class _ChatInputFieldState extends State<ChatInputField> {
-  final TextEditingController _textController = TextEditingController();
+  late final TextEditingController _textController;
   bool _showEmojiPicker = false;
   bool _isComposing = false;
+  bool _isTyping = false;
+  Timer? _typingTimer;
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _textController = widget.controller ?? TextEditingController();
     _textController.addListener(_handleTextChange);
     _focusNode.addListener(_handleFocusChange);
   }
@@ -38,16 +48,38 @@ class _ChatInputFieldState extends State<ChatInputField> {
   @override
   void dispose() {
     _textController.removeListener(_handleTextChange);
-    _textController.dispose();
+    if (widget.controller == null) {
+      _textController.dispose();
+    }
     _focusNode.removeListener(_handleFocusChange);
     _focusNode.dispose();
+    _typingTimer?.cancel();
     super.dispose();
   }
 
   void _handleTextChange() {
+    final isNotEmpty = _textController.text.isNotEmpty;
     setState(() {
-      _isComposing = _textController.text.isNotEmpty;
+      _isComposing = isNotEmpty;
     });
+
+    // Xử lý typing status
+    if (isNotEmpty && !_isTyping) {
+      _isTyping = true;
+      widget.onTypingStatusChanged?.call(true);
+    }
+
+    _typingTimer?.cancel();
+    _typingTimer = Timer(const Duration(seconds: 2), () {
+      if (_isTyping) {
+        _isTyping = false;
+        widget.onTypingStatusChanged?.call(false);
+      }
+    });
+
+    if (widget.onTextChanged != null) {
+      widget.onTextChanged!(_textController.text);
+    }
   }
 
   void _handleFocusChange() {
@@ -66,6 +98,11 @@ class _ChatInputFieldState extends State<ChatInputField> {
       setState(() {
         _isComposing = false;
       });
+      // Reset typing status
+      if (_isTyping) {
+        _isTyping = false;
+        widget.onTypingStatusChanged?.call(false);
+      }
     }
   }
 

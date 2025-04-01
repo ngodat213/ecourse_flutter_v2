@@ -121,7 +121,9 @@ class CourseLearnVM extends BaseVM {
           lessonProgress.add(UserProgressModel.fromJson(progress));
         }
       }
-      onContentSelected(lessonProgress.last.lessonContent!);
+      if (lessonProgress.isNotEmpty) {
+        onContentSelected(lessonProgress.last.lessonContent!);
+      }
       notifyListeners();
     } catch (e) {
       setError(e.toString());
@@ -130,6 +132,10 @@ class CourseLearnVM extends BaseVM {
 
   Future<void> markContentComplete(String contentId) async {
     // Tìm content trong lessonProgress
+
+    if (lessonProgress.isEmpty) {
+      return;
+    }
     final existingProgress = lessonProgress.firstWhere(
       (element) => element.lessonContent?.sId == contentId,
     );
