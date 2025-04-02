@@ -4,34 +4,93 @@ import 'package:ecourse_flutter_v2/app/data/models/chat_model.dart';
 import 'package:ecourse_flutter_v2/app/data/models/user_profile.dart';
 import 'package:ecourse_flutter_v2/app/domain/repositories/conversation_repository.dart';
 import 'package:ecourse_flutter_v2/app/data/models/conversation_model.dart';
+import 'package:ecourse_flutter_v2/core/services/socket_service.dart';
+import 'package:ecourse_flutter_v2/enums/message_type.enum.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
 class ChatVM extends BaseVM {
   final ConversationRepository conversationRepository =
       ConversationRepositoryImpl();
+  final SocketService _socketService = SocketService();
 
   final List<ChatModel> _messages = [];
   final List<ConversationModel> _chats = [];
   UserProfile? _userData;
   bool _isLoading = false;
   String? _error;
+  String? _currentConversationId;
+  final Map<String, bool> _typingUsers = {};
 
   // Getters
   List<ChatModel> get messages => _messages;
   List<ConversationModel> get chats => _chats;
   UserProfile? get currentUserId => _userData;
+  Map<String, bool> get typingUsers => Map.unmodifiable(_typingUsers);
+  bool get isConnected => _socketService.isConnected;
   @override
   bool get isLoading => _isLoading;
   @override
   String? get error => _error;
 
-  ChatVM(super.context);
+  ChatVM(super.context) {
+    _initSocket();
+  }
+
+  Future<void> _initSocket() async {
+    await _socketService.initSocket();
+    _setupSocketListeners();
+  }
+
+  void _setupSocketListeners() {
+    _socketService.onNewMessage((data) {
+      try {
+        if (data['message'] != null &&
+            data['message'] is Map<String, dynamic>) {
+          final message = ChatModel.fromJson(data['message']);
+          if (message.sender?.sId != _userData?.user?.sId) {
+            _messages.add(message);
+            notifyListeners();
+          }
+        }
+      } catch (e) {
+        debugPrint('Error handling new message: $e');
+      }
+    });
+
+    _socketService.onTyping((data) {
+      if (data['userId'] != null &&
+          data['conversationId'] == _currentConversationId) {
+        _typingUsers[data['userId']] = true;
+        notifyListeners();
+      }
+    });
+
+    _socketService.onStopTyping((data) {
+      if (data['userId'] != null && _typingUsers.containsKey(data['userId'])) {
+        _typingUsers.remove(data['userId']);
+        notifyListeners();
+      }
+    });
+
+    _socketService.onUserJoined((data) {
+      notifyListeners();
+    });
+  }
 
   @override
   void onInit() {
     super.onInit();
     _userData = context.read<UserVM>().userProfile;
+  }
+
+  @override
+  void dispose() {
+    if (_currentConversationId != null) {
+      _socketService.leaveConversation(_currentConversationId!);
+    }
+    super.dispose();
   }
 
   Future<void> loadChatList() async {
@@ -50,8 +109,12 @@ class ChatVM extends BaseVM {
 
   Future<void> loadChatDetail(String chatId) async {
     _setLoading(true);
+    _currentConversationId = chatId;
 
     try {
+      // Join socket room cho conversation
+      _socketService.joinConversation(chatId);
+
       _messages.clear();
       final response = await conversationRepository.getConversationMessages(
         chatId,
@@ -70,46 +133,52 @@ class ChatVM extends BaseVM {
   }
 
   void sendMessage(String content) {
-    // if (content.trim().isEmpty) return;
+    if (content.trim().isEmpty || _currentConversationId == null) return;
 
-    // // Trong ứng dụng thực tế, gọi API để gửi tin nhắn
-    // final newMessage = ChatModel(
-    //   id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
-    //   senderId: _currentUserId,
-    //   receiverId: 'instructor_id', // ID người nhận (cần truyền vào từ UI)
-    //   content: content,
-    //   type: MessageType.text,
-    //   createdAt: DateTime.now(),
-    // );
+    // Gửi tin nhắn qua socket
+    _socketService.sendMessage(
+      _currentConversationId!,
+      content,
+      contentType: 'text',
+    );
 
-    // _messages.add(newMessage);
+    // Thêm tin nhắn local để hiển thị ngay (có thể cập nhật lại khi nhận tin từ socket)
+    final newMessage = ChatModel(
+      sId: 'temp_${DateTime.now().millisecondsSinceEpoch}',
+      conversation: _currentConversationId,
+      sender: Sender(sId: _userData?.user?.sId, email: _userData?.user?.email),
+      content: content,
+      contentType: MessageType.text,
+      readBy: [],
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
 
-    // // Cập nhật lastMessage trong danh sách chat
-    // if (_chats.isNotEmpty) {
-    //   final chatIndex = _chats.indexWhere(
-    //     (chat) =>
-    //         chat.participants.contains(newMessage.receiverId) &&
-    //         chat.participants.contains(_currentUserId),
-    //   );
-
-    //   if (chatIndex != -1) {
-    //     _chats[chatIndex] = _chats[chatIndex].copyWith(
-    //       lastMessage: newMessage,
-    //       unreadCount: 0,
-    //     );
-    //   }
-    // }
-
+    _messages.add(newMessage);
     notifyListeners();
   }
 
-  // void markAsRead(String messageId) {
-  //   final index = _messages.indexWhere((msg) => msg.id == messageId);
-  //   if (index != -1) {
-  //     _messages[index] = _messages[index].copyWith(isRead: true);
-  //     notifyListeners();
-  //   }
-  // }
+  void sendImage(String base64Image, {String caption = ''}) {
+    if (_currentConversationId == null) return;
+
+    _socketService.sendImage(
+      _currentConversationId!,
+      base64Image,
+      caption: caption,
+    );
+  }
+
+  void sendTypingStatus() {
+    if (_currentConversationId == null) return;
+
+    _socketService.sendTypingStatus(_currentConversationId!);
+  }
+
+  void stopTypingStatus() {
+    if (_currentConversationId == null) return;
+
+    _socketService.stopTypingStatus(_currentConversationId!);
+  }
 
   void _setLoading(bool value) {
     _isLoading = value;
