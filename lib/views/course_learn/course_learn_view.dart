@@ -44,7 +44,7 @@ class _CourseLearnScreenState extends State<CourseLearnScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
 
     // Khởi tạo video player với URL ban đầu
     if (widget.viewModel.currentContent != null &&

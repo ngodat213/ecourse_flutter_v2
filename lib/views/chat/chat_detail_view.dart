@@ -8,6 +8,7 @@ import 'package:ecourse_flutter_v2/views/chat/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'dart:async';
 
 class ChatDetailView extends BaseView<ChatVM> {
   final ConversationModel conversation;
@@ -24,14 +25,19 @@ class ChatDetailView extends BaseView<ChatVM> {
 
   @override
   Widget buildView(BuildContext context, ChatVM vm) {
-    return ChatDetailScreen(viewModel: vm);
+    return ChatDetailScreen(viewModel: vm, conversation: conversation);
   }
 }
 
 class ChatDetailScreen extends StatefulWidget {
   final ChatVM viewModel;
+  final ConversationModel conversation;
 
-  const ChatDetailScreen({super.key, required this.viewModel});
+  const ChatDetailScreen({
+    super.key,
+    required this.viewModel,
+    required this.conversation,
+  });
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -39,10 +45,21 @@ class ChatDetailScreen extends StatefulWidget {
 
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _messageController = TextEditingController();
+  bool _isTyping = false;
+  Timer? _typingTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollToBottom();
+  }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _messageController.dispose();
+    _typingTimer?.cancel();
     super.dispose();
   }
 
@@ -53,6 +70,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
+    }
+  }
+
+  void _handleTypingStatusChanged(bool isTyping) {
+    if (isTyping) {
+      widget.viewModel.sendTypingStatus();
+    } else {
+      widget.viewModel.stopTypingStatus();
     }
   }
 
@@ -68,6 +93,14 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
           padding: EdgeInsets.only(top: 48.h),
           child: AppBar(
             backgroundColor: AppColor.background,
+            title: Text(
+              widget.conversation.name,
+              style: TextStyle(
+                color: AppColor.textPrimary,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             actions: [
               IconButton(
                 icon: SvgPicture.asset(
@@ -101,12 +134,44 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             ),
           ),
 
+          // Typing indicator
+          _buildTypingIndicator(),
+
           // Input field
           ChatInputField(
+            controller: _messageController,
             onSendMessage: _handleSendMessage,
             onAttachmentPressed: _handleAttachmentPressed,
+            onTypingStatusChanged: _handleTypingStatusChanged,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTypingIndicator() {
+    final typingUsers = widget.viewModel.typingUsers;
+    if (typingUsers.isEmpty) return const SizedBox.shrink();
+
+    // Tìm người đang gõ không phải người dùng hiện tại
+    final typingUsersIds =
+        typingUsers.keys
+            .where((id) => id != widget.viewModel.currentUserId?.user?.sId)
+            .toList();
+
+    if (typingUsersIds.isEmpty) return const SizedBox.shrink();
+
+    // Hiển thị "đang gõ..." cho người đầu tiên trong danh sách
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      alignment: Alignment.centerLeft,
+      child: Text(
+        '${widget.conversation.name} đang gõ...',
+        style: TextStyle(
+          color: AppColor.textSecondary,
+          fontSize: 12.sp,
+          fontStyle: FontStyle.italic,
+        ),
       ),
     );
   }
@@ -169,6 +234,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     if (text.trim().isEmpty) return;
 
     widget.viewModel.sendMessage(text);
+    _messageController.clear();
+    _stopTyping();
 
     // Cuộn xuống dưới cùng sau khi gửi tin nhắn
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
@@ -191,6 +258,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 leading: Icon(Icons.photo, color: AppColor.primary),
                 title: Text('Gửi ảnh'),
                 onTap: () {
+                  // Implement image picking here
                   Navigator.pop(context);
                 },
               ),
@@ -213,5 +281,12 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         );
       },
     );
+  }
+
+  void _stopTyping() {
+    if (_isTyping) {
+      setState(() => _isTyping = false);
+      widget.viewModel.stopTypingStatus();
+    }
   }
 }

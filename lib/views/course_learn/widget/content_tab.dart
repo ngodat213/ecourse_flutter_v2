@@ -130,6 +130,11 @@ class SelectionItem extends StatelessWidget {
                 lessonProgress
                     .firstWhere(
                       (element) => element.lessonContent?.sId == content.sId,
+                      orElse:
+                          () => UserProgressModel(
+                            status: 'not_completed',
+                            lessonContent: content,
+                          ),
                     )
                     .status ==
                 'completed';

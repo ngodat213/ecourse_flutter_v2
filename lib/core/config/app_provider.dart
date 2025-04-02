@@ -1,4 +1,5 @@
 import 'package:ecourse_flutter_v2/core/providers/theme_provider.dart';
+import 'package:ecourse_flutter_v2/core/providers/chat_provider.dart';
 import 'package:ecourse_flutter_v2/core/services/shared_prefs.dart';
 import 'package:ecourse_flutter_v2/view_models/chat_vm.dart';
 import 'package:ecourse_flutter_v2/view_models/course_learn_vm.dart';
@@ -23,6 +24,7 @@ class AppProvider {
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(SharedPrefs.getThemeMode(), context),
     ),
+    ChangeNotifierProvider(create: (context) => ChatProvider()),
     ChangeNotifierProvider(create: (context) => UserVM(context)),
     ChangeNotifierProvider(create: (context) => LoginVM(context)),
     ChangeNotifierProvider(create: (context) => HomeVM(context)),
@@ -54,5 +56,6 @@ class AppProvider {
     context.read<CourseDetailVM>().dispose();
     context.read<CourseLearnVM>().dispose();
     context.read<LearningStreakVM>().dispose();
+    context.read<ChatProvider>().dispose();
   }
 }
