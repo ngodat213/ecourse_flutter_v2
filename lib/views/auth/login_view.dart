@@ -111,147 +111,151 @@ class LoginMobileViewState extends State<LoginMobileView>
       key: widget.vm.loginFormKey,
       child: Padding(
         padding: EdgeInsets.all(16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: SvgPicture.asset(
-                    AppImage.svgGoogle,
-                    width: 23.w,
-                    height: 23.h,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      AppImage.svgGoogle,
+                      width: 23.w,
+                      height: 23.h,
+                    ),
+                    onPressed: () {},
                   ),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: SvgPicture.asset(
-                    AppImage.svgFacebook,
-                    width: 23.w,
-                    height: 23.h,
+                  IconButton(
+                    icon: SvgPicture.asset(
+                      AppImage.svgFacebook,
+                      width: 23.w,
+                      height: 23.h,
+                    ),
+                    onPressed: () {},
                   ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-            SizedBox(height: 16.h),
-            Center(child: Text('Or use your email account login'.tr())),
-            SizedBox(height: 32.h),
-            SizedBox(
-              height: 48.h,
-              child: Visibility(
-                visible: widget.vm.error != null,
-                child: Container(
-                  height: 48.h,
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  decoration: BoxDecoration(
-                    color: AppColor.errorBackground,
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        AppImage.svgInfo,
-                        width: 16.w,
-                        height: 16.h,
-                        color: AppColor.error,
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        widget.vm.error ?? '',
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(color: AppColor.error),
-                      ),
-                    ],
-                  ),
-                ),
+                ],
               ),
-            ),
-            SizedBox(height: 16.h),
-            Text(
-              'email_address'.tr(),
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-            SizedBox(height: 8.h),
-            BaseTextField(
-              controller: widget.vm.emailController,
-              labelText: 'email'.tr(),
-              prefixIcon: SvgPicture.asset(
-                AppImage.svgUser,
-                width: 16.w,
-                height: 16.h,
-              ),
-              validator: (value) => Validator.validateEmail(value),
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-            ),
-            SizedBox(height: 16.h),
-            Text(
-              'password'.tr(),
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-            SizedBox(height: 8.h),
-            BaseTextField(
-              controller: widget.vm.passwordController,
-              labelText: 'password'.tr(),
-              prefixIcon: SvgPicture.asset(
-                AppImage.svgLock,
-                width: 16.w,
-                height: 16.h,
-              ),
-              obscureText: true,
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) => widget.vm.login(),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () => widget.vm.forgotPassword(),
-                child: Text(
-                  'forgot_password'.tr(),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: AppColor.primary,
+              SizedBox(height: 16.h),
+              Center(child: Text('Or use your email account login'.tr())),
+              SizedBox(height: 32.h),
+              SizedBox(
+                height: 48.h,
+                child: Visibility(
+                  visible: widget.vm.error != null,
+                  child: Container(
+                    height: 48.h,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    decoration: BoxDecoration(
+                      color: AppColor.errorBackground,
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          AppImage.svgInfo,
+                          width: 16.w,
+                          height: 16.h,
+                          color: AppColor.error,
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          widget.vm.error ?? '',
+                          style: Theme.of(context).textTheme.labelMedium
+                              ?.copyWith(color: AppColor.error),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: ResponsiveLayout.isDesktop(context) ? 32.h : 16.h),
-            CustomElevatedButton(
-              context: context,
-              onPressed: () => widget.vm.login(),
-              text: 'login'.tr(),
-              width: 1.sw,
-            ),
-            SizedBox(height: 16.h),
-            CustomElevatedButton(
-              context: context,
-              onPressed: () => {},
-              backgroundColor: Colors.white,
-              text: 'login_with_face_id'.tr(),
-              width: 1.sw,
-              leading: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: SvgPicture.asset(
-                  AppImage.svgFaceId,
-                  width: 24.w,
-                  height: 24.h,
+              SizedBox(height: 16.h),
+              Text(
+                'email_address'.tr(),
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              SizedBox(height: 8.h),
+              BaseTextField(
+                controller: widget.vm.emailController,
+                labelText: 'email'.tr(),
+                prefixIcon: SvgPicture.asset(
+                  AppImage.svgUser,
+                  width: 16.w,
+                  height: 16.h,
+                ),
+                validator: (value) => Validator.validateEmail(value),
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+              ),
+              SizedBox(height: 16.h),
+              Text(
+                'password'.tr(),
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+              SizedBox(height: 8.h),
+              BaseTextField(
+                controller: widget.vm.passwordController,
+                labelText: 'password'.tr(),
+                prefixIcon: SvgPicture.asset(
+                  AppImage.svgLock,
+                  width: 16.w,
+                  height: 16.h,
+                ),
+                obscureText: true,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => widget.vm.login(),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () => widget.vm.forgotPassword(),
+                  child: Text(
+                    'forgot_password'.tr(),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.primary,
+                    ),
+                  ),
                 ),
               ),
-              textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColor.secondary,
+              SizedBox(
+                height: ResponsiveLayout.isDesktop(context) ? 32.h : 16.h,
               ),
-            ),
-          ],
+              CustomElevatedButton(
+                context: context,
+                onPressed: () => widget.vm.login(),
+                text: 'login'.tr(),
+                width: 1.sw,
+              ),
+              SizedBox(height: 16.h),
+              CustomElevatedButton(
+                context: context,
+                onPressed: () => {},
+                backgroundColor: Colors.white,
+                text: 'login_with_face_id'.tr(),
+                width: 1.sw,
+                leading: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: SvgPicture.asset(
+                    AppImage.svgFaceId,
+                    width: 24.w,
+                    height: 24.h,
+                  ),
+                ),
+                textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColor.secondary,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

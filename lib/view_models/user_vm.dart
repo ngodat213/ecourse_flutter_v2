@@ -12,4 +12,9 @@ class UserVM extends BaseVM {
     _userProfile = newUserProfile;
     notifyListeners();
   }
+
+  void clearUserProfile() {
+    _userProfile = null;
+    notifyListeners();
+  }
 }

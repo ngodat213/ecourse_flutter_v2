@@ -1,6 +1,6 @@
 class AppConfig {
-  static const String baseUrl = 'https://98d7-112-197-36-236.ngrok-free.app';
-  static const String socketUrl = 'https://98d7-112-197-36-236.ngrok-free.app';
+  static const String apiUrl = 'https://4a50-112-197-36-236.ngrok-free.app';
+  static const String socketUrl = 'https://4a50-112-197-36-236.ngrok-free.app';
   static const int connectTimeout = 5000;
   static const int receiveTimeout = 3000;
 

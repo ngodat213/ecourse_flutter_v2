@@ -172,7 +172,7 @@ class SettingView extends BaseView<ProfileVM> {
                 height: 48.h,
                 backgroundColor: AppColor.error,
                 text: 'sign_out'.tr(),
-                onPressed: () {},
+                onPressed: vm.logout,
               ),
             ),
             SizedBox(height: 32.h),

@@ -25,4 +25,8 @@ abstract class UserRepository {
     required String type,
   });
   Future<ApiResponse> getStreakInfo();
+  Future<ApiResponse> registerFcmToken({
+    required String fcmToken,
+    required String deviceInfo,
+  });
 }
