@@ -152,7 +152,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
               children: [
                 IconButton(
                   icon: SvgPicture.asset(
-                    AppImage.svgBell,
+                    AppImage.svgFolder,
                     width: 20.w,
                     height: 20.w,
                     color: AppColor.textSecondary,

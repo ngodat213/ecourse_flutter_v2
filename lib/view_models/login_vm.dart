@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:ecourse_flutter_v2/core/config/app_config.dart';
 import 'package:ecourse_flutter_v2/core/routes/app_routes.dart';
 import 'package:ecourse_flutter_v2/core/services/base_api.dart';
+import 'package:ecourse_flutter_v2/core/services/firebase_messaging_service.dart';
 import 'package:ecourse_flutter_v2/mixin/login_form_mixin.dart';
 import 'package:ecourse_flutter_v2/app/data/models/user_profile.dart';
 import 'package:ecourse_flutter_v2/view_models/user_vm.dart';
@@ -84,6 +85,10 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
     final data = response.body;
     await _saveToken(data);
     await _saveLoginCredentials();
+
+    // Register FCM token after successful login
+    await registerFcmToken();
+
     return true;
   }
 
@@ -353,5 +358,15 @@ class LoginVM extends BaseVM with LoginFormMixin, RegisterFormMixin {
       value,
       registerPasswordController.text,
     );
+  }
+
+  // Register FCM token
+  Future<void> registerFcmToken() async {
+    try {
+      final firebaseMessagingService = FirebaseMessagingService();
+      await firebaseMessagingService.registerFcmToken();
+    } catch (e) {
+      debugPrint('Error registering FCM token: $e');
+    }
   }
 }

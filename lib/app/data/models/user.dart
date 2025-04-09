@@ -1,4 +1,5 @@
 import 'package:ecourse_flutter_v2/app/data/models/course_model.dart';
+import 'package:ecourse_flutter_v2/app/data/models/notification_model.dart';
 
 class User {
   String? sId;
@@ -12,7 +13,7 @@ class User {
   int? certificateCount;
   List<CourseModel>? enrolledCourses;
   // List<Null>? teachingCourses;
-  // List<Null>? notifications;
+  List<NotificationModel>? notifications;
   int? followersCount;
   int? unreadNotifications;
   String? createdAt;
@@ -41,7 +42,7 @@ class User {
     this.enrolledCourses,
     this.followersCount,
     // this.teachingCourses,
-    // this.notifications,
+    this.notifications,
     this.unreadNotifications,
     this.createdAt,
     this.updatedAt,
@@ -81,12 +82,12 @@ class User {
     //     teachingCourses!.add(Null.fromJson(v));
     //   });
     // }
-    // if (json['notifications'] != null) {
-    //   notifications = <Null>[];
-    //   json['notifications'].forEach((v) {
-    //     notifications!.add(Null.fromJson(v));
-    //   });
-    // }
+    if (json['notifications'] != null) {
+      notifications = <NotificationModel>[];
+      json['notifications'].forEach((v) {
+        notifications!.add(NotificationModel.fromJson(v));
+      });
+    }
     unreadNotifications = json['unread_notifications'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -122,10 +123,9 @@ class User {
     //   data['teaching_courses'] =
     //       this.teachingCourses!.map((v) => v.toJson()).toList();
     // }
-    // if (this.notifications != null) {
-    //   data['notifications'] =
-    //       this.notifications!.map((v) => v.toJson()).toList();
-    // }
+    if (notifications != null) {
+      data['notifications'] = notifications!.map((v) => v.toJson()).toList();
+    }
     data['unread_notifications'] = unreadNotifications;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;

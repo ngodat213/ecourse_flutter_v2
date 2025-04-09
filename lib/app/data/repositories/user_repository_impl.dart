@@ -219,4 +219,22 @@ class UserRepositoryImpl implements UserRepository {
       return ApiResponse(success: false, message: e.toString());
     }
   }
+
+  /// Đăng ký FCM token cho notifications
+  @override
+  Future<ApiResponse> registerFcmToken({
+    required String fcmToken,
+    required String deviceInfo,
+  }) async {
+    try {
+      final response = await _api.fetchData(
+        '/users/fcm-token',
+        method: ApiMethod.POST,
+        body: {'fcm_token': fcmToken, 'device_info': deviceInfo},
+      );
+      return ApiResponse.fromResponse(response.data);
+    } catch (e) {
+      return ApiResponse(success: false, message: e.toString());
+    }
+  }
 }

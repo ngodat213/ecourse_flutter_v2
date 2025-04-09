@@ -1,5 +1,6 @@
 import 'package:ecourse_flutter_v2/views/cart/cart_view.dart';
 import 'package:ecourse_flutter_v2/views/forgot_pw/forget_pw_view.dart';
+import 'package:ecourse_flutter_v2/views/notification/notification_view.dart';
 import 'package:ecourse_flutter_v2/views/verify_otp/verify_otp_view.dart';
 import 'package:ecourse_flutter_v2/views/exam/exam_taking_view.dart';
 import 'package:ecourse_flutter_v2/views/course_detail/course_detail_view.dart';
@@ -37,6 +38,9 @@ class AppRoutes {
   static const String transactionHistory = '/transaction-history';
   static const String passwordSecurity = '/password-security';
   static const String contactUs = '/contact-us';
+  static const String conversation = '/conversation';
+  static const String eventDetail = '/event-detail';
+  static const String notification = '/notification';
   // Route map
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -58,6 +62,7 @@ class AppRoutes {
       transactionHistory: (context) => const TransactionHistoryView(),
       passwordSecurity: (context) => const PasswordSecurityView(),
       contactUs: (context) => const ContactUsView(),
+      notification: (context) => const NotificationView(),
     };
   }
 

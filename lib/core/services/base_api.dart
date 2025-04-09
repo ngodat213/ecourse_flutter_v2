@@ -68,7 +68,7 @@ class ErrorResponse {
 }
 
 class BaseAPI {
-  static String domain = '${AppConfig.baseUrl}/api';
+  static String domain = '${AppConfig.apiUrl}/api';
   final Dio _dio = Dio();
 
   Future<Map<String, String>> getHeaders() async {

@@ -41,4 +41,5 @@ class AppImage {
   static const String svgCheck = '${_svg}check.svg';
   static const String svgSend = '${_svg}send.svg';
   static const String svgLike = '${_svg}like.svg';
+  static const String svgFolder = '${_svg}folder.svg';
 }

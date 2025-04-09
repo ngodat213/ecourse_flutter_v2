@@ -126,5 +126,10 @@
   "transaction_pending": "Transaction Pending",
   "transaction_refunded": "Transaction Refunded",
   "transaction_expired": "Transaction Expired",
-  "transaction_cancelled": "Transaction Cancelled"
+  "transaction_cancelled": "Transaction Cancelled",
+  "ECourse": "ECourse",
+  "Brainy": "Brainy",
+  "Or use your email account login": "Or use your email account login",
+  "search": "Search",
+  "featured_courses": "Featured Courses"
 } 

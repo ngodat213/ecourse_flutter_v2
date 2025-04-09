@@ -63,26 +63,35 @@ class _ChatContentState extends State<ChatContent>
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TabBar(
-          controller: _tabController,
-          labelColor: AppColor.textPrimary,
-          unselectedLabelColor: AppColor.textSecondary,
-          tabs: [Text('chats'.tr()), Text('groups'.tr())],
-        ),
         SizedBox(
           height: 1.sh - 170.h,
-          child: Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                ChatTabBar(conversations: widget.viewModel.conversations),
-                ChatTabBar(conversations: widget.viewModel.groupConversations),
-              ],
-            ),
-          ),
+          child: ChatTabBar(conversations: widget.viewModel.groupConversations),
         ),
       ],
     );
+
+    // return Column(
+    //   children: [
+    //     TabBar(
+    //       controller: _tabController,
+    //       labelColor: AppColor.textPrimary,
+    //       unselectedLabelColor: AppColor.textSecondary,
+    //       tabs: [Text('chats'.tr()), Text('groups'.tr())],
+    //     ),
+    //     SizedBox(
+    //       height: 1.sh - 170.h,
+    //       child: Expanded(
+    //         child: TabBarView(
+    //           controller: _tabController,
+    //           children: [
+    //             ChatTabBar(conversations: widget.viewModel.conversations),
+    //             ChatTabBar(conversations: widget.viewModel.groupConversations),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ],
+    // );
   }
 }
 

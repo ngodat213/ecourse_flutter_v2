@@ -61,6 +61,10 @@ class HomeVM extends BaseVM {
     AppRoutes.push(context, AppRoutes.cart);
   }
 
+  void redirectToNotification() {
+    AppRoutes.push(context, AppRoutes.notification);
+  }
+
   Future<void> _getCourseProgress() async {
     try {
       if (userProfile?.user?.enrolledCourses != null) {

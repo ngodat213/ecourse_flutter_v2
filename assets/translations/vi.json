@@ -124,5 +124,10 @@
   "transaction_pending": "Giao dịch chờ",
   "transaction_refunded": "Giao dịch hoàn trả",
   "transaction_expired": "Giao dịch hết hạn",
-  "transaction_cancelled": "Giao dịch đã hủy"
+  "transaction_cancelled": "Giao dịch đã hủy",
+  "ECourse": "Khóa Học Trực Tuyến",
+  "Brainy": "Brainy",
+  "Or use your email account login": "Hoặc đăng nhập bằng tài khoản email",
+  "search": "Tìm kiếm",
+  "featured_courses": "Khóa học nổi bật"
 }
